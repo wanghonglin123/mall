@@ -30,10 +30,12 @@
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 
+		<!-- springboot 核心 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<!-- 用於打包好的war包可以在外部tomcat運行，注释掉用于快速开发，热部署-->
+			<!--<scope>provided</scope>-->
 		</dependency>
 	</dependencies>
 
