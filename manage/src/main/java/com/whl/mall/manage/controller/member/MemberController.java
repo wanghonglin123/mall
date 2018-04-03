@@ -9,6 +9,7 @@ package com.whl.mall.manage.controller.member;
  */
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,9 +21,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class MemberController {
+    /**
+     * 进入登陆页
+     *
+     * @param model model
+     * @return
+     * @throws Exception Exception
+     */
     @RequestMapping("/toLogin")
-    @ResponseBody
-    public String toLogin() {
-        return "1";
+    public String login(Model model) throws Exception {
+        return "member/member/login";
+    }
+
+    /**
+     * 进入首页
+     *
+     * @return
+     */
+    @RequestMapping("/")
+    public String register() {
+        return "member/member/index";
     }
 }

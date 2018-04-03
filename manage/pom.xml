@@ -38,11 +38,16 @@
 			<!--<scope>provided</scope>-->
 		</dependency>
 
-		<!-- Spring boot 热部署 -->
+		<!-- 快速应用程序重新启动 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
 	</dependencies>
 

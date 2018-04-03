@@ -1,0 +1,63 @@
+/* 功能按钮 */
+.function-button {padding-bottom: 10px;overflow: hidden;}
+.function-button .button {margin-right: 10px;margin-bottom: 10px;float: left;}
+
+/* 搜索功能 */
+.word-screen {padding: 5px 0;position: relative;background: #e8e8e8;}
+.word-screen-hide {overflow: hidden;height: 40px;}
+.word-screen-operation {position: absolute;right: 15px;top: 12px;}
+.word-screen-button {padding-left: 35px;position: relative;display: block;float: left;width: 43px;height: 32px;line-height: 32px;font-size: 12px;color: #fff;background: #ffac00;border-radius: 3px;}
+.word-screen-button:hover {background: #cd8a01;}
+.word-screen-button i {margin-top: -9px;position: absolute;top: 50%;left: 10px;width: 18px;height: 18px;background: url(/img/icon.png) no-repeat -23px -50px;}
+.word-screen-operation .click-show-hide {margin: 10px 0 0 10px;position: relative;display: block;float: left;width: 21px;height: 11px;}
+.word-screen-operation .click-show-hide i {position: absolute;top: 0;left: 0;width: 10px;height: 11px;background: url(/img/icon.png) no-repeat -23px -83px;}
+.word-screen-operation .click-show-hide.hide i {background-position: -23px -70px;}
+.word-screen-operation .click-show-hide span {position: absolute;top: 1px;right: 0;width: 7px;height: 7px;background: url(/img/icon.png) no-repeat -23px -96px;}
+.word-screen-cont {padding-right: 128px;}
+.word-screen-cont ul {display: block;}
+.word-screen-cont ul li {margin-right: 5px;padding: 5px 0;display: block;float: left;}
+.word-screen-cont ul li .name {display: block;float: left;min-width: 110px;text-align: right;height: 34px;line-height: 34px;font-size: 14px;color: #333;}
+.word-screen-cont ul li .type-text {padding: 0 5px;display: block;float: left;width: 140px;height: 34px;border-radius: 3px;box-sizing: inherit;}
+.word-screen-cont ul li .select-box {width: 150px;height: 34px;line-height: 34px;border-radius: 3px;}
+.word-screen-cont ul li .select-box select {margin-top: -18px;padding-left: 10px;width: 180px;height: 36px;}
+.word-screen-cont ul li .type-checkbox {float: left;width: 150px;}
+.word-screen-cont ul li .type-checkbox input {margin: 10px 0 0 -2px;width: 25px;height: 18px}
+.word-screen-cont ul li .textbox .textbox-text{height: 32px !important;line-height: 32px !important;font-size: 14px;color: #333;}
+.word-screen-cont ul li .combo-arrow{height: 32px !important;}
+
+/* easyUI表格图片样式 */
+.datagrid-cell {}
+.datagrid-btable img {margin: 6px auto;display: block;height: 26px;}
+
+/* 编辑模块 */
+.form-operation {overflow-y: auto;height: 100%;background: #ffffff;}
+.form-operation-com {padding: 30px 20px 10px;}
+.form-operation-com ul {display: block;}
+.form-operation-com ul li {padding-bottom: 20px;position: relative;overflow: hidden;display: block;}
+.form-operation-com ul li .tit {padding-right: 10px;display: block;float: left;width: 150px;text-align: right;height: 34px;line-height: 34px;font-size: 14px;color: #333;}
+.form-operation-com ul li .tit i {margin-right: 5px;color: #ff2c41;}
+.form-operation-com ul li .type-text {padding: 0 10px;width: 280px;height: 34px;line-height: 32px;font-size: 13px;color: #333;border: 1px solid #ddd;border-radius: 3px;}
+.form-operation-com ul li .type-textarea {padding: 10px 10px;width: 280px;min-height: 40px;font-size: 14px;color: #333;border: 1px solid #DDD;border-radius: 3px;}
+.form-operation-com ul li .select-box {width: 300px;height: 34px;line-height: 32px;font-size: 13px;color: #333;border: 1px solid #DDD;border-radius: 3px;}
+.form-operation-com ul li .select-box select {margin-top: -18px;padding-left: 10px;width: 340px;height: 36px;}
+.form-operation-com ul li .info {padding: 3px 0 3px 160px;min-height: 18px;line-height: 18px;font-size: 12px;color: #ffac00;}
+.form-operation-com ul li .warn {position: absolute;bottom: 0;left: 160px;height: 20px;line-height: 20px;font-size: 12px;color: #d00;}
+
+/* 重写easyui表格 */
+.yt-table {box-sizing: border-box;padding: 10px 10px;width: 100%;overflow-x: hidden;height: 100%;min-height: 500px;}
+.panel-body,.panel-header {border-color: #dbdcde;}
+.panel-body {background: #f5f5f5;}
+.datagrid-view2 {background: #FFF;}
+.datagrid-row {height: 38px;line-height: 38px;}
+.datagrid-cell {cursor: pointer;}
+.datagrid-cell-check,.datagrid-header-check {height: 30px;line-height: 30px;}
+.datagrid-cell-check input,.datagrid-header-check input {margin-top: 8px;padding: 0;width: 15px;height: 18px;}
+.datagrid-row-selected {background-color: #eceded;color: #333;}
+
+/* 操作验证密码 */
+.word-verify-paw {padding: 30px 55px 25px;width: 300px;text-align: center;}
+.word-verify-paw .tit {height: 30px;line-height: 30px;font-size: 16px;color: #333;}
+.word-verify-paw .info {height: 24px;line-height: 24px;font-size: 12px;color: #666;}
+.word-verify-paw .edit-input {margin: 8px auto 4px;padding: 0 10px;width: 278px;height: 40px;border: #e4e4e4 solid 1px;}
+.word-verify-paw .edit-input .type-paw {width: 100%;height: 40px;}
+.word-verify-paw .warn {text-align: left;height: 24px;line-height: 24px;color: #ff0000;}
