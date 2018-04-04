@@ -34,6 +34,8 @@ package com.whl.mall.manage.controller.member;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,7 +50,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class MenuController {
-
+    private static final Logger LOGGER = LogManager.getLogger(MenuController.class);
     /**
      * 进入列表
      * @param model
@@ -57,6 +59,11 @@ public class MenuController {
      */
     @RequestMapping("/menu/list")
     public String login(Model model){
+        LOGGER.debug("Debugging log");
+        LOGGER.info("Info log");
+        LOGGER.warn("Hey, This is a warning!");
+        LOGGER.error("Oops! We have an Error. OK");
+        LOGGER.fatal("Damn! Fatal error. Please fix me.");
         return "member/menu/menuList";
     }
 

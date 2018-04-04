@@ -1,22 +1,314 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN" monitorInterval="30">
-    <Properties>
-        <Property name="LOG_PATTERN">
-            %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
-        </Property>
-    </Properties>
-    <Appenders>
-        <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-        </Console>
-    </Appenders>
-    <Loggers>
-        <Logger name="com.example.log4j2demo" level="debug" additivity="false">
-            <AppenderRef ref="ConsoleAppender" />
-        </Logger>
+<!--
 
-        <Root level="info">
-            <AppenderRef ref="ConsoleAppender" />
-        </Root>
-    </Loggers>
-</Configuration>
+http://www.cnblogs.com/hafiz/p/6170702.html
+
+http://blog.csdn.net/lianjunzongsiling/article/details/78848844
+
+3.配置文件节点解析　　　　
+
+　　　　(1).根节点Configuration有两个属性:status和monitorinterval,有两个子节点:Appenders和Loggers(表明可以定义多个Appender和Logger).
+
+　　　　　　　status用来指定log4j本身的打印日志的级别.
+
+　　　　　　　monitorinterval用于指定log4j自动重新配置的监测间隔时间，单位是s,最小是5s.
+
+　　　　(2).Appenders节点，常见的有三种子节点:Console、RollingFile、File.
+
+　　　　　　　Console节点用来定义输出到控制台的Appender.
+
+　　　　　　　　name:指定Appender的名字.
+
+　　　　　　　　target:SYSTEM_OUT 或 SYSTEM_ERR,一般只设置默认:SYSTEM_OUT.
+
+　　　　　　　　PatternLayout:输出格式，不设置默认为:%m%n.
+
+　　　　　　　File节点用来定义输出到指定位置的文件的Appender.
+
+　　　　　　　　name:指定Appender的名字.
+
+　　　　　　　　fileName:指定输出日志的目的文件带全路径的文件名.
+
+　　　　　　　　PatternLayout:输出格式，不设置默认为:%m%n.
+
+　　　　　　　RollingFile节点用来定义超过指定大小自动删除旧的创建新的的Appender.
+
+　　　　　　　　name:指定Appender的名字.
+
+　　　　　　　　fileName:指定输出日志的目的文件带全路径的文件名.
+
+　　　　　　　　PatternLayout:输出格式，不设置默认为:%m%n.
+
+　　　　　　　　filePattern:指定新建日志文件的名称格式.
+
+　　　　　　　　Policies:指定滚动日志的策略，就是什么时候进行新建日志文件输出日志.
+
+　　　　　　　 TimeBasedTriggeringPolicy:Policies子节点，基于时间的滚动策略，interval属性用来指定多久滚动一次，默认是1 hour。modulate=true用来调整时间：比如现在是早上3am，interval是4，那么第一次滚动是在4am，接着是8am，12am...而不是7am.
+
+　　　　　　　　SizeBasedTriggeringPolicy:Policies子节点，基于指定文件大小的滚动策略，size属性用来定义每个日志文件的大小.
+
+                http://blog.csdn.net/lianjunzongsiling/article/details/78848844 :
+                SizeBasedTriggeringPolicy表示日志文件大小超过多大时对其进行分卷，size表示日志大小，单位推荐写MB，数值为大于0的整数，100 MB中间有个空格，推荐写上。DefaultRolloverStrategy表示分卷策略，只需要记住这个必须要配就行了，不必深究，max表示最多可以有多少个分卷文件，默认为7个，超出7个的日志分卷文件将被删除，也就是说可能导致重要日志丢失，所以该参数配大点，100000应该够了，compressionLevel表示压缩等级，值为0-9，只在filePattern以.zip结尾，也就是说压缩格式为zip时起作用，这也是为什么前面说建议压缩格式为zip。0表示不压缩，只打包为zip格式，9表示最高压缩比（个人测试1MB日志文件某些情况下能压缩到4KB左右）。如果不想启用压缩功能，前面说过，日志filePattern不以.zip结尾就行了，这时compressionLevel是不起作用的。
+
+　　　　　　　　DefaultRolloverStrategy:用来指定同一个文件夹下最多有几个日志文件时开始删除最旧的，创建新的(通过max属性)。
+
+　　　　(3).Loggers节点，常见的有两种:Root和Logger.
+
+　　　　　　　Root节点用来指定项目的根日志，如果没有单独指定Logger，那么就会默认使用该Root日志输出
+
+　　　　　　　　　level:日志输出级别，共有8个级别，按照从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF.
+
+　　　　　　　　　AppenderRef：Root的子节点，用来指定该日志输出到哪个Appender.
+
+　　　　　　　Logger节点用来单独指定日志的形式，比如要为指定包下的class指定不同的日志级别等。
+
+　　　　　　　　　level:日志输出级别，共有8个级别，按照从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF.
+
+　　　　　　　　　name:用来指定该Logger所适用的类或者类所在的包全路径,继承自Root节点.
+
+　　　　　　　　　AppenderRef：Logger的子节点，用来指定该日志输出到哪个Appender,如果没有指定，就会默认继承自Root.如果指定了，那么会在指定的这个Appender和Root的Appender中都会输出，此时我们可以设置Logger的additivity="false"只在自定义的Appender中进行输出。
+
+　　　　(4).关于日志level.
+
+　　　　　　共有8个级别，按照从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF.
+
+　　　　　　All:最低等级的，用于打开所有日志记录.
+
+　　　　　　Trace:是追踪，就是程序推进以下，你就可以写个trace输出，所以trace应该会特别多，不过没关系，我们可以设置最低日志级别不让他输出.
+
+　　　　　　Debug:指出细粒度信息事件对调试应用程序是非常有帮助的.
+
+　　　　　　Info:消息在粗粒度级别上突出强调应用程序的运行过程.
+
+　　　　　　Warn:输出警告及warn以下级别的日志.
+
+　　　　　　Error:输出错误信息日志.
+
+　　　　　　Fatal:输出每个严重的错误事件将会导致应用程序的退出的日志.
+
+　　　　　　OFF:最高等级的，用于关闭所有日志记录.
+
+            注意： 共有8个级别，按照从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF.
+            也就是， ALL 日志包括 Trace 日志， Trace 日志 包括 Debug 日志， Debug 日志 包括 Info 日志。以此类推 ！！！！
+
+　　　　　　程序会打印高于或等于所设置级别的日志，设置的日志等级越高，打印出来的日志就越少。
+
+-->
+
+
+<!-- 日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<!-- Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置，当设置成trace时，你会看到log4j2内部各种详细输出-->
+<!-- monitorInterval：Log4j能够自动检测修改配置 文件和重新配置本身，设置间隔秒数 ， 1800s ==> 30 分钟， 3600s ==> 1小时 -->
+
+<configuration status="WARN" monitorInterval="3600">
+    <!-- 先定义一些配置，可以使用代理${name} 获取值-->
+    <Properties>
+        <Property name="appName">manage</Property>
+    </Properties>
+
+    <!-- 先定义所有的appender-->
+    <appenders>
+        <!-- 这个输出控制台的配置-->
+        <console name="console" target="SYSTEM_OUT">
+            <!-- 输出日志的格式-->
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+        </console>
+
+        <!-- 文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用-->
+        <File name="log" fileName="${sys:user.dir}/${appName}/mall-log/log-temp/test.log" append="false">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </File>
+
+        <!-- 这个会打印出所有的debug、info、warn、error及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingFile name="rollingFileDebug" fileName="${sys:user.dir}/${appName}/mall-log/logs/debug.log"
+                     filePattern="${sys:user.dir}/${appName}/mall-log/logs/$${date:yyyy-MM}/debug-%d{yyyy-MM-dd}-%i.log">
+            <!-- 控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）， ACCEPT：接受，NEUTRAL：中立，DENY：拒绝  -->
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--<ThresholdFilter level="debug" onMatch="DENY" onMismatch="DENY"/>-->
+            <!--<ThresholdFilter level="debug" onMatch="NEUTRAL" onMismatch="DENY"/>-->
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="rollingFileInfo" fileName="${sys:user.dir}/${appName}/mall-log/logs/info.log"
+                     filePattern="${sys:user.dir}/${appName}/mall-log/logs/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+            <!-- 控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--<ThresholdFilter level="info" onMatch="NEUTRAL" onMismatch="DENY"/>-->
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="rollingFileWarn" fileName="${sys:user.dir}/${appName}/mall-log/logs/warn.log"
+                     filePattern="${sys:user.dir}/${appName}/mall-log/logs/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
+            <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--<ThresholdFilter level="warn" onMatch="NEUTRAL" onMismatch="DENY"/>-->
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <!-- SizeBasedTriggeringPolicy表示日志文件大小超过多大时对其进行分卷，size表示日志大小，单位推荐写MB，数值为大于0的整数，100 MB中间有个空格，推荐写上。 -->
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了20 -->
+            <!-- DefaultRolloverStrategy表示分卷策略，只需要记住这个必须要配就行了，不必深究，max表示最多可以有多少个分卷文件，默认为7个，超出7个的日志分卷文件将被删除，也就是说可能导致重要日志丢失，所以该参数配大点，100000应该够了，compressionLevel表示压缩等级，值为0-9，只在filePattern以.zip结尾，也就是说压缩格式为zip时起作用，这也是为什么前面说建议压缩格式为zip。0表示不压缩，只打包为zip格式，9表示最高压缩比（个人测试1MB日志文件某些情况下能压缩到4KB左右）。如果不想启用压缩功能，前面说过，日志filePattern不以.zip结尾就行了，这时compressionLevel是不起作用的。  -->
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+
+        <RollingFile name="rollingFileError" fileName="${sys:user.dir}/${appName}/mall-log/logs/error.log"
+                     filePattern="${sys:user.dir}/${appName}/mall-log/logs/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+    </appenders>
+
+    <!-- 然后定义logger，只有定义了logger并引入的appender，appender才会生效 -->
+    <loggers>
+
+        <!-- 定义根logger，根logger是必须的，这里我把根logger定义为异步的，也可为定义为普通的同步的，但是注意在同步根logger和异步根logger中只能存在一个，不能两个都配置 -->
+        <!--<asyncRoot level="info">
+            <AppenderRef ref="rollingFileDebug" />
+        </asyncRoot>-->
+
+
+        <!-- 异步方式的日志 ####### Begin ########### -->
+        <!-- 定义根logger，根logger是必须的，这里我把根logger定义为异步的，也可为定义为普通的同步的，但是注意在同步根logger和异步根logger中只能存在一个，不能两个都配置 -->
+        <!-- asyncRoot 所有模块通用，如果需要定制同步日志，则定义<Logger> 指定特别的包或者类-->
+        <asyncRoot level="all">
+            <!-- <AppenderRef ref="rollingFileDebug" />-->
+            <appender-ref ref="rollingFileDebug"/>
+            <appender-ref ref="rollingFileInfo"/>
+            <appender-ref ref="rollingFileWarn"/>
+            <appender-ref ref="rollingFileError"/>
+        </asyncRoot>
+
+        <!-- 定义一个普通的logger，这里我定义为异步的 -->
+        <!--<asyncLogger name="cc.msonion" level="all" additivity="false">
+             <appender-ref ref="rollingFileDebug"/>
+             <appender-ref ref="rollingFileInfo"/>
+            <appender-ref ref="rollingFileWarn"/>
+            <appender-ref ref="rollingFileError"/>
+
+        </asyncLogger>-->
+
+        <!-- 以下asyncLogger 是对一些包定制私有日志配置-->
+        <!-- 定义一个普通的logger，这里我定义为异步的 -->
+        <asyncLogger name="org.springframework" level="info" additivity="false">
+            <!--<AppenderRef ref="rollingFileWarn" />
+            <AppenderRef ref="rollingRandomAccessFileAppender" />-->
+
+            <!-- <appender-ref ref="rollingFileDebug"/>
+             <appender-ref ref="rollingFileInfo"/>-->
+            <appender-ref ref="rollingFileWarn"/>
+            <appender-ref ref="rollingFileError"/>
+            <appender-ref ref="console"></appender-ref>
+        </asyncLogger>
+
+        <!-- 定义一个普通的logger，这里我定义为异步的 -->
+        <asyncLogger name="org.mybatis" level="warn" additivity="false">
+            <!--<AppenderRef ref="rollingFileWarn" />
+            <AppenderRef ref="rollingRandomAccessFileAppender" />-->
+
+            <!-- <appender-ref ref="rollingFileDebug"/>
+             <appender-ref ref="rollingFileInfo"/>-->
+            <appender-ref ref="rollingFileWarn"/>
+            <appender-ref ref="rollingFileError"/>
+
+        </asyncLogger>
+
+        <!-- 定义一个普通的logger，这里我定义为异步的 -->
+        <asyncLogger name="com.alibaba" level="warn" additivity="false">
+            <!--<AppenderRef ref="rollingFileWarn" />
+            <AppenderRef ref="rollingRandomAccessFileAppender" />-->
+
+            <!-- <appender-ref ref="rollingFileDebug"/>
+             <appender-ref ref="rollingFileInfo"/>-->
+            <appender-ref ref="rollingFileWarn"/>
+            <appender-ref ref="rollingFileError"/>
+
+        </asyncLogger>
+
+        <!-- 定义一个普通的logger，这里我定义为异步的 -->
+        <asyncLogger name="com.dangdang" level="warn" additivity="false">
+            <!--<AppenderRef ref="rollingFileWarn" />
+            <AppenderRef ref="rollingRandomAccessFileAppender" />-->
+
+            <!-- <appender-ref ref="rollingFileDebug"/>
+             <appender-ref ref="rollingFileInfo"/>-->
+            <appender-ref ref="rollingFileWarn"/>
+            <appender-ref ref="rollingFileError"/>
+
+        </asyncLogger>
+
+        <!-- 定义一个普通的logger，这里我定义为异步的 -->
+        <asyncLogger name="org.elasticsearch" level="warn" additivity="false">
+            <!--<AppenderRef ref="rollingFileWarn" />
+            <AppenderRef ref="rollingRandomAccessFileAppender" />-->
+
+            <!-- <appender-ref ref="rollingFileDebug"/>
+             <appender-ref ref="rollingFileInfo"/>-->
+            <appender-ref ref="rollingFileWarn"/>
+            <appender-ref ref="rollingFileError"/>
+
+        </asyncLogger>
+
+        <!-- 定义一个普通的logger，这里我定义为异步的 -->
+        <asyncLogger name="org.apache" level="warn" additivity="false">
+            <!--<AppenderRef ref="rollingFileWarn" />
+            <AppenderRef ref="rollingRandomAccessFileAppender" />-->
+
+            <!-- <appender-ref ref="rollingFileDebug"/>
+             <appender-ref ref="rollingFileInfo"/>-->
+            <appender-ref ref="rollingFileWarn"/>
+            <appender-ref ref="rollingFileError"/>
+
+        </asyncLogger>
+
+        <!-- 定义一个普通的logger，这里我定义为异步的  ## Netty   -->
+        <asyncLogger name="io.netty" level="warn" additivity="false">
+            <!--<AppenderRef ref="rollingFileWarn" />
+            <AppenderRef ref="rollingRandomAccessFileAppender" />-->
+
+            <!-- <appender-ref ref="rollingFileDebug"/>
+             <appender-ref ref="rollingFileInfo"/>-->
+            <appender-ref ref="rollingFileWarn"/>
+            <appender-ref ref="rollingFileError"/>
+
+        </asyncLogger>
+
+
+        <!-- 异步方式的日志 ####### End ########### -->
+
+        <!-- 同步方式的日志 ####### Begin ########### -->
+
+
+        <!-- 过滤掉spring和mybatis 等框架的一些无用的DEBUG、INFO信息，有 WARN、ERROR  -->
+        <!-- <logger name="org.springframework" level="WARN"></logger>
+         <logger name="org.mybatis" level="WARN"></logger>
+         <logger name="com.alibaba" level="WARN"></logger>
+         <logger name="com.dangdang" level="WARN"></logger>
+         <logger name="org.elasticsearch" level="WARN"></logger>-->
+
+        <!--<root level="all">-->
+
+        <!-- 关闭控制台  -->
+        <!--<appender-ref ref="console"/>-->
+        <!-- 开启 RollingFile 方式的日志 -->
+        <!--<appender-ref ref="rollingFileDebug"/>
+        <appender-ref ref="rollingFileInfo"/>
+        <appender-ref ref="rollingFileWarn"/>
+        <appender-ref ref="rollingFileError"/>
+    </root>-->
+        <!-- 同步方式的日志 ####### End ########### -->
+
+    </loggers>
+</configuration>
