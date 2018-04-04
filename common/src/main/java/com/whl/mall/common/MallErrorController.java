@@ -82,7 +82,8 @@ public class MallErrorController extends BasicErrorController {
     )
     public ModelAndView errorHtml(HttpServletRequest request, HttpServletResponse response) {
         HttpStatus status = this.getStatus(request);
-        Map<String, Object> model = Collections.unmodifiableMap(this.getErrorAttributes(request, this.isIncludeStackTrace(request, MediaType.TEXT_HTML)));
+        Map<String, Object> model = Collections.unmodifiableMap(this.getErrorAttributes(request,
+                this.isIncludeStackTrace(request, MediaType.TEXT_HTML)));
         response.setStatus(status.value());
         // 自定义异常页面路径，重写resolveErrorView 这个方法，具体实现看BasicErrorController源码
         ModelAndView modelAndView = this.resolveErrorView(request, response, status, model);

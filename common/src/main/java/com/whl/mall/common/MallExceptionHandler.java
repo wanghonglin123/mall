@@ -36,6 +36,7 @@ package com.whl.mall.common;
 
 import com.whl.mall.common.beans.MallBeans;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -63,12 +64,36 @@ public class MallExceptionHandler extends MallBeans{
      * @param ex
      * @return
      */
-    @ExceptionHandler(Exception.class)
-    @ResponseBody
-    ModelAndView handleControllerException(HttpServletRequest request, Throwable ex) {
+    @ExceptionHandler(MallException.class)
+    ModelAndView handleControllerMallException(HttpServletRequest request, Throwable ex) {
         HttpStatus status = getStatus(request);
         super.getLog4jLog().error(ex);
         return new ModelAndView(ERROR_PATH + status);
+    }
+
+    /**
+     * 所有Controller异常处理，返回页面
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(Exception.class)
+    ModelAndView handleControllerException(HttpServletRequest request, Throwable ex) {
+        return handleControllerMallException(request, ex);
+    }
+
+    /**
+     * Ajax请求异常处理，返回json
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(MallAjaxException.class)
+    @ResponseBody
+    String handleControllerAjaxException(HttpServletRequest request, Throwable ex) {
+        HttpStatus status = getStatus(request);
+        super.getLog4jLog().error(ex);
+        return "ajax fail";
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {
