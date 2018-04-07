@@ -9,6 +9,7 @@ package com.whl.mall.manage.controller.member;
  */
 
 import com.whl.mall.common.MallAjaxException;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,11 +32,6 @@ public class MemberController {
      */
     @RequestMapping("/toLogin")
     public String login(Model model) throws MallAjaxException{
-        try {
-            System.out.println(1/0);
-        } catch (Exception e) {
-            /*throw new MallException(e);*/
-        }
         return "member/member/login";
     }
 
@@ -49,13 +45,23 @@ public class MemberController {
         return "member/member/index";
     }
 
-    @RequestMapping("/getPageData")
-    @ResponseBody
-    public String getPageData() {
-        try {
-            System.out.println(1 / 0);
-        } catch (Exception e) {
-        }
-        return "ok";
+    /**
+     * 进入成员列表
+     *
+     * @return
+     */
+    @RequestMapping("/member/toList")
+    public String toList() {
+        return "member/member/list";
+    }
+
+    /**
+     * 进入新增成员页面
+     *
+     * @return
+     */
+    @RequestMapping("/member/toAddMember")
+    public String toAddMember() {
+        return "member/member/addMemberInfo";
     }
 }

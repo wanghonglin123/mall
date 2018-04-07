@@ -1,15 +1,11 @@
-
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML>
 <head>
 
     <title>洋桃跨境供应链后台管理中心-新增个人信息</title>
-    <jsp:include page="../common/memberCommon.jsp"></jsp:include>
+    <#include "../../common/memberCommon.jsp"/>
 </head>
 <body>
-<link rel="stylesheet" href="${static$domain}/css/member/member.css?_v=${css$version}" />
+<link rel="stylesheet" href="/css/member/member.css?_v=${css$version!}" />
 <!--新增成员信息 start-->
 <div id="addInformation" style="overflow-y: scroll;overflow-x: hidden;width: 700px;height: 400px;display: block;background: #fff;">
     <div class="ms-container">
@@ -69,9 +65,7 @@
             <p class="relative">
                 <select class="ms-input" id="memberCate">
                     <option value="0">请选择</option>
-                    <c:forEach items="${memberCateList}" var="memberCate">
-                        <option value="${memberCate.idx}" ${member.memberCateIdx eq memberCate.idx ? "selected='selected'" : ''}>${memberCate.name}</option>
-                    </c:forEach>
+
                 </select>
                 <i class="downIcon"></i>
             </p>
@@ -94,7 +88,7 @@
         <div class="row-set">
             <div class="row-set-lf">
                 <label class="ms-userName">角色设置：</label>
-                <button class="ms-set" type="button" onclick="setRoles(${member.idx});">设置</button>
+                <button class="ms-set" type="button" onclick="setRoles();">设置</button>
             </div>
             <div class="row-set-lr" id="role-div">
             </div>
@@ -214,6 +208,6 @@
         });
     }
 </script>
-<script type="text/javascript" src="${static$domain}/js/member/login.js?_v=${js$version}" ></script>
+<script type="text/javascript" src="/js/member/login.js?_v=${js$version!}" ></script>
 </body>
 </html>

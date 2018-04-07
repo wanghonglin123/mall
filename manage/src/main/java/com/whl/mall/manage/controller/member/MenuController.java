@@ -40,6 +40,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @ClassName: MenuController
@@ -59,16 +60,11 @@ public class MenuController {
      */
     @RequestMapping("/menu/list")
     public String login(Model model){
-        LOGGER.debug("Debugging log");
-        LOGGER.info("Info log");
-        LOGGER.warn("Hey, This is a warning!");
-        LOGGER.error("Oops! We have an Error. OK");
-        LOGGER.fatal("Damn! Fatal error. Please fix me.");
         return "member/menu/menuList";
     }
 
     /**
-     * 进入列表
+     * 菜单操作
      * @param type
      * @param idx
      * @return
@@ -78,10 +74,18 @@ public class MenuController {
         return "/member/menu/saveOrEditOrViewMenu";
     }
 
-    /*@RequestMapping("/menu/operation/{type}/{idx}")
+    /**
+     * 菜单操作
+     * @param type
+     * @param idx
+     * @param menu
+     * @return
+     * @throws Exception
+     *//*
+    @RequestMapping("/menu/operation/{type}/{idx}")
     @ResponseBody
     public int saveOrEditOrDelete(@PathVariable String type, @PathVariable Long idx, Menu menu) throws Exception {
-        menuService.save(menu);
+        //menuService.save(menu);
         return 0;
     }*/
 }
