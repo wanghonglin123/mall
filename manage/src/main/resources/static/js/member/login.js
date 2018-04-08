@@ -231,12 +231,12 @@ function checkName(){
     		$("#name").addClass("border-red").removeClass("border-gray");
             return false;
     	}else{
-            var info=checkUnique(1,name);
+            /*var info=checkUnique(1,name);
             if(info){
                 $("#hint1").html(" * "+info);
                 $("#name").addClass("border-red").removeClass("border-gray");
                 return false;
-            }
+            }*/
             $("#hint1").html("");
             $("#name").addClass("border-gray").removeClass("border-red");
             return true;
@@ -334,12 +334,12 @@ function checkPhone(){
     	return false;
     }else if(strPhone != null || strPhone != "" || strPhone != undefined){
     	if(Ms.checkMobileNo(strPhone) == true){
-            var info=checkUnique(2,strPhone);
+            /*var info=checkUnique(2,strPhone);
             if(info){
                 $("#hint6").html(" * "+info);
                 $("#phone").addClass("border-red").removeClass("border-gray");
                 return false;
-            }
+            }*/
     		$("#hint6").html("");
     		$("#phone").addClass("border-gray").removeClass("border-red");
             return true;
@@ -390,12 +390,12 @@ function checkEmail(){
                 return false;
             }
     		if(Ms.checkMail(strEmail)){
-                var info=checkUnique(3,strEmail);
+                /*var info=checkUnique(3,strEmail);
                 if(info){
                     $("#hint8").html(" * "+info);
                     $("#email").addClass("border-red").removeClass("border-gray");
                     return false;
-                }
+                }*/
     			$("#hint8").html("");
     			$("#email").addClass("border-gray").removeClass("border-red");
                 return true;

@@ -15,25 +15,6 @@
             <span class="hints" id="hint1"></span>
         </div>
         <div class="row">
-            <label class="ms-userName">全称：</label>
-            <input class="ms-input" id="allName" type="text" onblur="checkAllName()" />
-            <span class="hints" id="hint2"></span>
-        </div>
-
-        <div class="row">
-            <label class="ms-userName">性别：</label>
-            <p class="checkbox-span">
-            <p class="gender-man">
-                <span class="sex-man sex-manCur"></span>
-                <label class="sex">男</label>
-            </p>
-            <p class="gender-woman">
-                <span class="sex-woman"></span>
-                <label class="sex">女</label>
-            </p>
-            </p>
-        </div>
-        <div class="row">
             <label class="ms-userName">密码：</label>
             <input class="ms-input" id="password" type="password" onblur="checkPassword()" />
             <span class="hints" id="hint4"></span>
@@ -48,11 +29,6 @@
             <label class="ms-userName">手机号码：</label>
             <input class="ms-input" id="phone" type="text" onblur="checkPhone()" maxlength="11"/>
             <span class="hints" id="hint6"></span>
-        </div>
-        <div class="row">
-            <label class="ms-userName">电话号码：</label>
-            <input class="ms-input" id="telephone" type="text" onblur="checkTelephone()"  maxlength="20"/>
-            <span class="hints" id="hint7"></span>
         </div>
         <div class="row">
             <label class="ms-userName">电子邮箱：</label>
@@ -82,7 +58,7 @@
         </div>
         <div class="row-bz">
             <label class="ms-userName">描述：</label>
-            <textarea class="bz-textarea" id="remark" onblur="checkRemark()" placeholder="100位字符（包含中英文）"></textarea>
+            <textarea class="bz-textarea" id="remark"  placeholder="100位字符（包含中英文）"></textarea>
             <span class="hints" id="hint10"></span>
         </div>
         <div class="row-set">
@@ -92,11 +68,6 @@
             </div>
             <div class="row-set-lr" id="role-div">
             </div>
-        </div>
-        <div class="row-bz js-user-password">
-            <label class="ms-userName">您的账号密码：</label>
-            <input class="ms-input js-edit-type-paw" id="user-password" type="text" placeholder="请输入您的密码确认操作" value=""/>
-            <span class="hints"></span>
         </div>
     </div>
 </div>

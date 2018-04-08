@@ -19,8 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.whl.mall</groupId>
-			<artifactId>common</artifactId>
-			<version>1.0.0</version>
+			<artifactId>service</artifactId>
 		</dependency>
 
 		<dependency>

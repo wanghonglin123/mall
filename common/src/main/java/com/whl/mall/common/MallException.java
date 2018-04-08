@@ -57,7 +57,7 @@ public class MallException extends Exception{
     public MallException(Throwable cause) {
         super(cause);
     }
-
+    
     protected MallException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }

@@ -14,6 +14,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -29,9 +30,9 @@ import org.springframework.core.io.Resource;
 @PropertySource({"mybatis.properties"})
 public class MallMybatisConfigura {
     /**
-     * dao mapper
+     * dao mapper 路径
      */
-    private static final String BASEPACKAGE = "com.timowang.dao.mapper";
+    private final String BASEPACKAGE = "com.whl.mall.dao";
 
     @Value("${mybatis.typeAliasesPackage}")
     private String typeAliasesPackage;

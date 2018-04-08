@@ -183,7 +183,7 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
         <!-- 异步方式的日志 ####### Begin ########### -->
         <!-- 定义根logger，根logger是必须的，这里我把根logger定义为异步的，也可为定义为普通的同步的，但是注意在同步根logger和异步根logger中只能存在一个，不能两个都配置 -->
         <!-- asyncRoot 所有模块通用，如果需要定制同步日志，则定义<Logger> 指定特别的包或者类-->
-        <asyncRoot level="error">
+        <asyncRoot level="info">
             <!-- <AppenderRef ref="rollingFileDebug" />-->
             <appender-ref ref="rollingFileDebug"/>
             <appender-ref ref="rollingFileInfo"/>
@@ -202,7 +202,7 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
 
         <!-- 以下asyncLogger 是对一些包定制私有日志配置-->
         <!-- 定义一个普通的logger，这里我定义为异步的 -->
-        <asyncLogger name="org.springframework" level="info" additivity="false">
+        <asyncLogger name="org.springframework" level="warn" additivity="false">
             <!--<AppenderRef ref="rollingFileWarn" />
             <AppenderRef ref="rollingRandomAccessFileAppender" />-->
 

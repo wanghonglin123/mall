@@ -20,6 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <mall.version>1.0.0</mall.version>
     </properties>
 
     <dependencies>
@@ -59,8 +60,15 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-freemarker</artifactId>
+                <groupId>com.whl.mall</groupId>
+                <artifactId>common</artifactId>
+                <version>${mall.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.whl.mall</groupId>
+                <artifactId>service</artifactId>
+                <version>${mall.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

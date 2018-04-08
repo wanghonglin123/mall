@@ -9,11 +9,19 @@ package com.whl.mall.manage.controller.member;
  */
 
 import com.whl.mall.common.MallAjaxException;
+import com.whl.mall.common.MallResult;
+import com.whl.mall.common.constants.MallStatus;
+import com.whl.mall.interfaces.member.MemberService;
+import com.whl.mall.pojo.member.Member;
+import com.whl.mall.pojo.member.Menu;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Date;
 
 /**
  * @ClassName: member
@@ -23,6 +31,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class MemberController {
+
+    @Autowired
+    private MemberService memberService;
+
     /**
      * 进入登陆页
      *
@@ -63,5 +75,18 @@ public class MemberController {
     @RequestMapping("/member/toAddMember")
     public String toAddMember() {
         return "member/member/addMemberInfo";
+    }
+
+    /**
+     * 新增或者修改
+     *
+     * @param member
+     * @return
+     */
+    @RequestMapping("/member/do-save")
+    @ResponseBody
+    public MallResult doSave(Member member) {
+        memberService.save(member);
+        return MallResult.ok();
     }
 }

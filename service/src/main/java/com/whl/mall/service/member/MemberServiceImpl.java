@@ -18,56 +18,49 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.common.base.service.ext;
-
-/**
- * @Title: ShopServiceExt
- * @Package: com.shop.common.base.service.ext
+package com.whl.mall.service.member;/**
+ * @Title: MemberServiceImpl
+ * @Package: com.whl.mall.service.member
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/3/26
- * @Version: V2.0.10
+ * @Date: 2018/4/8
+ * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/3/26
- * @Modify-version: 2.1.5
+ * @Modify-date: 2018/4/8
+ * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.common.base.dao.MallBaseMapper;
-import com.whl.mall.common.base.pojo.MallBasePoJo;
-import com.whl.mall.common.base.service.MallBaseService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.whl.mall.common.MallException;
+import com.whl.mall.common.base.service.ext.MallServiceExt;
+import com.whl.mall.common.constants.MallStatus;
+import com.whl.mall.interfaces.member.MemberService;
+import com.whl.mall.pojo.member.Member;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
- * @ClassName: ShopServiceExt
- * @Description: 顶级接口扩展
- * @Company: 广州市两棵树网络科技有限公司
+ * @ClassName: MemberServiceImpl
+ * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/3/26
+ * @Date: 2018/4/8
  */
-public abstract class MallServiceExt<T extends MallBasePoJo/*, Mapper extends MallBaseMapper<T>*/> implements MallBaseService<T> {
-
-    @Autowired
-    private MallBaseMapper<T> baseMapper;
+@Service
+public class MemberServiceImpl extends MallServiceExt<Member/*, MenuMapper*/> implements MemberService {
 
     @Override
-    public int save(T po) {
-        return baseMapper.save(po);
+    public int saveMember(Member member) throws MallException {
+        long time = System.nanoTime();
+        member.setIdx(time);
+        member.setIdxCode(time);
+        member.setCreateTime(new Date());
+        member.setVersion(time);
+        member.setUpdateTime(new Date());
+        member.setExt("");
+        member.setStatus(MallStatus.STATUS_1);
+        return super.save(member);
     }
 
-    @Override
-    public T queryOne() {
-        return baseMapper.queryOne();
-    }
-
-    @Override
-    public int delete(T po) {
-        return baseMapper.delete(po);
-    }
-
-    @Override
-    public int update(T po) {
-        return baseMapper.update(po);
-    }
 }

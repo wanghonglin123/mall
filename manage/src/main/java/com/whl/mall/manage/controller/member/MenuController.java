@@ -34,8 +34,11 @@ package com.whl.mall.manage.controller.member;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.whl.mall.common.MallResult;
+import com.whl.mall.interfaces.member.MemberService;
+import com.whl.mall.interfaces.member.MenuService;
+import com.whl.mall.pojo.member.Menu;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,20 +54,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class MenuController {
-    private static final Logger LOGGER = LogManager.getLogger(MenuController.class);
+    /**
+     * 菜单服务
+     */
+    @Autowired
+    private MenuService menuService;
+
     /**
      * 进入列表
+     *
      * @param model
      * @return
      * @throws Exception
      */
-    @RequestMapping("/menu/list")
-    public String login(Model model){
+    @RequestMapping("/menu/toList")
+    public String toList(Model model) {
         return "member/menu/menuList";
     }
 
     /**
-     * 菜单操作
+     * 页面操作 1：增 2：删 3：改
+     *
      * @param type
      * @param idx
      * @return
@@ -75,17 +85,27 @@ public class MenuController {
     }
 
     /**
-     * 菜单操作
-     * @param type
-     * @param idx
+     * 新增或者修改
+     *
      * @param menu
      * @return
-     * @throws Exception
-     *//*
-    @RequestMapping("/menu/operation/{type}/{idx}")
+     */
+    @RequestMapping("/menu/do-saveOrEdit")
     @ResponseBody
-    public int saveOrEditOrDelete(@PathVariable String type, @PathVariable Long idx, Menu menu) throws Exception {
-        //menuService.save(menu);
+    public MallResult saveOrEdit(Menu menu) {
+        menuService.save(menu);
+        return MallResult.ok();
+    }
+
+    /**
+     * 新增或者修改
+     *
+     * @param menu
+     * @return
+     */
+    @RequestMapping("/menu/page")
+    @ResponseBody
+    public int page(Menu menu) {
         return 0;
-    }*/
+    }
 }

@@ -44,7 +44,7 @@ import org.springframework.context.annotation.PropertySource;
  * @Date: 2017/11/18
  */
 @Configuration
-@PropertySource("/${spring.profile.active}/jdbc.properties")
+@PropertySource("/${spring.profiles.active}/jdbc.properties")
 public class MallDruidConfigura {
 
     @Value("${spring.druid.datasource.driverClassName}")
