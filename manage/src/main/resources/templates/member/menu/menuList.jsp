@@ -342,7 +342,7 @@
      */
     function editOrAddButton(idx) {
         var node = $('#menuTree').tree('getSelected');
-        var url = idx ? '/menu/button/edit/'+idx : '/menu/button/add/1?menuIdx=' + node.id;
+        var url = idx ? '/button/edit/'+idx : '/button/add/1?menuIdx=' + 1;
         var title =idx ? '修改按钮' : '新增按钮';
         //页面层
         parent.layer.open({

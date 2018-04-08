@@ -1,43 +1,40 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
-
 <!doctype html>
 <head>
     <title>洋桃跨境供应链后台管理中心-按钮操作相关</title>
-    <jsp:include page="../common/memberCommon.jsp"></jsp:include>
+    <#include "../../common/memberCommon.jsp"/>
 </head>
 <body>
-<link rel="stylesheet" href="${static$domain}/css/common/current.css?_v=${css$version}"/>
+<link rel="stylesheet" href="/css/common/current.css?_v="/>
 
 <!-- start-->
-<input type="hidden" id="idx" value="${button.idx}"/>
-<input type="hidden" id="menuIdx" value="${menu.idx}">
+<input type="hidden" id="idx" value=""/>
+<input type="hidden" id="menuIdx" value="">
 <div id="resourceCapacity">
     <div class="winCont">
         <div class="winRow">
             <label class="brandName">当前菜单：</label>
-            <input id="menuName" class="brandTxt" type="text" value="${menu.name}" disabled="disabled">
+            <input id="menuName" class="brandTxt" type="text" value="" disabled="disabled">
         </div>
         <div class="winRow">
             <label class="brandName">当前菜单编码：</label>
-            <input id="menuCode" class="brandTxt" type="text" value="${menu.code}" disabled="disabled">
+            <input id="menuCode" class="brandTxt" type="text" value="" disabled="disabled">
         </div>
 
         <div class="winRow">
             <label class="brandName"><i>*</i>名称：</label>
-            <input id="name" class="brandTxt required" type="text" value="${button.name}">
+            <input id="name" class="brandTxt required" type="text" value="">
             <p class="palce-hint hint1">*名称必填</p>
         </div>
         <div class="winRow">
             <label class="brandName"><i>*</i>编码：</label>
             <input id="code" class="brandTxt required" type="text" onkeyup="MS.onlyEnOrNumber(this);" onblur="MS.onlyEnOrNumber(this);"
-                   value="${button.code}" ${type ne 'add' ? 'readonly="readonly"' :''} >
+                   value=""  >
             <p class="palce-hint hint2">*编码必填</p>
         </div>
 
         <div class="winRow2">
             <label class="brandName">备注：</label>
-            <textarea class="brandTxt" id="remark">${button.remark}</textarea>
+            <textarea class="brandTxt" id="remark"></textarea>
         </div>
 
     </div>

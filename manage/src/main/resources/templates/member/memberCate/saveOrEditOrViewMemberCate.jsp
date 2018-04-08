@@ -1,30 +1,26 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
-
-
 <!doctype html>
 <head>
     <title>洋桃跨境供应链后台管理中心-成员类别操作相关</title>
-    <jsp:include page="../common/memberCommon.jsp"></jsp:include>
+    <#include "../../common/memberCommon.jsp"/>
 </head>
 <body>
-<link rel="stylesheet" href="${static$domain}/css/common/current.css?_v=${css$version}"/>
+<link rel="stylesheet" href="/css/common/current.css?_v="/>
 
 
 <!-- start-->
-<input type="hidden" id="idx" value="${memberCate.idx}"/>
+<input type="hidden" id="idx" value=""/>
 <div id="resourceCapacity" style="height: 200px;">
     <div class="winCont">
 
         <div class="winRow">
             <label class="brandName"><i>*</i>成员类别名称：</label>
-            <input id="name" class="brandTxt required" type="text" value="${memberCate.name}">
+            <input id="name" class="brandTxt required" type="text" value="">
             <p class="palce-hint hint1">*名称必填</p>
         </div>
 
         <div class="winRow2">
             <label class="brandName">备注：</label>
-            <textarea class="brandTxt" id="remark">${memberCate.remark}</textarea>
+            <textarea class="brandTxt" id="remark"></textarea>
         </div>
 
     </div>

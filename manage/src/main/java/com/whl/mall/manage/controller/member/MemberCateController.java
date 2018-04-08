@@ -35,7 +35,7 @@ public class MemberCateController {
      *
      * @return
      */
-    @RequestMapping("/memberCate/{type}/{idxCode}")
+    @RequestMapping("/memberCate/{type}/{idx}")
     public String toAddOrEditOrSee(@PathVariable String type, @PathVariable Long idx) {
         return "member/memberCate/saveOrEditOrViewMemberCate";
     }

@@ -25,7 +25,7 @@ public class ResourceGroupController {
      *
      * @return
      */
-    @RequestMapping("/resourceGroup/toList")
+    @RequestMapping("/authManage/toList")
     public String toList() {
         return "member/resourceGroup/resourceGrouplist";
     }
@@ -35,7 +35,7 @@ public class ResourceGroupController {
      *
      * @return
      */
-    @RequestMapping("/resourceGroup/{type}/{idxCode}")
+    @RequestMapping("/authManage/{type}/{idx}")
     public String toAddOrEditOrSee(@PathVariable String type, @PathVariable Long idx) {
         return "member/resourceGroup/saveOrEditOrViewResourceGroup";
     }

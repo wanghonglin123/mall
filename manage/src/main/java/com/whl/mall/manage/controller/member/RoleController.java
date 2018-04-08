@@ -35,7 +35,7 @@ public class RoleController {
      *
      * @return
      */
-    @RequestMapping("/role/{type}/{idxCode}")
+    @RequestMapping("/role/{type}/{idx}")
     public String toAddOrEditOrSee(@PathVariable String type, @PathVariable Long idx) {
         return "member/role/saveOrEditOrViewRole";
     }

@@ -1,19 +1,14 @@
-<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <head>
     <title>洋桃跨境供应链后台管理中心-资源组列表</title>
-    <jsp:include page="../common/memberCommon.jsp"></jsp:include>
+    <#include "../../common/memberCommon.jsp"/>
 </head>
 <body>
 <section class="main">
     <div class="table-container">
-        <shiro:hasPermission name="authManage:add">
         <div class="function-button">
             <button type="button"  class="button button-ffac00" onclick="editOrAddResourcesGroup()">新增</button>
         </div>
-        </shiro:hasPermission>
         <div class="main-content">
             <div class="word-screen word-screen-hide">
                 <div class="word-screen-operation">
@@ -32,9 +27,6 @@
                                 <div class="select-box">
                                     <select id="resourceGourpState">
                                         <option value="">请选择</option>
-                                        <c:forEach items="${statusMap}" var="m">
-                                            <option value="${m.key}">${m.value}</option>
-                                        </c:forEach>
                                     </select>
                                     <i></i>
                                 </div>
@@ -76,24 +68,14 @@
                 formatter : function(value, rowData, rowIndex){
                     var array=[];
                     if(rowData.status == '1'){
-                        <shiro:hasPermission name="authManage:disabled">
                         array.push('<a class="margin-auto click-icon click-icon-off" href="javascript:void(0)" title="禁用" onclick="$updateStatus(\'/authManage/updateStatus/'+rowData.idx+'/2\', null, \'resourceGourplist\');"></a>');
-                        </shiro:hasPermission>
 
-                        <shiro:hasPermission name="authManage:edit">
                         array.push('<a class="margin-auto click-icon click-icon-edit" href="javascript:void(0)" title="编辑" onclick="editOrAddResourcesGroup('+rowData.idx+')"></a>');
-                        </shiro:hasPermission>
-                        <shiro:hasPermission name="authManage:del">
                         array.push('<a class="margin-auto click-icon click-icon-del" href="javascript:void(0)" title="删除" onclick="$updateStatus(\'/authManage/updateStatus/'+rowData.idx+'/0\', null, \'resourceGourplist\');"></a>');
-                        </shiro:hasPermission>
                     }
                     if(rowData.status == '2'){
-                        <shiro:hasPermission name="authManage:recover">
                         array.push('<a class="margin-auto click-icon click-icon-open" href="javascript:void(0)" title="激活" onclick="$updateStatus(\'/authManage/updateStatus/'+rowData.idx+'/1\', null, \'resourceGourplist\');"></a>');
-                        </shiro:hasPermission>
-                        <shiro:hasPermission name="authManage:del">
                         array.push('<a class="margin-auto click-icon click-icon-del" href="javascript:void(0)" title="删除" onclick="$updateStatus(\'/authManage/updateStatus/'+rowData.idx+'/0\', null, \'resourceGourplist\');"></a>');
-                        </shiro:hasPermission>
                     }
                     return array.join('');
                 }
@@ -123,7 +105,7 @@
                 width : 50,
                 title : '状态',
                 formatter : function(value, rowData, rowIndex){
-                    return '<span class="state-'+value+'">' + ${statusMapJson}[value] + '</span>';
+                    return '';
                 }
             } ] ],
             onLoadSuccess: function (data) {

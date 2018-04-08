@@ -1,53 +1,43 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
-
 <!doctype html>
 <head>
     <title>洋桃跨境供应链后台管理中心-角色操作相关</title>
-    <jsp:include page="../common/memberCommon.jsp"></jsp:include>
+    <#include "../../common/memberCommon.jsp"/>
 </head>
 <body>
-<link rel="stylesheet" href="${static$domain}/css/common/current.css?_v=${css$version}"/>
+<link rel="stylesheet" href="/css/common/current.css?_v="/>
 
 <!-- start-->
-<input type="hidden" id="idx" value="${role.idx}"/>
+<input type="hidden" id="idx" value=""/>
 <div id="resourceCapacity" style="height: 319px;overflow-y: auto;overflow-x: hidden;">
     <div class="winCont">
         <div class="winRow">
             <label class="brandName"><i>*</i>角色名称：</label>
-            <input id="name" class="brandTxt required" type="text" value="${role.name}">
+            <input id="name" class="brandTxt required" type="text" value="">
             <p class="palce-hint hint1">*角色名称必填</p>
         </div>
         <div class="winRow">
             <label class="brandName"><i>*</i>编码：</label>
             <input id="code" class="brandTxt required" type="text" onkeyup="MS.onlyEnOrNumber(this);" onblur="MS.onlyEnOrNumber(this);"
-                   value="${role.code}" ${type ne 'add' ? 'readonly="readonly"' :''} >
+                   value=""  >
             <p class="palce-hint hint2">*编码必填</p>
         </div>
         <div class="winRow2" style="margin-bottom: 20px;">
             <label class="brandName">备注：</label>
-            <textarea class="brandTxt" id="remark">${role.remark}</textarea>
+            <textarea class="brandTxt" id="remark"></textarea>
         </div>
         <div class="row-set">
             <div class="row-set-lf">
                 <label class="ms-userName">资源组设置：</label>
-                <c:if test="${type ne 'view'}">
                 <button class="ms-set" type="button" onclick="chooseResourceGroup(${role.idx});">设置</button>
-                </c:if>
             </div>
             <div class="row-set-lr" id="resource-group-text">
-                <c:forEach items="${resourceGroupList}" var="rg">
-                    <span class="ms-institution" id="resource-${rg.idx}" onclick="closeResouceGroupName(this);"><i></i>${rg.name}</span>
-                </c:forEach>
-              <%--  <span class="ms-institution"><i></i> 广东省公司</span>--%>
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
     $(function () {
-        var _type = '${type}';
+        var _type = '${type!}';
         if(_type != 'view') {
             $('#resourceCapacity .required').on({
                 'click': function () {

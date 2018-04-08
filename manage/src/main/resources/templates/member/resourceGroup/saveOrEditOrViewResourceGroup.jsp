@@ -1,8 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <head>
     <title>洋桃跨境供应链后台管理中心_资源组管理</title>
-    <jsp:include page="../common/memberCommon.jsp"></jsp:include>
+    <#include "../../common/memberCommon.jsp"/>
 </head>
 <body>
 
@@ -11,12 +10,12 @@
 </style>
 <!--权限管理弹框 start-->
 <div id="authorityCapacity" style="overflow-y: hidden;overflow-x: hidden;height: 420px;">
-    <input type="hidden" id="idx" value="${resourceGroup.idx}"/>
+    <input type="hidden" id="idx" value=""/>
     <div class="authorityRow">
         <label class="lb-name">资源组名称：</label>
-        <input type="text" class="txt-name" id="resourceGroupName" maxlength="30" value="${resourceGroup.name}"/>
+        <input type="text" class="txt-name" id="resourceGroupName" maxlength="30" value=""/>
         <label class="lb-name">资源组编码：</label>
-        <input type="text" class="txt-name" id="resourceGroupCode" onkeyup="MS.onlyEnOrNumber(this);" onblur="MS.onlyEnOrNumber(this);" maxlength="20" value="${resourceGroup.code}" ${type ne 'add' ? 'readonly="readonly"' :''}/>
+        <input type="text" class="txt-name" id="resourceGroupCode" onkeyup="MS.onlyEnOrNumber(this);" onblur="MS.onlyEnOrNumber(this);" maxlength="20" value="" />
     </div>
     <div class="authorityRow2">
         <label class="lb-name">选择权限：</label>
@@ -32,23 +31,19 @@
                 <ul id="authorityManageTree" class="easyui-tree"></ul>
             </div>
             <div class="right-check" id="authorityManageButtons">
-               <%-- <p>
-                    <input class="checkbox" type="checkbox" name="button-name"/>
-                    <label class="lb">恢复</label>
-                </p>--%>
             </div>
         </div>
     </div>
 </div>
 <!--权限管理弹框 end-->
-<link rel="stylesheet" href="${static$domain}/css/common/current.css?_v=${css$version}"/>
+<link rel="stylesheet" href="/css/common/current.css?_v="/>
 <script type="text/javascript">
     var $mnTree = $('#authorityManageTree'),$buttonsDiv = $('#authorityManageButtons');
     var buttonsArr =[],menusArr=[];
     $(function(){
         // 加载菜单树
-        var menuResourcesJson = ${menuResourcesJson};
-        var buttonResourcesJson = ${buttonResourcesJson};
+        var menuResourcesJson = "";
+        var buttonResourcesJson = "";
         $mnTree.html('<span style="font-size: 12px;">拼命加载中...</span>')
         $.ajax({
             timeout : Ms.AJAX_TIME_OUT,
@@ -81,8 +76,8 @@
                           }
                       });
                       // remove menu
-                      if('${hideMenuIdxs}'){
-                          var menuIdxs = '${hideMenuIdxs}';
+                      if('${hideMenuIdxs!}'){
+                          var menuIdxs = '${hideMenuIdxs!}';
                           var menuIdxArr = menuIdxs.split(",");
                           for (x in menuIdxArr) {
                               var node = $mnTree.tree('find',menuIdxArr[x]);
@@ -161,7 +156,6 @@
             // 存入数组中清空
             buttonsArr.splice($.inArray(str, buttonsArr), 1);
         }
-        // console.info(buttonsArr);
     }
     function doArrTxt(obj) {
         $(obj).prev().click();
@@ -193,11 +187,7 @@
         }
         var buttonsStr = buttonsArr.join(",");
         var menuStr = menusArr.join(",");
-//         console.info("buttonsArr: " + buttonsStr);
-//         console.info("menusArr: " + menuStr);
-//         return false;
         $.ajax({
-           // timeout :Ms.AJAX_TIME_OUT,
             type: "POST",
             url: "/authManage/do-saveOrEdit",
             data: {
