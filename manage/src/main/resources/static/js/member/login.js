@@ -487,7 +487,7 @@ function checkUnique(type,val) {
 
 /* 点击注册时验证数据的合法性 */
 function validateRegister(arg){
-	// 验证名称相关
+	/*// 验证名称相关
     if(!checkName() || !checkAllName()){
         return false;
     }
@@ -513,7 +513,7 @@ function validateRegister(arg){
         if(!checkVerification()){
             return false;
         }
-    }
+    }*/
     return true;
 }
 

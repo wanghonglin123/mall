@@ -90,37 +90,25 @@
             roleIdxArr.push(idxArr[1]);
         });
         var name = $.trim($('#name').val());
-        var fullName = $.trim($('#allName').val());
-        var sex = checkSex();
         var password = $.trim($('#password').val());
         var phone = $.trim($('#phone').val());
-        var tel = $.trim($('#telephone').val());
         var email = $.trim($('#email').val());
         var remark = $.trim($('#remark').val());
         var memberCate = $('#memberCate').val();
         var status = $('#status').val();
-        var userPaw = $('#user-password').val();/* 用户密码 */
-        if(userPaw==''){
-            $('.js-user-password .hints').html('请输入您的密码验证');
-            return false;
-        }
         parent.layer.load(2, {shade : 0.01, time : 50000});
         $.ajax({
             type: "POST",
             url: "/member/do-save",
             data: {
                 name: base64_encode(name),
-                fullName: base64_encode(fullName),
-                sex : sex,
                 password : base64_encode(password),
                 phone: base64_encode(phone),
-                tel: base64_encode(tel),
                 email: base64_encode(email),
                 remark: base64_encode(remark),
                 memberCateIdx: memberCate,
                 status : status,
                 roleIdxStr: base64_encode(roleIdxArr.join(",")),
-                permitKey:base64_encode(userPaw)
             },
             dataType: 'json'
         }).done(function (data) {

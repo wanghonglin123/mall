@@ -48,7 +48,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class MallServiceExt<T extends MallBasePoJo/*, Mapper extends MallBaseMapper<T>*/> implements MallBaseService<T> {
 
-    @Autowired
+    //@Autowired
     private MallBaseMapper<T> baseMapper;
 
     @Override
