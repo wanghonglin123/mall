@@ -32,8 +32,12 @@ package com.whl.mall.manage.controller;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whl.mall.common.MallAjaxException;
+import com.whl.mall.common.utils.MallJsonUtils;
 import com.whl.mall.interfaces.member.MenuService;
+import com.whl.mall.pojo.Test;
+import com.whl.mall.pojo.member.Button;
 import com.whl.mall.pojo.member.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,9 +45,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName: SystemController
@@ -77,10 +79,27 @@ public class SystemController {
      * @return
      */
     @RequestMapping("/")
-    public String index(HttpServletRequest request, Menu po) {
+    public String index(HttpServletRequest request, Menu po) throws Exception{
         //List<Menu> menuList = menuService.queryDataByCondition(po);
-        request.setAttribute("menuJson", new Object());
-        request.setAttribute("test", "test");
+        /*Map<String, Object> menuMap = new HashMap<>();
+        menuMap.put("id", 1);
+        menuMap.put("text", "测试菜单");
+        Map<String, Object> menuMap3 = new HashMap<>();
+        menuMap3.put("id", 1);
+        menuMap3.put("text", "测试菜单");
+        Map<String, Object> menuMap2 = new HashMap<>();
+        menuMap2.put("id", 2);
+        menuMap2.put("text", "测试菜单2");
+        List<Map> menus = new ArrayList<>();
+        menus.add(menuMap);
+        menus.add(menuMap2);
+        menuMap.put("children", menus);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(menus);
+        System.out.println(json);
+        request.setAttribute("menuJson", json);
+        request.setAttribute("test", "test");*/
+        //System.out.println(MallJsonUtils.objectToJson());
         return "member/member/index";
     }
 }
