@@ -38,6 +38,8 @@ import com.whl.mall.common.base.pojo.MallBasePoJo;
 import com.whl.mall.common.base.service.ext.MallMQServiceExt;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @ClassName: ShopRabbitmqServiceImpl
  * @Description: Rabbitmq 服务
@@ -70,5 +72,10 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
     @Override
     public int update(MallBasePoJo po) {
         return 0;
+    }
+
+    @Override
+    public List queryDataByCondition(MallBasePoJo po) {
+        return null;
     }
 }

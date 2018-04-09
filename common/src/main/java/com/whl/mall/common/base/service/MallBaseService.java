@@ -36,6 +36,8 @@ package com.whl.mall.common.base.service;
 
 import com.whl.mall.common.base.pojo.MallBasePoJo;
 
+import java.util.List;
+
 /**
  * @ClassName: ShopBaseService
  * @Description: 顶级父类接口
@@ -48,4 +50,5 @@ public interface MallBaseService<T extends MallBasePoJo> {
     T queryOne();
     int delete(T po);
     int update(T po);
+    List<T> queryDataByCondition(T po);
 }

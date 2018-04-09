@@ -34,9 +34,12 @@ package com.whl.mall.service.member;/**
 
 import com.whl.mall.common.MallException;
 import com.whl.mall.common.base.service.ext.MallServiceExt;
+import com.whl.mall.common.constants.MallStatus;
 import com.whl.mall.interfaces.member.MenuService;
 import com.whl.mall.pojo.member.Menu;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * @ClassName: MenuServiceImpl
@@ -49,6 +52,14 @@ public class MenuServiceImpl extends MallServiceExt<Menu> implements MenuService
 
     @Override
     public int saveMenu(Menu menu) throws MallException {
-        return 0;
+        long time = System.nanoTime();
+        menu.setIdx(time);
+        menu.setIdxCode(time);
+        menu.setCreateTime(new Date());
+        menu.setVersion(time);
+        menu.setUpdateTime(new Date());
+        menu.setExt("");
+        menu.setStatus(MallStatus.STATUS_1);
+        return super.save(menu);
     }
 }

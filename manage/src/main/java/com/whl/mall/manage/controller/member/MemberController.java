@@ -9,6 +9,7 @@ package com.whl.mall.manage.controller.member;
  */
 
 import com.whl.mall.common.MallAjaxException;
+import com.whl.mall.common.MallException;
 import com.whl.mall.common.MallResult;
 import com.whl.mall.common.constants.MallStatus;
 import com.whl.mall.interfaces.member.MemberService;
@@ -34,28 +35,6 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
-
-    /**
-     * 进入登陆页
-     *
-     * @param model model
-     * @return
-     * @throws Exception Exception
-     */
-    @RequestMapping("/toLogin")
-    public String login(Model model) throws MallAjaxException{
-        return "member/member/login";
-    }
-
-    /**
-     * 进入首页
-     *
-     * @return
-     */
-    @RequestMapping("/")
-    public String register() {
-        return "member/member/index";
-    }
 
     /**
      * 进入成员列表
@@ -85,8 +64,8 @@ public class MemberController {
      */
     @RequestMapping("/member/do-save")
     @ResponseBody
-    public MallResult doSave(Member member) {
-        memberService.save(member);
+    public MallResult doSave(Member member) throws MallException{
+        memberService.saveMember(member);
         return MallResult.ok();
     }
 }

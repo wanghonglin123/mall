@@ -38,6 +38,8 @@ import com.whl.mall.common.base.pojo.MallBasePoJo;
 import com.whl.mall.common.base.service.ext.MallCacheServiceExt;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @ClassName: ShopRedisServiceImpl
  * @Description: redis 缓存服务
@@ -47,6 +49,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MallRedisServiceImpl extends MallCacheServiceExt{
+
     @Override
     public int setCacheExpiryTime() {
         return 0;
@@ -70,5 +73,10 @@ public class MallRedisServiceImpl extends MallCacheServiceExt{
     @Override
     public int update(MallBasePoJo po) {
         return 0;
+    }
+
+    @Override
+    public List queryDataByCondition(MallBasePoJo po) {
+        return null;
     }
 }

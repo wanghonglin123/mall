@@ -18,42 +18,41 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.manage.controller.member;
-
-/**
- * @Title: MenuController
- * @Package: com.xunbao.controller.member
+package com.whl.mall.manage.controller;/**
+ * @Title: SystemController
+ * @Package: com.whl.mall.manage.controller
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/3/22
- * @Version: V2.0.10
+ * @Date: 2018/4/9
+ * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/3/22
- * @Modify-version: 2.1.5
+ * @Modify-date: 2018/4/9
+ * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.common.MallResult;
-import com.whl.mall.interfaces.member.MemberService;
+import com.whl.mall.common.MallAjaxException;
 import com.whl.mall.interfaces.member.MenuService;
 import com.whl.mall.pojo.member.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * @ClassName: MenuController
- * @Description: 菜单Controller
- * @Company: 广州市两棵树网络科技有限公司
+ * @ClassName: SystemController
+ * @Description: 系统Controller
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/3/22
+ * @Date: 2018/4/9
  */
 @Controller
-public class MenuController {
+public class SystemController {
     /**
      * 菜单服务
      */
@@ -61,51 +60,27 @@ public class MenuController {
     private MenuService menuService;
 
     /**
-     * 进入列表
+     * 进入登陆页
      *
-     * @param model
+     * @param model model
      * @return
-     * @throws Exception
+     * @throws Exception Exception
      */
-    @RequestMapping("/menu/toList")
-    public String toList(Model model) {
-        return "member/menu/menuList";
+    @RequestMapping("/toLogin")
+    public String login(Model model) throws MallAjaxException {
+        return "member/member/login";
     }
 
     /**
-     * 页面操作 1：增 2：删 3：改
+     * 进入首页
      *
-     * @param type
-     * @param idx
      * @return
      */
-    @RequestMapping("/menu/{type}/{idx}")
-    public String toSaveOrEditOrViewMenu(@PathVariable String type, @PathVariable Long idx) {
-        return "/member/menu/saveOrEditOrViewMenu";
-    }
-
-    /**
-     * 新增或者修改
-     *
-     * @param menu
-     * @return
-     */
-    @RequestMapping("/menu/do-saveOrEdit")
-    @ResponseBody
-    public MallResult saveOrEdit(Menu menu) throws Exception{
-        menuService.saveMenu(menu);
-        return MallResult.ok();
-    }
-
-    /**
-     * 新增或者修改
-     *
-     * @param menu
-     * @return
-     */
-    @RequestMapping("/menu/page")
-    @ResponseBody
-    public int page(Menu menu) {
-        return 0;
+    @RequestMapping("/")
+    public String index(HttpServletRequest request, Menu po) {
+        //List<Menu> menuList = menuService.queryDataByCondition(po);
+        request.setAttribute("menuJson", new Object());
+        request.setAttribute("test", "test");
+        return "member/member/index";
     }
 }

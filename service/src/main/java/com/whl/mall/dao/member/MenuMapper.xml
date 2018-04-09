@@ -38,4 +38,8 @@
       #{updateByMemberIdxCode,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, #{ext,jdbcType=VARCHAR}
       )
   </insert>
+  
+  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Menu" resultType="com.whl.mall.pojo.member.Menu">
+     SELECT idx_code,pidx_code,name, is_top  from tb_menu_p WHERE 1 = 1;
+  </select>
 </mapper>

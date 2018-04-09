@@ -107,8 +107,8 @@
             $('#servicerTime_T').text(timeFormat(servicerTime));
         },1000);
     }
-    //var treeJson = ${(sessionScope!).menuJson$msyt!};
-    var treeJson = "";
+
+    var treeJson = "${menuJson!}";
     $(function() {
         //画面加载完成之后就调用layout()方法将body变成easy的layout
         $('#easyUILayoutBody').layout();

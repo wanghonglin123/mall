@@ -39,6 +39,8 @@ import com.whl.mall.common.base.pojo.MallBasePoJo;
 import com.whl.mall.common.base.service.MallBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
  * @ClassName: ShopServiceExt
  * @Description: 顶级接口扩展
@@ -69,5 +71,10 @@ public abstract class MallServiceExt<T extends MallBasePoJo/*, Mapper extends Ma
     @Override
     public int update(T po) {
         return baseMapper.update(po);
+    }
+
+    @Override
+    public List<T> queryDataByCondition(T po) {
+        return baseMapper.queryDataByCondition(po);
     }
 }

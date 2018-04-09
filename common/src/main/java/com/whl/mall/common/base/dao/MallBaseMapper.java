@@ -34,6 +34,8 @@ package com.whl.mall.common.base.dao;/**
 
 import com.whl.mall.common.base.pojo.MallBasePoJo;
 
+import java.util.List;
+
 /**
  * @ClassName: ShopBaseMapper
  * @Description: 顶级Mapper接口
@@ -45,4 +47,5 @@ public interface MallBaseMapper<T extends MallBasePoJo> {
     T queryOne();
     int delete(T po);
     int update(T po);
+    List<T> queryDataByCondition(T po);
 }
