@@ -3,19 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>parent</artifactId>
+        <artifactId>common</artifactId>
         <groupId>com.whl.mall</groupId>
         <version>1.0.0</version>
-        <relativePath>../parent/pom.xml</relativePath>
+        <relativePath>../common/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <description>造数据模块，用于模拟数据，性能优化测试等</description>
 
-    <artifactId>demos</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>freemarkerdemo</module>
-        <module>freemarker-demo</module>
-    </modules>
-
+    <artifactId>data</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.whl.mall</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

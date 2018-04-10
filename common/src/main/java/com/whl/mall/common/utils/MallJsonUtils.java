@@ -11,7 +11,7 @@ package com.whl.mall.common.utils;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.*;
+import java.util.Collection;
 
 /**
  * @ClassName: MallJsonUtils

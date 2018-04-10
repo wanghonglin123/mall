@@ -18,71 +18,64 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.manage.controller;/**
- * @Title: SystemController
- * @Package: com.whl.mall.manage.controller
+package com.whl.mall.data.member;/**
+ * @Title: MenuData
+ * @Package: com.whl.mall.data.member
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/4/9
+ * @Date: 2018/4/10
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/4/9
+ * @Modify-date: 2018/4/10
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.whl.mall.common.MallAjaxException;
-import com.whl.mall.common.utils.MallJsonUtils;
-import com.whl.mall.interfaces.member.MenuService;
-import com.whl.mall.pojo.Test;
-import com.whl.mall.pojo.member.Button;
-import com.whl.mall.pojo.member.Menu;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.whl.mall.common.utils.MallJdbcUtils;
+import org.junit.Test;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.sql.Date;
 
 /**
- * @ClassName: SystemController
- * @Description: 系统Controller
+ * @ClassName: MenuData
+ * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/4/9
+ * @Date: 2018/4/10
  */
-@Controller
-public class SystemController {
-    /**
-     * 菜单服务
-     */
-    @Autowired
-    private MenuService menuService;
-
-    /**
-     * 进入登陆页
-     *
-     * @param model model
-     * @return
-     * @throws Exception Exception
-     */
-    @RequestMapping("/toLogin")
-    public String login(Model model) throws MallAjaxException {
-        return "member/member/login";
-    }
-
-    /**
-     * 进入首页
-     *
-     * @return
-     */
-    @RequestMapping("/")
-    public String index(HttpServletRequest request, Menu po) throws Exception{
-        List<Menu> menuList = menuService.queryDataByCondition(po);
-        String json = MallJsonUtils.objectToJson(menuList);
-        request.setAttribute("menuJson", json);
-        return "member/member/index";
+public class MenuData {
+    @Test
+    public void addData() {
+        final String sql = "insert into tb_member (idx, idx_code, name, telphone, email,\n" +
+                "    pwd, create_time, update_time,\n" +
+                "    create_by_member_idx_code, update_by_member_idx_code,\n" +
+                "    version, status, ext\n" +
+                "    )\n" +
+                "    values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        try {
+            final long times = System.nanoTime();
+            final Date date = Date.valueOf("2018-08-10");
+            MallJdbcUtils.execute(statement -> {
+                for (int i = 0; i < 10; i++) {
+                    statement.setLong(1, times + i);
+                    statement.setLong(2, times + i);
+                    statement.setString(3, "user" + i);
+                    statement.setString(4, "1807037753" + i);
+                    statement.setString(5, "62581607" + i + "@qq.com");
+                    statement.setString(6, "123456");
+                    statement.setDate(7, date);
+                    statement.setDate(8, date);
+                    statement.setLong(9, times + i);
+                    statement.setLong(10, times + i);
+                    statement.setLong(11, times + i);
+                    statement.setShort(12, (short)i);
+                    statement.setString(13, "");
+                    statement.addBatch();
+                }
+                statement.executeBatch();
+            }, sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -18,19 +18,17 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.common.base.service.ext;
-
-/**
- * @Title: ShopServiceExt
- * @Package: com.shop.common.base.service.ext
+package com.whl.mall.common.base.service.ext;/**
+ * @Title: MallServiceExt
+ * @Package: com.whl.mall.common.base.service.ext
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/3/26
- * @Version: V2.0.10
+ * @Date: 2018/4/10
+ * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/3/26
- * @Modify-version: 2.1.5
+ * @Modify-date: 2018/4/10
+ * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
@@ -42,15 +40,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 /**
- * @ClassName: ShopServiceExt
- * @Description: 顶级接口扩展
- * @Company: 广州市两棵树网络科技有限公司
+ * @ClassName: MallServiceExt
+ * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/3/26
+ * @Date: 2018/4/10
  */
-public abstract class MallServiceExt<T extends MallBasePoJo/*, Mapper extends MallBaseMapper<T>*/> implements MallBaseService<T> {
+public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBaseService<T>{
 
-    //@Autowired
+    @Autowired
     private MallBaseMapper<T> baseMapper;
 
     @Override
