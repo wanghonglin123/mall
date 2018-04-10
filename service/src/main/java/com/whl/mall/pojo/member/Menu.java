@@ -114,6 +114,11 @@ public class Menu implements MallBasePoJo{
     private String pid;
 
     /**
+     * 菜单路径
+     */
+    private String url;
+
+    /**
      * 菜单idx
      */
     public Long getIdx() {
@@ -132,6 +137,20 @@ public class Menu implements MallBasePoJo{
      */
     public Long getIdxCode() {
         return idxCode;
+    }
+
+    /**
+     * @return url
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * @param url url
+     */
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     /**
@@ -392,6 +411,7 @@ public class Menu implements MallBasePoJo{
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append(", id=").append(id);
         sb.append(", pid=").append(pid);
+        sb.append(", url=").append(url);
         sb.append("]");
         return sb.toString();
     }
