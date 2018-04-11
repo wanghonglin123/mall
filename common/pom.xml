@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>common</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <parent>
         <groupId>com.whl.mall</groupId>
         <artifactId>parent</artifactId>
