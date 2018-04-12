@@ -34,11 +34,9 @@ package com.whl.mall.manage.controller.member;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.common.MallResult;
-import com.whl.mall.interfaces.member.MemberService;
-import com.whl.mall.interfaces.member.MenuService;
+import com.whl.mall.core.MallResult;
+import com.whl.mall.ext.beans.MemberBeans;
 import com.whl.mall.pojo.member.Menu;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,13 +51,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Date: 2018/3/22
  */
 @Controller
-public class MenuController {
-    /**
-     * 菜单服务
-     */
-    @Autowired
-    private MenuService menuService;
-
+public class MenuController extends MemberBeans{
     /**
      * 进入列表
      *
@@ -93,7 +85,7 @@ public class MenuController {
     @RequestMapping("/menu/do-saveOrEdit")
     @ResponseBody
     public MallResult saveOrEdit(Menu menu) throws Exception{
-        menuService.saveMenu(menu);
+        super.getMenuService().saveMenu(menu);
         return MallResult.ok();
     }
 

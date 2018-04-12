@@ -19,7 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.whl.mall</groupId>
-			<artifactId>common</artifactId>
+			<artifactId>core</artifactId>
 		</dependency>
 	</dependencies>
 

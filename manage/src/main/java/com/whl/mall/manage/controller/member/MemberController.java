@@ -8,21 +8,14 @@ package com.whl.mall.manage.controller.member;
  * @Version: V2.0.0
  */
 
-import com.whl.mall.common.MallAjaxException;
-import com.whl.mall.common.MallException;
-import com.whl.mall.common.MallResult;
-import com.whl.mall.common.constants.MallStatus;
-import com.whl.mall.interfaces.member.MemberService;
+import com.whl.mall.core.MallException;
+import com.whl.mall.core.MallResult;
+import com.whl.mall.core.common.beans.MallBeans;
+import com.whl.mall.ext.beans.MemberBeans;
 import com.whl.mall.pojo.member.Member;
-import com.whl.mall.pojo.member.Menu;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.Date;
 
 /**
  * @ClassName: member
@@ -31,11 +24,7 @@ import java.util.Date;
  * @Date: 2018-04-02 下午 9:23
  */
 @Controller
-public class MemberController {
-
-    @Autowired
-    private MemberService memberService;
-
+public class MemberController extends MemberBeans{
     /**
      * 进入成员列表
      *
@@ -65,7 +54,7 @@ public class MemberController {
     @RequestMapping("/member/do-save")
     @ResponseBody
     public MallResult doSave(Member member) throws MallException{
-        memberService.saveMember(member);
+        super.getMemberService().saveMember(member);
         return MallResult.ok();
     }
 }

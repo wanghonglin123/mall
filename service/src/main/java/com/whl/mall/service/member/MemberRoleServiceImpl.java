@@ -32,9 +32,9 @@ package com.whl.mall.service.member;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.common.MallException;
-import com.whl.mall.common.base.service.ext.MallServiceExt;
-import com.whl.mall.common.constants.MallStatus;
+import com.whl.mall.core.MallException;
+import com.whl.mall.core.base.service.ext.MallServiceExt;
+import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.interfaces.member.MemberRoleService;
 import com.whl.mall.pojo.member.MemberRole;
 import org.springframework.stereotype.Service;

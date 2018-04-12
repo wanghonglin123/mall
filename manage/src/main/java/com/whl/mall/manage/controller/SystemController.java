@@ -32,12 +32,9 @@ package com.whl.mall.manage.controller;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.whl.mall.common.MallAjaxException;
-import com.whl.mall.common.utils.MallJsonUtils;
+import com.whl.mall.core.MallAjaxException;
+import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.interfaces.member.MenuService;
-import com.whl.mall.pojo.Test;
-import com.whl.mall.pojo.member.Button;
 import com.whl.mall.pojo.member.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,7 +42,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.List;
 
 /**
  * @ClassName: SystemController

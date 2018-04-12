@@ -32,10 +32,9 @@ package com.whl.mall.interfaces.member;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.common.MallException;
-import com.whl.mall.common.base.service.MallBaseService;
+import com.whl.mall.core.MallException;
+import com.whl.mall.core.base.service.MallBaseService;
 import com.whl.mall.pojo.member.Member;
-import com.whl.mall.pojo.member.Menu;
 
 /**
  * @ClassName: MemberService

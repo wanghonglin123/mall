@@ -21,6 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <mall.version>1.0.0</mall.version>
+        <shiro.version>1.3.2</shiro.version>
     </properties>
 
     <dependencies>
@@ -69,15 +70,28 @@
         <dependencies>
             <dependency>
                 <groupId>com.whl.mall</groupId>
-                <artifactId>common</artifactId>
+                <artifactId>service</artifactId>
                 <version>${mall.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.whl.mall</groupId>
-                <artifactId>service</artifactId>
+                <artifactId>core</artifactId>
                 <version>${mall.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.whl.mall</groupId>
+                <artifactId>ext</artifactId>
+                <version>${mall.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 </project>

@@ -1,6 +1,6 @@
 package com.whl.mall.pojo.member;
 
-import com.whl.mall.common.base.pojo.MallBasePoJo;
+import com.whl.mall.core.base.pojo.MallBasePoJo;
 
 import java.util.Date;
 
