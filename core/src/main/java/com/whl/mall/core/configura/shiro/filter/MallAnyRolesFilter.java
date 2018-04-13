@@ -33,6 +33,11 @@ import javax.servlet.ServletResponse;
  * @Date: 2017/11/22
  */
 public class MallAnyRolesFilter extends AccessControlFilter {
+    private static final String LOGIN_JSP = "/member/login.jsp";
+    @Override
+    public void setLoginUrl(String loginUrl) {
+        super.setLoginUrl(LOGIN_JSP);
+    }
 
     /**
      * 判断是否允许访问， true 允许， flase 不允许
@@ -44,7 +49,7 @@ public class MallAnyRolesFilter extends AccessControlFilter {
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
-        return true;
+        return false;
     }
 
     /**
@@ -56,6 +61,7 @@ public class MallAnyRolesFilter extends AccessControlFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
+        super.redirectToLogin(servletRequest, servletResponse);
         return false;
     }
 }

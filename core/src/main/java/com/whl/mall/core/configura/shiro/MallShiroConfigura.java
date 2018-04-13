@@ -155,7 +155,7 @@ public class MallShiroConfigura extends MallBeans {
     }
 
     @Bean
-    public AuthorizingRealm shiroSecurityRealm() {
+    public MallShiroRealm shiroSecurityRealm() {
         return new MallShiroRealm();
     }
 
