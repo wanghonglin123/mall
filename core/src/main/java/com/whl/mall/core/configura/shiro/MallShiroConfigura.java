@@ -190,11 +190,19 @@ public class MallShiroConfigura extends MallBeans {
         StringBuilder filterChainDefinitions = new StringBuilder();
         //filterChainDefinitions.append("/rebuild/item/index = anon \n");
         // <!-- anon表示此地址不需要任何权限即可访问 -->
-        //filterChainDefinitions.append("/*/**=anon \n");
+        filterChainDefinitions.append("/*Login=anon \n");
+        filterChainDefinitions.append("/css/**=anon \n");
+        filterChainDefinitions.append("/images/**=anon \n");
+        filterChainDefinitions.append("/img/**=anon \n");
+        filterChainDefinitions.append("/js/**=anon \n");
+        filterChainDefinitions.append("/plugins/**=anon \n");
+        filterChainDefinitions.append("/script/**=anon \n");
+        filterChainDefinitions.append("/style/**=anon \n");
+        filterChainDefinitions.append("/=anyRoles \n");
+        filterChainDefinitions.append("/**=anyRoles \n");
         // <!-- authc需要认证(登录)，登陆后所有用户多具备这个权限 -->
         //filterChainDefinitions.append("/collect/item/downExcel = authc \n");
         /*<!--所有的请求(除去配置的静态资源请求或请求地址为anon的请求)都要通过登录验证,如果未登录则跳到/loginUrl -->*/
-        filterChainDefinitions.append("/*/** = anyRoles \n");
         return filterChainDefinitions.toString();
     }
 }

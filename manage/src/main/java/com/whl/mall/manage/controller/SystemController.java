@@ -33,16 +33,26 @@ package com.whl.mall.manage.controller;/**
  */
 
 import com.whl.mall.core.MallAjaxException;
+import com.whl.mall.core.common.constants.MallSessionConstants;
+import com.whl.mall.core.common.utils.MallBase64Utils;
+import com.whl.mall.core.common.utils.MallJdbcUtils;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.interfaces.member.MenuService;
 import com.whl.mall.pojo.member.Menu;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.Base64;
 
 /**
  * @ClassName: SystemController
@@ -66,8 +76,47 @@ public class SystemController {
      * @throws Exception Exception
      */
     @RequestMapping("/toLogin")
-    public String login(Model model) throws MallAjaxException {
-        return "member/member/login";
+    public String toLogin(Model model) throws MallAjaxException {
+        // 获取访问主体Subject
+        Subject subject = SecurityUtils.getSubject();
+        // subject.getSession(false) 设置为true，会动态代码创建一个Session,但是这里不需要使用Session，所以设置为false
+        Session session = subject.getSession(false);
+
+        // 如果session存在，name判断会话是否存在登录成员信息，因为用户未登录或者登录失败或者退出操作,或者清空Session操作，
+        // name会话会清空成员属性，或者不能创建成员属性，只有登录成功才会存在成员属性
+        if (session != null && session.getAttribute(MallSessionConstants.SESSION_MEMBER) == null) {
+            return "redirect:/";
+        }
+
+        return getLoginName();
+    }
+
+    /**
+     * 获取登录页面名称
+     * @return
+     */
+    private String getLoginName() {
+        return "login";
+    }
+
+    /**
+     * 执行登录
+     * @param username 会员名称
+     * @param password 密码
+     * @return
+     * @throws Exception Exception
+     */
+    @PostMapping("/doLogin")
+    @ResponseBody
+    public String doLogin(String username, String password) throws Exception{
+        Subject subject = SecurityUtils.getSubject();
+
+        username = MallBase64Utils.decode(username);
+        password = MallBase64Utils.decode(password);
+        // 创建token唯一标识
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        subject.login(token);
+        return "login";
     }
 
     /**
@@ -77,8 +126,8 @@ public class SystemController {
      */
     @RequestMapping("/")
     public String index(HttpServletRequest request, Menu po) throws Exception{
-        List<Menu> menuList = menuService.queryDataByCondition(po);
-        String json = MallJsonUtils.objectToJson(menuList);
+        //List<Menu> menuList = menuService.queryDataByCondition(po);
+        String json = MallJsonUtils.objectToJson("");
         request.setAttribute("menuJson", json);
         return "member/member/index";
     }

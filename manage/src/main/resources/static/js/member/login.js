@@ -115,8 +115,9 @@ function doLogin(type,cookie_nave) {
     var param={};
     param.username =base64_encode(userName);
     param.password = base64_encode(passWord);
-    param.vcode = base64_encode(_captcha_img_content.pictureCode("getCodeValue"));
-    param.accessCode = _captcha_img_content.pictureCode("getAccessCodeValue");
+    /*param.vcode = base64_encode(_captcha_img_content.pictureCode("getCodeValue"));
+    param.accessCode = _captcha_img_content.pictureCode("getAccessCodeValue");*/
+    type = 1;
     if(type ==2){
         if(!YT.getCookie(cookie_nave+'cookietime')){
             $.post('/sys/sendSmsCode-login',param,function (ret) {
@@ -133,7 +134,7 @@ function doLogin(type,cookie_nave) {
             },'json');
         }
     }else {
-        var TelVCode = $.trim($('.verification-code input').val());
+        /*var TelVCode = $.trim($('.verification-code input').val());
         if(isSmsSend && isSmsSend == 'true' && TelVCode.length != 6){
             showLoginInfo("请输入6位正确的手机验证码");
             return false;
@@ -141,11 +142,11 @@ function doLogin(type,cookie_nave) {
         var rememberme = $('#rememberme').hasClass("cur") ? "1" : "0";
         param.rememberme = base64_encode(rememberme);
         param.sendSmsCode = TelVCode;
-        hideLoginInfo();
+        hideLoginInfo();*/
         $('#login-btn').html("登录中...").addClass("login-btn").removeClass("login-btn-active");
         $.ajax({
             type : "POST",
-            url : "/sys/do-login",
+            url : "/toLogin",
             cache : false,
             data :param
         }).done(function (result) {

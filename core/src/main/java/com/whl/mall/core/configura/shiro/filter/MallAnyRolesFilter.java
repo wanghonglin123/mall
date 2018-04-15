@@ -20,7 +20,9 @@
  */
 package com.whl.mall.core.configura.shiro.filter;
 
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
+import org.apache.shiro.web.util.WebUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -33,12 +35,8 @@ import javax.servlet.ServletResponse;
  * @Date: 2017/11/22
  */
 public class MallAnyRolesFilter extends AccessControlFilter {
-    private static final String LOGIN_JSP = "/member/login.jsp";
-    @Override
-    public void setLoginUrl(String loginUrl) {
-        super.setLoginUrl(LOGIN_JSP);
-    }
-
+    private static final String LOGIN_URL = "/toLogin";
+    private short status = 0;
     /**
      * 判断是否允许访问， true 允许， flase 不允许
      * @param servletRequest
@@ -49,6 +47,12 @@ public class MallAnyRolesFilter extends AccessControlFilter {
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
+        Subject subject = getSubject(servletRequest, servletResponse);
+        if (subject.getPrincipal() == null) {
+            status = 1;
+            return false;
+        }
+        subject.logout();
         return false;
     }
 
@@ -61,7 +65,12 @@ public class MallAnyRolesFilter extends AccessControlFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
-        super.redirectToLogin(servletRequest, servletResponse);
+        if (status == 1) {
+
+        } else {
+
+        }
+        WebUtils.issueRedirect(servletRequest, servletResponse, LOGIN_URL);
         return false;
     }
 }
