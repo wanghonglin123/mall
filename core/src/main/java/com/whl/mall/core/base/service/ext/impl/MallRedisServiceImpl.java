@@ -79,4 +79,9 @@ public class MallRedisServiceImpl<T extends MallBasePoJo> extends MallCacheServi
     public List<T> queryDataByCondition(T po) {
         return null;
     }
+
+    @Override
+    public T queryOneByCondition(T po) {
+        return null;
+    }
 }

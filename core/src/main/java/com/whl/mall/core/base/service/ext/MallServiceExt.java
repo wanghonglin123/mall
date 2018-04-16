@@ -73,4 +73,9 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
     public List<T> queryDataByCondition(T po) {
         return baseMapper.queryDataByCondition(po);
     }
+
+    @Override
+    public T queryOneByCondition(T po) {
+        return baseMapper.queryOneByCondition(po);
+    }
 }

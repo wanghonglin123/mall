@@ -37,9 +37,12 @@ package com.whl.mall.manage.shiro.pojo;
 import com.whl.mall.interfaces.member.MemberService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.UUID;
 
 
 /**
@@ -63,7 +66,8 @@ public class MallShiroRealm extends AuthorizingRealm{
      */
     @Override
     public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection var1){
-        return null;
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        return info;
     }
 
     /**
@@ -77,7 +81,10 @@ public class MallShiroRealm extends AuthorizingRealm{
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken)authcToken;
         String userName = usernamePasswordToken.getUsername();
         String password = String.valueOf(usernamePasswordToken.getPassword());
-        return new SimpleAuthenticationInfo();
+        if (userName != null) {
+            return new SimpleAuthenticationInfo(UUID.randomUUID().toString() + "," + password, password, getName());
+        }
+        return null;
     }
 
 }

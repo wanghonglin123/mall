@@ -81,7 +81,7 @@ public class MallShiroConfigura extends MallBeans {
     @Bean(name = "sessionIdCookie")
     public SimpleCookie sessionIdCookie() {
         // 设置JsessionId为 sid.timowang.com, 必须加环境区分cookie名称，否则多个环境一起打开的时候会出现权限混淆问题
-        SimpleCookie timoSimpleCookie = new SimpleCookie(super.getDomain() + sessionIdCookie);
+        SimpleCookie timoSimpleCookie = new SimpleCookie(super.getDomain().getDomain() + sessionIdCookie);
         // 必须设置为true, 增加cookie安全性，增加安全性
         timoSimpleCookie.setHttpOnly(true);
         // 浏览器关闭后sessionIdCookie的寿命，设置为10分钟，如果为-1，即浏览器关闭后就失效

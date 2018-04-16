@@ -33,6 +33,7 @@ package com.whl.mall.manage.controller;/**
  */
 
 import com.whl.mall.core.MallAjaxException;
+import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallSessionConstants;
 import com.whl.mall.core.common.utils.MallBase64Utils;
 import com.whl.mall.core.common.utils.MallJdbcUtils;
@@ -108,15 +109,19 @@ public class SystemController {
      */
     @PostMapping("/doLogin")
     @ResponseBody
-    public String doLogin(String username, String password) throws Exception{
+    public MallResult doLogin(String username, String password) throws Exception{
         Subject subject = SecurityUtils.getSubject();
 
-        username = MallBase64Utils.decode(username);
-        password = MallBase64Utils.decode(password);
-        // 创建token唯一标识
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-        subject.login(token);
-        return "login";
+        try {
+            username = MallBase64Utils.decode(username);
+            password = MallBase64Utils.decode(password);
+            // 创建token唯一标识
+            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+            subject.login(token);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return MallResult.ok();
     }
 
     /**

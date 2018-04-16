@@ -52,7 +52,6 @@ public class MallAnyRolesFilter extends AccessControlFilter {
             status = 1;
             return false;
         }
-        subject.logout();
         return false;
     }
 

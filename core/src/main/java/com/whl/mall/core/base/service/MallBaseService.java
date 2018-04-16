@@ -51,4 +51,5 @@ public interface MallBaseService<T extends MallBasePoJo> {
     int delete(T po);
     int update(T po);
     List<T> queryDataByCondition(T po);
+    T queryOneByCondition(T po);
 }
