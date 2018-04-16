@@ -18,7 +18,7 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.configura.shiro.pojo;
+package com.whl.mall.manage.shiro.pojo;
 
 /**
  * @Title: TimoShiroSessionListener

@@ -18,7 +18,7 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.configura.shiro;
+package com.whl.mall.manage.shiro;
 
 /**
  * @Title: TimoShiroConfigura
@@ -35,12 +35,11 @@ package com.whl.mall.core.configura.shiro;
  */
 
 import com.whl.mall.core.common.beans.MallBeans;
-import com.whl.mall.core.configura.shiro.filter.MallAnyRolesFilter;
-import com.whl.mall.core.configura.shiro.pojo.MallSessionDao;
-import com.whl.mall.core.configura.shiro.pojo.MallShiroRealm;
-import com.whl.mall.core.configura.shiro.pojo.MallShiroSessionListener;
+import com.whl.mall.manage.shiro.filter.MallAnyRolesFilter;
+import com.whl.mall.manage.shiro.pojo.MallSessionDao;
+import com.whl.mall.manage.shiro.pojo.MallShiroRealm;
+import com.whl.mall.manage.shiro.pojo.MallShiroSessionListener;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
-import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -116,9 +115,9 @@ public class MallShiroConfigura extends MallBeans {
     }
 
     @Bean
-    public CachingSessionDAO sessionDAO() {
-        CachingSessionDAO cachingSessionDAO = new MallSessionDao();
-        return cachingSessionDAO;
+    public MallSessionDao sessionDAO() {
+        MallSessionDao sessionDao = new MallSessionDao();
+        return sessionDao;
     }
 
     @Bean
@@ -161,7 +160,7 @@ public class MallShiroConfigura extends MallBeans {
 
     @Bean
     public DefaultWebSessionManager sessionManager(SimpleCookie sessionIdCookie,
-                                                   CachingSessionDAO sessionDao,
+                                                   MallSessionDao sessionDao,
                                                    SessionListener sessionListener) {
         DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
         //url sessionId 不加上

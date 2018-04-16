@@ -18,57 +18,59 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.configura.shiro.pojo;
+package com.whl.mall.manage.shiro.filter;
 
-import org.apache.shiro.session.Session;
-import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.filter.AccessControlFilter;
+import org.apache.shiro.web.util.WebUtils;
 
-import java.io.Serializable;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 /**
- * @ClassName: TimoSessionDao
- * @Description:    Shiro SessionDao操作
+ * @ClassName: TimoAnyRolesFilter
+ * @Description:    Shiro 权限过滤器
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2017/11/21
+ * @Date: 2017/11/22
  */
-public class MallSessionDao extends CachingSessionDAO{
-
+public class MallAnyRolesFilter extends AccessControlFilter {
+    private static final String LOGIN_URL = "/toLogin";
+    private short status = 0;
     /**
-     * Session 创建，只有在Session == null 或者失效的时候才会创建session
-     * @param session
+     * 判断是否允许访问， true 允许， flase 不允许
+     * @param servletRequest
+     * @param servletResponse
+     * @param o
      * @return
+     * @throws Exception
      */
     @Override
-    protected Serializable doCreate(Session session) {
-        Serializable sessionId = this.generateSessionId(session);
-        super.assignSessionId(session, sessionId);
-        return sessionId;
+    protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
+        Subject subject = getSubject(servletRequest, servletResponse);
+        if (subject.getPrincipal() == null) {
+            status = 1;
+            return false;
+        }
+        subject.logout();
+        return false;
     }
 
     /**
-     * 当服务器重启后，如果发现Cookie存在SessionId,就会执行该方法读取该方法，任何操作多执行该方法，比如刷新浏览器，点击按钮等
-     * @param serializable
+     *  如果isAccessAllowed返回false, 验证失败逻辑处理
+     * @param servletRequest
+     * @param servletResponse
      * @return
+     * @throws Exception
      */
     @Override
-    protected Session doReadSession(Serializable serializable) {
-        return null;
-    }
+    protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
+        if (status == 1) {
 
-    /**
-     * Session 更新，当Session存在的情况下，任何操作多会更新当前Session
-     * @param session
-     */
-    @Override
-    protected void doUpdate(Session session) {
-    }
+        } else {
 
-    /**
-     * Session 删除，退出或者Session失效的时候会被执行
-     * @param session
-     */
-    @Override
-    protected void doDelete(Session session) {
+        }
+        WebUtils.issueRedirect(servletRequest, servletResponse, LOGIN_URL);
+        return false;
     }
 }

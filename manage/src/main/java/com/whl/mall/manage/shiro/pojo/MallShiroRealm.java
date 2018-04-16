@@ -18,7 +18,7 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.configura.shiro.pojo;
+package com.whl.mall.manage.shiro.pojo;
 
 /**
  * @Title: TimoShiroSecurityRealm
@@ -34,12 +34,12 @@ package com.whl.mall.core.configura.shiro.pojo;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import org.apache.shiro.SecurityUtils;
+import com.whl.mall.interfaces.member.MemberService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -50,6 +50,11 @@ import org.apache.shiro.subject.Subject;
  * @Date: 2017/11/21
  */
 public class MallShiroRealm extends AuthorizingRealm{
+    /**
+     * 成员服务
+     */
+    @Autowired
+    private MemberService memberService;
 
     /**
      * 授权
