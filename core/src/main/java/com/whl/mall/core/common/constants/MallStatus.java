@@ -42,6 +42,8 @@ public final class MallStatus {
     private MallStatus() {}
 
     public static final Short HTTP_STATUS_200 = 200;
+    public static final Short HTTP_STATUS_400 = 200;
+    public static final Short HTTP_STATUS_500 = 200;
 
     public static final Short STATUS_1 = 1;
 }

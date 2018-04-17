@@ -32,15 +32,23 @@ package com.whl.mall.core.base.service.ext;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.MallException;
 import com.whl.mall.core.base.dao.MallBaseMapper;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.base.service.MallBaseService;
+import com.whl.mall.core.common.constants.MallJavaTypeConstants;
+import com.whl.mall.core.common.constants.MallPojoFieldNameConstants;
+import com.whl.mall.core.common.constants.MallStatus;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.List;
 
 /**
  * @ClassName: MallServiceExt
- * @Description:
+ * @Description: 服务扩展类
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/4/10
  */
@@ -50,22 +58,24 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
     private MallBaseMapper<T> baseMapper;
 
     @Override
-    public int save(T po) {
+    public int save(T po) throws MallException{
+        // 设置po公共属性值,不采用反射方式，比较消耗性能
+        inspectPojoFieldValue(po);
         return baseMapper.save(po);
     }
 
     @Override
-    public int delete(T po) {
+    public int delete(T po) throws MallException {
         return baseMapper.delete(po);
     }
 
     @Override
-    public int update(T po) {
+    public int update(T po) throws MallException {
         return baseMapper.update(po);
     }
 
     @Override
-    public List<T> queryDataByCondition(T po) {
+    public List<T> queryDataByCondition(T po) throws MallException {
         return baseMapper.queryDataByCondition(po);
     }
 
@@ -74,7 +84,7 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
      * @param po
      * @return
      */
-    public T queryOneAllInfoByCondition(T po) {
+    public T queryOneAllInfoByCondition(T po) throws MallException {
         return baseMapper.queryOneAllInfoByCondition(po);
     }
 
@@ -83,7 +93,83 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
      * @param po
      * @return
      */
-    public T queryOneSomeInfoByCondition(T po) {
+    public T queryOneSomeInfoByCondition(T po) throws MallException {
         return baseMapper.queryOneSomeInfoByCondition(po);
+    }
+
+    /**
+     * 使用Srping 反射工具类，设置pojo字段值
+     * @param pojo 实体类
+     * @throws MallException
+     */
+    protected void inspectPojoFieldValue(T pojo) throws MallException{
+        // 获取类注解，到时候开发
+
+        // 执行所有字段，设置新值
+        ReflectionUtils.doWithFields(pojo.getClass(), new ReflectionUtils.FieldCallback() {
+            @Override
+            public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
+                setFieldValue(field, pojo);
+            }
+
+            public String getNewStringValue(Object oldValue) {
+                String strValue = String.valueOf(oldValue);
+                String newValue = null;
+                // 是null 或者 "" , " " ， "   "
+                if (StringUtils.isEmpty(strValue)) {
+                    // 设置默认空字符串, 不然数据库字段会为NULL，会影响性能
+                    newValue = "";
+                } else if (StringUtils.isNotEmpty(strValue)) {
+                    // 去掉左右两边空格
+                    newValue = strValue.trim();
+                } else { // 预留特别情况
+                    newValue = "";
+                }
+                return newValue;
+            }
+
+            public Long getNewLongValue() {
+                // 目前使用这种时间戳，到时候改成分布式唯一id
+                return System.nanoTime();
+            }
+
+            public void setFieldValue(Field field, T pojo) throws IllegalArgumentException, IllegalAccessException {
+                // 允许访问,不然获取不到私有属性的信息
+                field.setAccessible(true);
+                // 获取属性值
+                Object value = field.get(pojo);
+                // 获取字段类型名称。比如java.lang.Interger
+                String typeName = field.getType().getName();
+                Object newValue = null;
+                if (MallJavaTypeConstants.TYPE_REFERENCE_STRING_NAME.equals(typeName)
+                        || MallJavaTypeConstants.TYPE_REFERENCE_CHARSEQUENCE_NAME.equals(typeName)) {  // 字符串类型 String
+                    newValue = getNewStringValue(value);
+                } else if (MallJavaTypeConstants.TYPE_REFERENCE_LONG_NAME.equals(typeName)) {  // Long类型
+                    String fieldName = field.getName();
+                    if (MallPojoFieldNameConstants.FIELD_IDX.equals(fieldName)
+                            || MallPojoFieldNameConstants.FIELD_IDX_CODE.equals(fieldName)
+                            || MallPojoFieldNameConstants.FIELD_VERSION.equals(fieldName)) {
+                        newValue = getNewLongValue();
+                    } else if (null == value) {
+                        // 必须设置为0L, Long类型， 否则报错
+                        newValue = 0L;
+                    }
+                } else if (MallJavaTypeConstants.TYPE_REFERENCE_DATE_NAME.equals(typeName)) {  // 日期类型 Date
+                    if (null == value) {
+                        newValue = new Date();
+                    }
+                } else if (MallJavaTypeConstants.TYPE_REFERENCE_INTEGER_NAME.equals(typeName)) {  // int类型
+                    if (null == value) {
+                        newValue = 0;
+                    }
+                } else if (MallJavaTypeConstants.TYPE_REFERENCE_SHORT_NAME.equals(typeName)) {  // Short类型
+                    if (null == value) {
+                        // Short 必须强制转换
+                        newValue = (short) 0;
+                    }
+                }
+                field.set(pojo, newValue);
+            }
+        });
     }
 }

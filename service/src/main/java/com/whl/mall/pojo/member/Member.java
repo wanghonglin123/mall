@@ -5,6 +5,11 @@ import com.whl.mall.core.base.pojo.MallBasePoJo;
 import java.util.Date;
 
 public class Member implements MallBasePoJo {
+    @Override
+    public void setRemark(String remark) {
+
+    }
+
     /**
      * 主键idx
      */
@@ -45,6 +50,20 @@ public class Member implements MallBasePoJo {
      * 唯一标识，idx, JavaScript  对 18位数字idx支持不好，导致最后一位丢失，所以使用字符串id
      */
     private String id;
+
+    private String remark;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
 
     /**
      * 主键idx

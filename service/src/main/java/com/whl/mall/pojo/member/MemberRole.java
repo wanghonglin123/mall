@@ -5,6 +5,7 @@ import com.whl.mall.core.base.pojo.MallBasePoJo;
 import java.util.Date;
 
 public class MemberRole implements MallBasePoJo {
+
     /**
      * 主键idx，分布式架构，全局唯一递增
      */

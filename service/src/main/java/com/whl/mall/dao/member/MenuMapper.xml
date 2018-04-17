@@ -39,8 +39,36 @@
       #{updateByMemberIdxCode,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, #{ext,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR}
       )
   </insert>
-  
-  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Menu" resultType="com.whl.mall.pojo.member.Menu">
-     SELECT idx_code,pidx_code,name,url is_top  from tb_menu_p WHERE 1 = 1;
+
+  <select id="queryOneAllInfoByCondition" parameterType="com.whl.mall.pojo.member.Member">
+    SELECT
+    <include refid="Base_Column_List" />
+    from tb_out_store_stock_detail from tb_member where 1 = 1
+    <if test="name != null">
+      and name = #{name}
+    </if>
+    <if test="pwd != null">
+      and pwd = #{pwd}
+    </if>
+  </select>
+
+  <select id="queryOneSomeInfoByCondition" parameterType="com.whl.mall.pojo.member.Member">
+    SELECT  idx, idx_code, name, telphone, email from tb_member where 1 = 1
+    <if test="name != null">
+      and name = #{name}
+    </if>
+    <if test="pwd != null">
+      and pwd = #{pwd}
+    </if>
+  </select>
+
+  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Member">
+    SELECT  <include refid="Base_Column_List" /> from tb_member where 1 = 1
+    <if test="name != null">
+      and name = #{name}
+    </if>
+    <if test="pwd != null">
+      and pwd = #{pwd}
+    </if>
   </select>
 </mapper>

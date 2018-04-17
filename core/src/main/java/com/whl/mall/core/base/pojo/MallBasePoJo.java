@@ -34,7 +34,10 @@ package com.whl.mall.core.base.pojo;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.common.constants.MallStatus;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @ClassName: ShopBasePoJo
@@ -44,4 +47,11 @@ import java.io.Serializable;
  * @Date: 2018/3/23
  */
 public interface MallBasePoJo extends Serializable {
+    void setIdx(Long idx);
+    void setIdxCode(Long idxCode);
+    void setCreateTime(Date date);
+    void setUpdateTime(Date date);
+    void setRemark(String remark);
+    void setExt(String ext);
+    void setVersion(Long version);
 }

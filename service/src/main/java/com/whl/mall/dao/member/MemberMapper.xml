@@ -50,4 +50,14 @@
       and pwd = #{pwd}
     </if>
   </select>
+
+  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Member">
+    SELECT  <include refid="Base_Column_List" /> from tb_member where 1 = 1
+    <if test="name != null">
+      and name = #{name}
+    </if>
+    <if test="pwd != null">
+      and pwd = #{pwd}
+    </if>
+  </select>
 </mapper>

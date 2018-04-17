@@ -34,6 +34,7 @@ package com.whl.mall.core.base.service;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.MallException;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 
 import java.util.List;
@@ -51,40 +52,40 @@ public interface MallBaseService<T extends MallBasePoJo> {
      * @param po
      * @return
      */
-    int save(T po);
+    int save(T po) throws MallException;
 
     /**
      * 删除
      * @param po
      * @return
      */
-    int delete(T po);
+    int delete(T po) throws MallException;
 
     /**
      * 修改
      * @param po
      * @return
      */
-    int update(T po);
+    int update(T po) throws MallException;
 
     /**
      * 根据条件查询结果
      * @param po
      * @return
      */
-    List<T> queryDataByCondition(T po);
+    List<T> queryDataByCondition(T po) throws MallException;
 
     /**
      * 查询单个数据所有信息
      * @param po
      * @return
      */
-    T queryOneAllInfoByCondition(T po);
+    T queryOneAllInfoByCondition(T po) throws MallException;
 
     /**
      * 查询单个数据部分信息，性能比所有信息更快
      * @param po
      * @return
      */
-    T queryOneSomeInfoByCondition(T po);
+    T queryOneSomeInfoByCondition(T po) throws MallException;
 }
