@@ -41,6 +41,7 @@ import com.whl.mall.core.common.utils.MallJdbcUtils;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.interfaces.member.MenuService;
+import com.whl.mall.pojo.member.Member;
 import com.whl.mall.pojo.member.Menu;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -109,9 +110,18 @@ public class SystemController extends MallBaseController{
         Subject subject = SecurityUtils.getSubject();
 
         try {
+            // 登陆验证
             username = MallBase64Utils.decode(username);
             password = MallBase64Utils.decode(password);
-            // 创建token唯一标识
+            Member member = new Member();
+            member.setUserName(username);
+            member.setPwd(password);
+            member = getMemberService().login(member);
+            if (member == null) {
+                return MallResult.build(400, "账号或者用户不存在", null);
+            }
+
+            // Shiro token唯一标识，登陆成功保存认证信息和授权信息
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             subject.login(token);
         } catch (Exception e) {
