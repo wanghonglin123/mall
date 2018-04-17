@@ -43,6 +43,10 @@ import com.whl.mall.core.base.pojo.MallBasePoJo;
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/3/26
  */
-public interface MallBaseMQService<T extends MallBasePoJo> extends MallBaseService<T> {
-    int send();
+public interface MallBaseMQService<T extends MallBasePoJo> {
+    /**
+     * 发送MQ消息
+     * @return
+     */
+    int sendMsg();
 }

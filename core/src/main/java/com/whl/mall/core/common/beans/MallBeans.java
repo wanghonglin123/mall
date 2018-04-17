@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/3/20
  */
-public class MallBeans{
+public class MallBeans {
     /**
      * log4j 日志组件
      */
@@ -26,11 +26,11 @@ public class MallBeans{
     /**
      * @return log4jLog
      */
-    public MallLoggerAdapter getLog4jLog() {
+    protected MallLoggerAdapter getLog4jLog() {
         return log4jLog;
     }
 
-    public MallDomain getDomain() {
+    protected MallDomain getDomain() {
         return domain;
     }
 }

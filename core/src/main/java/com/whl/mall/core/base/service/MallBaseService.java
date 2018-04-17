@@ -46,10 +46,45 @@ import java.util.List;
  * @Date: 2018/3/26
  */
 public interface MallBaseService<T extends MallBasePoJo> {
+    /**
+     * 保存
+     * @param po
+     * @return
+     */
     int save(T po);
-    T queryOne();
+
+    /**
+     * 删除
+     * @param po
+     * @return
+     */
     int delete(T po);
+
+    /**
+     * 修改
+     * @param po
+     * @return
+     */
     int update(T po);
+
+    /**
+     * 根据条件查询结果
+     * @param po
+     * @return
+     */
     List<T> queryDataByCondition(T po);
-    T queryOneByCondition(T po);
+
+    /**
+     * 查询单个数据所有信息
+     * @param po
+     * @return
+     */
+    T queryOneAllInfoByCondition(T po);
+
+    /**
+     * 查询单个数据部分信息，性能比所有信息更快
+     * @param po
+     * @return
+     */
+    T queryOneSomeInfoByCondition(T po);
 }

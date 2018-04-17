@@ -51,37 +51,7 @@ import java.util.List;
 public class MallRedisServiceImpl<T extends MallBasePoJo> extends MallCacheServiceExt<T>{
 
     @Override
-    public int save(T po) {
-        return 0;
-    }
-
-    @Override
     public int setCacheExpiryTime() {
         return 0;
-    }
-
-    @Override
-    public T queryOne() {
-        return null;
-    }
-
-    @Override
-    public int delete(T po) {
-        return 0;
-    }
-
-    @Override
-    public int update(T po) {
-        return 0;
-    }
-
-    @Override
-    public List<T> queryDataByCondition(T po) {
-        return null;
-    }
-
-    @Override
-    public T queryOneByCondition(T po) {
-        return null;
     }
 }

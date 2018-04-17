@@ -10,8 +10,7 @@ package com.whl.mall.manage.controller.member;
 
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallResult;
-import com.whl.mall.core.common.beans.MallBeans;
-import com.whl.mall.ext.beans.MemberBeans;
+import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.Member;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Date: 2018-04-02 下午 9:23
  */
 @Controller
-public class MemberController extends MemberBeans{
+public class MemberController extends MallBaseController{
     /**
      * 进入成员列表
      *

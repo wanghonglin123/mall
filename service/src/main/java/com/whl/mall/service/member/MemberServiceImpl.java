@@ -35,6 +35,7 @@ package com.whl.mall.service.member;/**
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.base.service.ext.MallServiceExt;
 import com.whl.mall.core.common.constants.MallStatus;
+import com.whl.mall.core.common.utils.MallMd5Utils;
 import com.whl.mall.interfaces.member.MemberService;
 import com.whl.mall.pojo.member.Member;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,7 @@ public class MemberServiceImpl extends MallServiceExt<Member/*, MenuMapper*/> im
     public int saveMember(Member member) throws MallException {
         long time = System.nanoTime();
         member.setIdx(time);
+        member.setPwd(MallMd5Utils.md5ForData(member.getPwd()));
         member.setIdxCode(time);
         member.setCreateTime(new Date());
         member.setVersion(time);
@@ -63,4 +65,11 @@ public class MemberServiceImpl extends MallServiceExt<Member/*, MenuMapper*/> im
         return super.save(member);
     }
 
+    @Override
+    public Member login(Member member) throws MallException {
+        String pwd = member.getPwd();
+        pwd = MallMd5Utils.md5ForData(pwd);
+        member.setPwd(pwd);
+        return queryOneSomeInfoByCondition(member);
+    }
 }

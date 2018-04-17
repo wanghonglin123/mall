@@ -18,66 +18,43 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall;/**
- * @Title: MemberData
- * @Package: com.whl.mall.data.member
+package com.whl.mall.ext.beans;/**
+ * @Title: MallBeansExt
+ * @Package: com.whl.mall.ext.beans
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/4/10
+ * @Date: 2018/4/17
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/4/10
+ * @Modify-date: 2018/4/17
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.base.service.ext.MallDbServiceExt;
-import org.junit.Test;
-
-import java.sql.Date;
+import com.whl.mall.core.common.beans.MallBeans;
+import com.whl.mall.interfaces.member.MemberService;
+import com.whl.mall.interfaces.member.MenuService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @ClassName: MemberData
- * @Description: 成员数据
+ * @ClassName: MallBeansExt
+ * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/4/10
+ * @Date: 2018/4/17
  */
-public class MemberData {
+public class MallBeansExt extends MallBeans {
+    @Autowired
+    private MemberService memberService;
 
-    @Test
-    public void addData() {
-        final String sql = "insert into tb_member (idx, idx_code, name, telphone, email,\n" +
-                "    pwd, create_time, update_time,\n" +
-                "    create_by_member_idx_code, update_by_member_idx_code,\n" +
-                "    version, status, ext\n" +
-                "    )\n" +
-                "    values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        try {
-            final long times = System.nanoTime();
-            final Date date = Date.valueOf("2018-08-10");
-            MallDbServiceExt.execute(preparedStatement -> {
-                    for (int i = 0; i < 10; i++) {
-                        preparedStatement.setLong(1, times + i);
-                        preparedStatement.setLong(2, times + i);
-                        preparedStatement.setString(3, "user" + i);
-                        preparedStatement.setString(4, "1807037753" + i);
-                        preparedStatement.setString(5, "62581607" + i + "@qq.com");
-                        preparedStatement.setString(6, "123456");
-                        preparedStatement.setDate(7, date);
-                        preparedStatement.setDate(8, date);
-                        preparedStatement.setLong(9, times + i);
-                        preparedStatement.setLong(10, times + i);
-                        preparedStatement.setLong(11, times + i);
-                        preparedStatement.setShort(12, (short) i);
-                        preparedStatement.setString(13, "");
-                        preparedStatement.addBatch();
-                    }
-                    preparedStatement.executeBatch();
-            }, sql);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Autowired
+    private MenuService menuService;
+
+    protected MemberService getMemberService() {
+        return memberService;
     }
 
+    protected MenuService getMenuService() {
+        return menuService;
+    }
 }

@@ -44,4 +44,5 @@ import com.whl.mall.pojo.member.Member;
  */
 public interface MemberService extends MallBaseService<Member> {
     int saveMember(Member member) throws MallException;
+    Member login(Member member) throws MallException;
 }

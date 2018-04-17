@@ -44,9 +44,9 @@ import java.util.List;
  */
 public interface MallBaseMapper<T extends MallBasePoJo> {
     int save(T po);
-    T queryOne();
     int delete(T po);
     int update(T po);
     List<T> queryDataByCondition(T po);
-    T queryOneByCondition(T po);
+    T queryOneAllInfoByCondition(T po);
+    T queryOneSomeInfoByCondition(T po);
 }

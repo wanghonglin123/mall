@@ -34,10 +34,12 @@ package com.whl.mall.manage.controller;/**
 
 import com.whl.mall.core.MallAjaxException;
 import com.whl.mall.core.MallResult;
+import com.whl.mall.core.common.beans.MallBeans;
 import com.whl.mall.core.common.constants.MallSessionConstants;
 import com.whl.mall.core.common.utils.MallBase64Utils;
 import com.whl.mall.core.common.utils.MallJdbcUtils;
 import com.whl.mall.core.common.utils.MallJsonUtils;
+import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.interfaces.member.MenuService;
 import com.whl.mall.pojo.member.Menu;
 import org.apache.shiro.SecurityUtils;
@@ -62,13 +64,7 @@ import java.util.Base64;
  * @Date: 2018/4/9
  */
 @Controller
-public class SystemController {
-    /**
-     * 菜单服务
-     */
-    @Autowired
-    private MenuService menuService;
-
+public class SystemController extends MallBaseController{
     /**
      * 进入登陆页
      *

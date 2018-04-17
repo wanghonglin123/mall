@@ -43,6 +43,10 @@ import com.whl.mall.core.base.pojo.MallBasePoJo;
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/3/26
  */
-public interface MallBaseCacheService<T extends MallBasePoJo> extends MallBaseService<T> {
+public interface MallBaseCacheService<T extends MallBasePoJo> {
+    /**
+     * 设置缓存时间
+     * @return
+     */
     int setCacheExpiryTime();
 }

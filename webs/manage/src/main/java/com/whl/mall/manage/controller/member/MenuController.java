@@ -18,40 +18,86 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.base.service.ext.impl;
+package com.whl.mall.manage.controller.member;
 
 /**
- * @Title: ShopRabbitmqServiceImpl
- * @Package: com.shop.common.base.service.impl
+ * @Title: MenuController
+ * @Package: com.xunbao.controller.member
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/3/28
+ * @Date: 2018/3/22
  * @Version: V2.0.10
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/3/28
+ * @Modify-date: 2018/3/22
  * @Modify-version: 2.1.5
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.base.pojo.MallBasePoJo;
-import com.whl.mall.core.base.service.ext.MallMQServiceExt;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import com.whl.mall.core.MallResult;
+import com.whl.mall.ext.controller.MallBaseController;
+import com.whl.mall.pojo.member.Menu;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * @ClassName: ShopRabbitmqServiceImpl
- * @Description: Rabbitmq 服务
+ * @ClassName: MenuController
+ * @Description: 菜单Controller
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/3/28
+ * @Date: 2018/3/22
  */
-@Service
-public abstract class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServiceExt<T> {
+@Controller
+public class MenuController extends MallBaseController {
+    /**
+     * 进入列表
+     *
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/menu/toList")
+    public String toList(Model model) {
+        return "member/menu/menuList";
+    }
 
-    @Override
-    public int sendMsg() {
+    /**
+     * 页面操作 1：增 2：删 3：改
+     *
+     * @param type
+     * @param idx
+     * @return
+     */
+    @RequestMapping("/menu/{type}/{idx}")
+    public String toSaveOrEditOrViewMenu(@PathVariable String type, @PathVariable Long idx) {
+        return "/member/menu/saveOrEditOrViewMenu";
+    }
+
+    /**
+     * 新增或者修改
+     *
+     * @param menu
+     * @return
+     */
+    @RequestMapping("/menu/do-saveOrEdit")
+    @ResponseBody
+    public MallResult saveOrEdit(Menu menu) throws Exception{
+        super.getMenuService().saveMenu(menu);
+        return MallResult.ok();
+    }
+
+    /**
+     * 新增或者修改
+     *
+     * @param menu
+     * @return
+     */
+    @RequestMapping("/menu/page")
+    @ResponseBody
+    public int page(Menu menu) {
         return 0;
     }
 }

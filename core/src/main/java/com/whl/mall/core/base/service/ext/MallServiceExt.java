@@ -55,11 +55,6 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
     }
 
     @Override
-    public T queryOne() {
-        return baseMapper.queryOne();
-    }
-
-    @Override
     public int delete(T po) {
         return baseMapper.delete(po);
     }
@@ -74,8 +69,21 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
         return baseMapper.queryDataByCondition(po);
     }
 
-    @Override
-    public T queryOneByCondition(T po) {
-        return baseMapper.queryOneByCondition(po);
+    /**
+     * 查询单个数据所有信息
+     * @param po
+     * @return
+     */
+    public T queryOneAllInfoByCondition(T po) {
+        return baseMapper.queryOneAllInfoByCondition(po);
+    }
+
+    /**
+     * 查询单个数据部分信息，性能比所有信息更快
+     * @param po
+     * @return
+     */
+    public T queryOneSomeInfoByCondition(T po) {
+        return baseMapper.queryOneSomeInfoByCondition(po);
     }
 }
