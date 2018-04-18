@@ -47,13 +47,13 @@ public class MemberController extends MallBaseController{
     /**
      * 新增或者修改
      *
-     * @param member
+     * @param po
      * @return
      */
     @RequestMapping("/member/do-save")
     @ResponseBody
-    public MallResult doSave(Member member) throws MallException{
-        super.getMemberService().saveMember(member);
+    public MallResult doSave(Member po) throws MallException{
+        super.getMemberService().save(po);
         return MallResult.ok();
     }
 }

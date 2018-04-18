@@ -2,15 +2,19 @@ package com.whl.mall.manage.controller.member;
 /**
  * @Title: MemberCatController
  * @Package: com.whl.mall.manage.controller.member
- * @Description:
+ * @Description: 成员类别
  * @Author: WangHongLin
  * @Date: 2018-04-08 下午 11:23
  * @Version: V2.0.0
  */
 
+import com.whl.mall.core.MallResult;
+import com.whl.mall.ext.controller.MallBaseController;
+import com.whl.mall.pojo.member.Menu;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @ClassName: MemberCatController
@@ -19,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Date: 2018-04-08 下午 11:23
  */
 @Controller
-public class MemberCateController {
+public class MemberCateController extends MallBaseController {
     /**
      * 进入列表
      *
@@ -38,5 +42,18 @@ public class MemberCateController {
     @RequestMapping("/memberCate/{type}/{idx}")
     public String toAddOrEditOrSee(@PathVariable String type, @PathVariable Long idx) {
         return "member/memberCate/saveOrEditOrViewMemberCate";
+    }
+
+    /**
+     * 新增或者修改
+     *
+     * @param menu
+     * @return
+     */
+    @RequestMapping("/menu/do-saveOrEdit")
+    @ResponseBody
+    public MallResult saveOrEdit(Menu menu) throws Exception{
+        super.getMenuService().save(menu);
+        return MallResult.ok();
     }
 }

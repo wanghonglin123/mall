@@ -33,8 +33,7 @@ package com.whl.mall.ext.beans;/**
  */
 
 import com.whl.mall.core.common.beans.MallBeans;
-import com.whl.mall.interfaces.member.MemberService;
-import com.whl.mall.interfaces.member.MenuService;
+import com.whl.mall.interfaces.member.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -46,9 +45,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class MallBeansExt extends MallBeans {
     @Autowired
     private MemberService memberService;
-
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private ButtonService buttonService;
+    @Autowired
+    private MemberRoleService memberRoleService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private ResourceService resourceService;
+    @Autowired
+    private ResourceGroupService resourceGroupService;
+    @Autowired
+    private ResourceGroupRoleService resourceGroupRoleService;
+
 
     protected MemberService getMemberService() {
         return memberService;
@@ -56,5 +67,29 @@ public class MallBeansExt extends MallBeans {
 
     protected MenuService getMenuService() {
         return menuService;
+    }
+
+    public ButtonService getButtonService() {
+        return buttonService;
+    }
+
+    public MemberRoleService getMemberRoleService() {
+        return memberRoleService;
+    }
+
+    public RoleService getRoleService() {
+        return roleService;
+    }
+
+    public ResourceService getResourceService() {
+        return resourceService;
+    }
+
+    public ResourceGroupService getResourceGroupService() {
+        return resourceGroupService;
+    }
+
+    public ResourceGroupRoleService getResourceGroupRoleService() {
+        return resourceGroupRoleService;
     }
 }

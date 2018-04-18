@@ -8,9 +8,14 @@ package com.whl.mall.manage.controller.member;
  * @Version: V2.0.0
  */
 
+import com.whl.mall.core.MallResult;
+import com.whl.mall.ext.controller.MallBaseController;
+import com.whl.mall.pojo.member.Menu;
+import com.whl.mall.pojo.member.ResourceGroup;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @ClassName: ResourceGroupController
@@ -19,13 +24,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Date: 2018-04-08 下午 11:26
  */
 @Controller
-public class ResourceGroupController {
+public class ResourceGroupController extends MallBaseController {
     /**
      * 进入列表
      *
      * @return
      */
-    @RequestMapping("/authManage/toList")
+    @RequestMapping("/resourceGroup/toList")
     public String toList() {
         return "member/resourceGroup/resourceGrouplist";
     }
@@ -35,8 +40,21 @@ public class ResourceGroupController {
      *
      * @return
      */
-    @RequestMapping("/authManage/{type}/{idx}")
+    @RequestMapping("/resourceGroup/{type}/{idx}")
     public String toAddOrEditOrSee(@PathVariable String type, @PathVariable Long idx) {
         return "member/resourceGroup/saveOrEditOrViewResourceGroup";
+    }
+
+    /**
+     * 新增或者修改
+     *
+     * @param po
+     * @return
+     */
+    @RequestMapping("/resourceGroup/do-saveOrEdit")
+    @ResponseBody
+    public MallResult saveOrEdit(ResourceGroup po) throws Exception{
+        super.getResourceGroupService().save(po);
+        return MallResult.ok();
     }
 }
