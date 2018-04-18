@@ -85,8 +85,7 @@
 <!--新增菜单弹框 end-->
 <script type="text/javascript">
     $(function () {
-        //var _type = '${type!}';
-        var _type = "";
+        var _type = '${type!}';
         if(_type != 'view') {
             $('#resourceCapacity .required').on({
                 'click': function () {
@@ -112,9 +111,11 @@
 
             });
 
-            // 初始化
-            var level = parseInt($('#level').val())-1;
-            initNextMenus(level, '${(menu!).pidx!}');
+            if (type == "edit") {
+                // 初始化
+                var level = parseInt($('#level').val())-1;
+                initNextMenus(level, '${(menu!).pidx!}');
+            }
         }
         if(_type == 'view'){
             $('input,textarea').prop('readonly',true).on({
@@ -130,7 +131,7 @@
     });
     // 初始化菜单
     function initNextMenus(level,defaultIdx) {
-        var url ='/menu/getMenusByLevel/'+level;
+        var url ='/menu/getMenuData/'+level;
         var $wr = $('#pidx');
         $wr.find('option:gt(0)').remove();
         $.ajax({

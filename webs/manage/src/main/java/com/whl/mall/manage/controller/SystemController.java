@@ -137,8 +137,7 @@ public class SystemController extends MallBaseController{
      */
     @RequestMapping("/")
     public String index(HttpServletRequest request, Menu po) throws Exception{
-        //List<Menu> menuList = menuService.queryDataByCondition(po);
-        String json = MallJsonUtils.objectToJson("");
+        String json = super.getMenuService().getTreeData();
         request.setAttribute("menuJson", json);
         return "member/member/index";
     }

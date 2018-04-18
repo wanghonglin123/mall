@@ -18,34 +18,35 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.base.pojo;
-
-/**
- * @Title: ShopBasePoJo
- * @Package: com.shop.common.base
+package com.whl.mall.core.common.constants;/**
+ * @Title: MallNumberConstants
+ * @Package: com.whl.mall.core.common.constants
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/3/23
- * @Version: V2.0.10
+ * @Date: 2018/4/18
+ * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/3/23
- * @Modify-version: 2.1.5
+ * @Modify-date: 2018/4/18
+ * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.common.constants.MallStatus;
-
-import java.io.Serializable;
-import java.util.Date;
-
 /**
- * @ClassName: ShopBasePoJo
- * @Description: 顶级pojo,所有pojo必须实现该接口
- * @Company: 广州市两棵树网络科技有限公司
+ * @ClassName: MallNumberConstants
+ * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/3/23
+ * @Date: 2018/4/18
  */
-public interface MallBasePoJo extends Serializable {
-
+public final class MallNumberConstants {
+    public static final Short ONE = 1;
+    public static final Short TWO = 2;
+    public static final Short THREE = 3;
+    public static final Short FOUR = 4;
+    public static final Short FIVE = 5;
+    public static final Short SIX = 6;
+    public static final Short SEVEN = 7;
+    public static final Short EIGHT = 8;
+    public static final Short NINE = 9;
+    public static final Short TEN = 10;
 }

@@ -8,8 +8,10 @@ package com.whl.mall.core.common.utils;
  * @Version: V2.0.0
  */
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.whl.mall.core.MallException;
 
 import java.util.Collection;
 
@@ -30,11 +32,15 @@ public final class MallJsonUtils {
      * @return
      * @throws Exception
      */
-    public static String objectToJson(Object data) throws Exception {
+    public static String objectToJson(Object data) throws MallException {
         if (data == null) {
             return null;
         }
-        return MAPPER.writeValueAsString(data);
+        try {
+            return MAPPER.writeValueAsString(data);
+        } catch (JsonProcessingException e) {
+            throw new MallException(e);
+        }
     }
 
     /**

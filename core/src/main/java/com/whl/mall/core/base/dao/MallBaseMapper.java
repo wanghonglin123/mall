@@ -49,4 +49,5 @@ public interface MallBaseMapper<T extends MallBasePoJo> {
     List<T> queryDataByCondition(T po);
     T queryOneAllInfoByCondition(T po);
     T queryOneSomeInfoByCondition(T po);
+    int updateByPrimaryKey(long idx);
 }

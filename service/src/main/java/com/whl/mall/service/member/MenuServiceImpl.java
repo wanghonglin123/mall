@@ -34,32 +34,65 @@ package com.whl.mall.service.member;/**
 
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.base.service.ext.MallServiceExt;
+import com.whl.mall.core.common.constants.MallNumberConstants;
+import com.whl.mall.core.common.constants.MallPojoFieldNameConstants;
 import com.whl.mall.core.common.constants.MallStatus;
+import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.interfaces.member.MenuService;
 import com.whl.mall.pojo.member.Menu;
+import com.whl.mall.pojo.member.MenuTree;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * @ClassName: MenuServiceImpl
- * @Description:
+ * @Description: 菜单服务
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/4/8
  */
 @Service
-public class MenuServiceImpl extends MallServiceExt<Menu> implements MenuService{
+public class MenuServiceImpl extends MallServiceExt<Menu> implements MenuService {
 
     @Override
-    public int saveMenu(Menu menu) throws MallException {
-        long time = System.nanoTime();
-        menu.setIdx(time);
-        menu.setIdxCode(time);
-        menu.setCreateTime(new Date());
-        menu.setVersion(time);
-        menu.setUpdateTime(new Date());
-        menu.setExt("");
-        menu.setStatus(MallStatus.STATUS_1);
-        return super.save(menu);
+    public String getTreeData() throws MallException{
+        List<Menu> menuData = queryDataByConditions(null, MallNumberConstants.ONE);
+        return getTreeData(menuData);
     }
+
+    public List<Menu> queryDataByConditions(Long pidx, Short level) throws MallException{
+        Menu menuPo = new Menu();
+        menuPo.setPidx(pidx);
+        menuPo.setLevel(level);
+        return queryDataByCondition(menuPo);
+    }
+
+    private MenuTree getMenuTree(Menu menuPo) throws MallException{
+        List<Menu> menus = queryDataByConditions(menuPo.getIdx(), null);
+        List<MenuTree> menuTrees = new ArrayList<>();
+        for (Menu menu : menus) {
+            menuTrees.add(getMenuTree(menu));
+        }
+        return getMenuTree(menuPo, menuTrees);
+    }
+
+    private MenuTree getMenuTree(Menu menuPo, List<MenuTree> menuTrees) {
+        MenuTree menuTree = new MenuTree();
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put(MallPojoFieldNameConstants.FIELD_URL, menuPo.getUrl());
+        menuTree.setId(menuPo.getIdx());
+        menuTree.setText(menuPo.getName());
+        menuTree.setAttributes(attributes);
+        menuTree.setChildren(menuTrees);
+        return menuTree;
+    }
+
+    private String getTreeData(List<Menu> menuData) throws MallException{
+        List<MenuTree> data = new ArrayList<>();
+        for (Menu menu : menuData) {
+            data.add(getMenuTree(menu));
+        }
+        return MallJsonUtils.objectToJson(data);
+    }
+
 }

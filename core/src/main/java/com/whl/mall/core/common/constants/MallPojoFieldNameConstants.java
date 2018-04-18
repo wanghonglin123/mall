@@ -21,4 +21,6 @@ public final class MallPojoFieldNameConstants {
     public static final String FIELD_IDX = "idx";
     public static final String FIELD_IDX_CODE = "idxCode";
     public static final String FIELD_VERSION = "version";
+    public static final String FIELD_SERIALVERSIONUID = "serialVersionUID";
+    public static final String FIELD_URL = "url";
 }

@@ -40,10 +40,15 @@
       )
   </insert>
 
-  <select id="queryOneAllInfoByCondition" parameterType="com.whl.mall.pojo.member.Member">
+  <sql id="Base_Column_List">
+    idx, idx_code, name, zindex,url, level, pidx, pidx_code, status, code, is_top, img, version,
+    create_time, update_time, create_by_member_idx_code, update_by_member_idx_code, remark,
+    ext
+  </sql>
+  <select id="queryOneAllInfoByCondition" parameterType="com.whl.mall.pojo.member.Menu" resultType="com.whl.mall.pojo.member.Menu">
     SELECT
     <include refid="Base_Column_List" />
-    from tb_out_store_stock_detail from tb_member where 1 = 1
+    from tb_menu_p from tb_member where 1 = 1
     <if test="name != null">
       and name = #{name}
     </if>
@@ -52,8 +57,8 @@
     </if>
   </select>
 
-  <select id="queryOneSomeInfoByCondition" parameterType="com.whl.mall.pojo.member.Member">
-    SELECT  idx, idx_code, name, telphone, email from tb_member where 1 = 1
+  <select id="queryOneSomeInfoByCondition" parameterType="com.whl.mall.pojo.member.Menu" resultType="com.whl.mall.pojo.member.Menu">
+    SELECT  idx, idx_code, name, telphone, email from tb_menu_p where 1 = 1
     <if test="name != null">
       and name = #{name}
     </if>
@@ -62,13 +67,13 @@
     </if>
   </select>
 
-  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Member">
-    SELECT  <include refid="Base_Column_List" /> from tb_member where 1 = 1
-    <if test="name != null">
-      and name = #{name}
+  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Menu" resultType="com.whl.mall.pojo.member.Menu">
+    SELECT  <include refid="Base_Column_List" /> from tb_menu_p where 1 != 0
+    <if test="level != null">
+      and level = #{level}
     </if>
-    <if test="pwd != null">
-      and pwd = #{pwd}
+    <if test="pidx != null">
+      and pidx = #{pidx}
     </if>
   </select>
 </mapper>

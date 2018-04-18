@@ -138,7 +138,7 @@
                             tab: tabSel,
                             options: {
                                 title: node.text,
-                                content: '<iframe  scrolling="auto" src="'+node.attributes[0].url+'" frameborder="0" style="width:100%;height:'+height+'px;"></iframe>',
+                                content: '<iframe  scrolling="auto" src="'+node.attributes.url+'" frameborder="0" style="width:100%;height:'+height+'px;"></iframe>',
                                 closable: true,
                                 selected:true
                             }
@@ -147,7 +147,7 @@
                         tabs.tabs('add', {
                             title: node.text,
                             //href: node.attributes[0].url,
-                            content:'<iframe  scrolling="auto" src="'+node.attributes[0].url+'" frameborder="0" style="width:100%;height:'+height+'px;"></iframe>',
+                            content:'<iframe  scrolling="auto" src="'+node.attributes.url+'" frameborder="0" style="width:100%;height:'+height+'px;"></iframe>',
                             closable: true,
                             bodyCls: "content"
                         });

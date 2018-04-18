@@ -5,11 +5,6 @@ import com.whl.mall.core.base.pojo.MallBasePoJo;
 import java.util.Date;
 
 public class Member implements MallBasePoJo {
-    @Override
-    public void setRemark(String remark) {
-
-    }
-
     /**
      * 主键idx
      */

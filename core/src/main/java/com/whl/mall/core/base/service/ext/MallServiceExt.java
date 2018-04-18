@@ -40,6 +40,7 @@ import com.whl.mall.core.common.constants.MallJavaTypeConstants;
 import com.whl.mall.core.common.constants.MallPojoFieldNameConstants;
 import com.whl.mall.core.common.constants.MallStatus;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
@@ -54,7 +55,7 @@ import java.util.List;
  */
 public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBaseService<T> {
 
-    //@Autowired
+    @Autowired
     private MallBaseMapper<T> baseMapper;
 
     @Override
@@ -95,6 +96,10 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
      */
     public T queryOneSomeInfoByCondition(T po) throws MallException {
         return baseMapper.queryOneSomeInfoByCondition(po);
+    }
+
+    public int updateByPrimaryKey(long idx) {
+        return baseMapper.updateByPrimaryKey(idx);
     }
 
     /**
@@ -140,12 +145,24 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
                 Object value = field.get(pojo);
                 // 获取字段类型名称。比如java.lang.Interger
                 String typeName = field.getType().getName();
+                // 获取字段名称
+                String fieldName = field.getName();
                 Object newValue = null;
+                if (MallPojoFieldNameConstants.FIELD_SERIALVERSIONUID.equals(fieldName)) {
+                    return;
+                }
+                if (null != value) {
+                    // 字符串区分，字符串可能存在非法字符等安全问题，做一下过滤
+                    if (MallJavaTypeConstants.TYPE_REFERENCE_STRING_NAME.equals(typeName)
+                            || MallJavaTypeConstants.TYPE_REFERENCE_CHARSEQUENCE_NAME.equals(typeName)) {  // 字符串类型 String
+                        field.set(pojo, getNewStringValue(value));
+                    }
+                    return;
+                }
                 if (MallJavaTypeConstants.TYPE_REFERENCE_STRING_NAME.equals(typeName)
                         || MallJavaTypeConstants.TYPE_REFERENCE_CHARSEQUENCE_NAME.equals(typeName)) {  // 字符串类型 String
-                    newValue = getNewStringValue(value);
+                    newValue = "";
                 } else if (MallJavaTypeConstants.TYPE_REFERENCE_LONG_NAME.equals(typeName)) {  // Long类型
-                    String fieldName = field.getName();
                     if (MallPojoFieldNameConstants.FIELD_IDX.equals(fieldName)
                             || MallPojoFieldNameConstants.FIELD_IDX_CODE.equals(fieldName)
                             || MallPojoFieldNameConstants.FIELD_VERSION.equals(fieldName)) {

@@ -88,4 +88,5 @@ public interface MallBaseService<T extends MallBasePoJo> {
      * @return
      */
     T queryOneSomeInfoByCondition(T po) throws MallException;
+
 }

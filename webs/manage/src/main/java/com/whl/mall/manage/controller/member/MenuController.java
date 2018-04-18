@@ -34,6 +34,7 @@ package com.whl.mall.manage.controller.member;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallResult;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.Menu;
@@ -42,6 +43,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * @ClassName: MenuController
@@ -65,14 +69,15 @@ public class MenuController extends MallBaseController {
     }
 
     /**
-     * 页面操作 1：增 2：删 3：改
+     * 页面操作 1：增 2：查看 3：改
      *
      * @param type
      * @param idx
      * @return
      */
     @RequestMapping("/menu/{type}/{idx}")
-    public String toSaveOrEditOrViewMenu(@PathVariable String type, @PathVariable Long idx) {
+    public String toSaveOrEditOrViewMenu(@PathVariable String type, @PathVariable Long idx, ModelAndView view) {
+        view.addObject("type", type);
         return "/member/menu/saveOrEditOrViewMenu";
     }
 
@@ -85,12 +90,12 @@ public class MenuController extends MallBaseController {
     @RequestMapping("/menu/do-saveOrEdit")
     @ResponseBody
     public MallResult saveOrEdit(Menu menu) throws Exception{
-        super.getMenuService().saveMenu(menu);
+        super.getMenuService().save(menu);
         return MallResult.ok();
     }
 
     /**
-     * 新增或者修改
+     * 分页查询
      *
      * @param menu
      * @return
@@ -99,5 +104,20 @@ public class MenuController extends MallBaseController {
     @ResponseBody
     public int page(Menu menu) {
         return 0;
+    }
+
+    /**
+     * 获取菜单数据
+     *
+     * @param level 菜单级别
+     * @return
+     */
+    @RequestMapping("/menu/getMenuData/{level}")
+    @ResponseBody
+    public MallResult getMenuData(@PathVariable Short level) throws MallException {
+        Menu menu = new Menu();
+        menu.setLevel(level);
+        List<Menu> list = super.getMenuService().queryDataByCondition(menu);
+        return MallResult.ok(list);
     }
 }

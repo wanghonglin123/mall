@@ -16,6 +16,11 @@
     <result column="status" jdbcType="SMALLINT" property="status" />
     <result column="ext" jdbcType="VARCHAR" property="ext" />
   </resultMap>
+  <sql id="Base_Column_List">
+    idx, idx_code, name, telphone, email, pwd, create_time, update_time, create_by_member_idx_code,
+    update_by_member_idx_code, version, status, ext
+  </sql>
+
   <insert id="save" parameterType="com.whl.mall.pojo.member.Member">
     insert into tb_member (idx, idx_code, user_name,
     pwd, create_time, update_time,
@@ -28,6 +33,23 @@
     #{version,jdbcType=BIGINT}, #{status,jdbcType=SMALLINT}, #{ext,jdbcType=VARCHAR}
     )
   </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.whl.mall.pojo.member.Member">
+    update tb_member
+    set idx_code = #{idxCode,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      telphone = #{telphone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_by_member_idx_code = #{createByMemberIdxCode,jdbcType=BIGINT},
+      update_by_member_idx_code = #{updateByMemberIdxCode,jdbcType=BIGINT},
+      version = #{version,jdbcType=BIGINT},
+      status = #{status,jdbcType=SMALLINT},
+      ext = #{ext,jdbcType=VARCHAR}
+    where idx = #{idx,jdbcType=BIGINT}
+  </update>
 
   <select id="queryOneAllInfoByCondition" parameterType="com.whl.mall.pojo.member.Member">
     SELECT
@@ -52,7 +74,7 @@
   </select>
 
   <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Member">
-    SELECT  <include refid="Base_Column_List" /> from tb_member where 1 = 1
+    SELECT  <include refid="Base_Column_List" /> from tb_member where 1 != 0
     <if test="name != null">
       and name = #{name}
     </if>
