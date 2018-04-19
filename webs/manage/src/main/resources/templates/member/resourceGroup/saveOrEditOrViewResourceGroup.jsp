@@ -189,7 +189,7 @@
         var menuStr = menusArr.join(",");
         $.ajax({
             type: "POST",
-            url: "/authManage/do-saveOrEdit",
+            url: "/resourceGroup/toOperation/1",
             data: {
                 idx: idx,
                 name: name,
@@ -232,7 +232,7 @@
         $.ajax({
             timeout :Ms.AJAX_TIME_OUT,
             type: "POST",
-            url: "/authManage/saveCurButtons",
+            url: "/resourceGroup/operation/2",
             data: {
                 idx: idx,
                 buttonsStr: buttonsStr,

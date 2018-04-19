@@ -72,7 +72,7 @@
             var idxArr = idx.split("-");
             resourceGroupIdx.push(idxArr[1]);
         });
-        var url = '/role/chooseResourceGroup/'+idx + '?resourceGroupIdx=' + resourceGroupIdx.join(',');
+        var url = '/resourceGroup/paging/'+idx + '?resourceGroupIdx=' + resourceGroupIdx.join(',');
         var title ='选择资源组';
         //页面层
         parent.layer.open({
@@ -140,7 +140,7 @@
         parent.layer.load(2, {shade : 0.01});
         $.ajax({
             type: "POST",
-            url: "/role/do-saveOrEdit",
+            url: "/role/operation/1",
             data: {
                 idx: params.idx,
                 name: params.name,

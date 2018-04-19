@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.whl.mall.core.MallException;
+import com.whl.mall.core.common.constants.MallStatus;
 
 import java.util.Collection;
 
@@ -39,7 +40,7 @@ public final class MallJsonUtils {
         try {
             return MAPPER.writeValueAsString(data);
         } catch (JsonProcessingException e) {
-            throw new MallException(e);
+            throw new MallException(MallStatus.HTTP_STATUS_500, e);
         }
     }
 

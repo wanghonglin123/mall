@@ -42,23 +42,41 @@ package com.whl.mall.core;
  * @Date: 2018/3/13
  */
 public class MallException extends Exception{
-    public MallException() {
+    /**
+     * 异常状态
+     */
+    private int status;
+
+    public MallException(int status) {
         super();
+        this.status = status;
     }
 
-    public MallException(String message) {
+    public MallException(int status, String message) {
         super(message);
+        this.status = status;
     }
 
-    public MallException(String message, Throwable cause) {
+    public MallException(int status, String message, Throwable cause) {
         super(message, cause);
+        this.status = status;
     }
 
-    public MallException(Throwable cause) {
+    public MallException(int status, Throwable cause) {
         super(cause);
+        this.status = status;
     }
     
-    protected MallException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected MallException(int status, String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
+        this.status = status;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

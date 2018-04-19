@@ -43,5 +43,4 @@ import com.whl.mall.pojo.member.Button;
  * @Date: 2018/4/9
  */
 public interface ButtonService extends MallBaseService<Button> {
-    int saveButton(Button button) throws MallException;
 }

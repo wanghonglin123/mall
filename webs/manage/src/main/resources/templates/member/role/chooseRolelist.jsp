@@ -30,7 +30,7 @@
     var txtArr = [],defalutIdxArr = ${roleIdxListJson} ;
     $(function(){
         $('#rolelist2').datagrid({
-            url : '/member/chooseRole/paging?status=1',
+            url : '/role/paging',
             fit : true,
             nowrap : true,
             fitColumns : true,

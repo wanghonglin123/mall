@@ -63,6 +63,10 @@ public class MallGridResult extends MallResult{
         return ok(new ArrayList<>(), MallNumberConstants.ZERO);
     }
 
+    public static MallGridResult fail(int status, String message) {
+        return build(status, message, new ArrayList<>(), MallNumberConstants.ZERO);
+    }
+
     public static MallGridResult ok(Object data, int total) {
         return build(MallStatus.HTTP_STATUS_200, MallMessage.MESSAGE_SUCCESS, data, total);
     }

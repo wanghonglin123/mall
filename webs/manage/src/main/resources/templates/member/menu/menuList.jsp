@@ -300,7 +300,7 @@
      * @param idx 主键idx
      */
     function editOrAdd(idx) {
-        var url = idx ? '/menu/edit/'+idx : '/menu/add/1';
+        var url = idx ? '/menu/toOperation/1'+idx : '/menu/toOperation/2';
         var title =idx ? '修改菜单' : '新增菜单';
         //页面层
         parent.layer.open({
@@ -325,7 +325,7 @@
      * @param idx 主键idx
      */
     function showForMenu(idx) {
-        var url ='/menu/view/'+idx ;
+        var url ='/menu/toOperation/3'+idx ;
         var title ='查看菜单';
         //页面层
         parent.layer.open({
@@ -344,7 +344,7 @@
      */
     function editOrAddButton(idx) {
         var node = $('#menuTree').tree('getSelected');
-        var url = idx ? '/button/edit/'+idx : '/button/add/1?menuIdx=' + 1;
+        var url = idx ? '/button/toOperation/1' : '/button/toOperation/2';
         var title =idx ? '修改按钮' : '新增按钮';
         //页面层
         parent.layer.open({
@@ -369,7 +369,7 @@
      */
     function showForButton(idx) {
         var node = $('#menuTree').tree('getSelected');
-        var url = '/menu/button/view/'+idx;
+        var url = '/button/toOperation/3';
         var title = '查看按钮';
         //页面层
         parent.layer.open({

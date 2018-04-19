@@ -10,6 +10,7 @@ package com.whl.mall.core.common.utils;
 
 
 import com.whl.mall.core.MallException;
+import com.whl.mall.core.common.constants.MallStatus;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -32,7 +33,7 @@ public class MallMd5Utils extends DigestUtils{
      */
     public static String md5ForData(String value) throws MallException{
         if (StringUtils.isEmpty(value)) {
-            throw new MallException(MESSAGE);
+            throw new MallException(MallStatus.HTTP_STATUS_400, MESSAGE);
         }
         return md5Hex(md5(value));
     }

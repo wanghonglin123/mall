@@ -42,4 +42,7 @@ public final class MallMessage {
     private MallMessage() {}
 
     public static final String MESSAGE_SUCCESS = "成功";
+    public static final String CONTROLLER_INVALID_PARAMETER = "Controller参数非法";
+    public static final String SERVICE_INVALID_PARAMETER = "service参数非法";
+    public static final String INVALID_PARAMETER = "参数非法";
 }

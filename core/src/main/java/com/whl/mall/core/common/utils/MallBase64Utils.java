@@ -9,6 +9,9 @@ package com.whl.mall.core.common.utils;
  */
 
 import com.whl.mall.core.MallAjaxException;
+import com.whl.mall.core.MallException;
+import com.whl.mall.core.common.constants.MallMessage;
+import com.whl.mall.core.common.constants.MallStatus;
 
 import java.util.Base64;
 
@@ -24,14 +27,14 @@ public final class MallBase64Utils {
 
     public static String encode(String value) throws Exception{
         if (value == null) {
-            throw new MallAjaxException("参数非法");
+            throw new MallException(MallStatus.HTTP_STATUS_400, MallMessage.INVALID_PARAMETER);
         }
         return Base64.getEncoder().encodeToString(value.getBytes(CHARSETNAME_UTF_8));
     }
 
     public static String decode(String value) throws Exception{
         if (value == null) {
-            throw new MallAjaxException("参数非法");
+            throw new MallException(MallStatus.HTTP_STATUS_400, MallMessage.INVALID_PARAMETER);
         }
         byte[] byteValue = Base64.getDecoder().decode(value.getBytes(CHARSETNAME_UTF_8));
         return new String(byteValue, CHARSETNAME_UTF_8);

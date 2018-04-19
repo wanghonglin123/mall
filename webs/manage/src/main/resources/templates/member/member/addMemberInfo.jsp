@@ -99,7 +99,7 @@
         parent.layer.load(2, {shade : 0.01, time : 50000});
         $.ajax({
             type: "POST",
-            url: "/member/do-save",
+            url: "/member/operation/1",
             data: {
                 name: base64_encode(name),
                 password : base64_encode(password),

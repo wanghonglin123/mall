@@ -35,7 +35,7 @@
     var txtArr = [],defalutIdxArr = ${resourceGroupIdxsJson} ;
     $(function(){
         $('#resourceGourplist2').datagrid({
-            url : '/role/chooseResourceGroup?status=1',
+            url : '/ResourceGroup/paging',
             fit : true,
             nowrap : true,
             fitColumns : true,

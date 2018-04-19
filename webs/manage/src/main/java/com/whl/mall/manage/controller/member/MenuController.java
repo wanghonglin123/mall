@@ -35,9 +35,14 @@ package com.whl.mall.manage.controller.member;
  */
 
 import com.whl.mall.core.MallException;
+import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.MallResult;
+import com.whl.mall.core.common.constants.MallMessage;
+import com.whl.mall.core.common.constants.MallNumberConstants;
+import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.ext.controller.MallBaseController;
+import com.whl.mall.pojo.member.Menu;
 import com.whl.mall.pojo.member.Menu;
 import com.whl.mall.pojo.member.MenuTree;
 import org.springframework.stereotype.Controller;
@@ -47,6 +52,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -84,16 +90,58 @@ public class MenuController extends MallBaseController {
     }
 
     /**
-     * 新增或者修改
+     * 操作 1：新增 2：编辑 3：查看 4：删除
      *
-     * @param menu
+     * @param po po
      * @return
      */
-    @RequestMapping("/menu/do-saveOrEdit")
+    @RequestMapping("/menu/operation/{type}")
     @ResponseBody
-    public MallResult saveOrEdit(Menu menu) throws Exception{
-        super.getMenuService().save(menu);
+    public MallResult operation(@PathVariable Short type, Menu po) throws Exception{
+        if (type == MallNumberConstants.ONE) { // 新增
+            super.getMenuService().save(po);
+        }
+
+        Long idxCode = po.getIdxCode();
+        if (idxCode == null) {
+            return MallResult.build(MallStatus.HTTP_STATUS_400, MallMessage.CONTROLLER_INVALID_PARAMETER);
+        }
+        if (type == MallNumberConstants.TWO) {
+            super.getMenuService().update(po);
+        } else if (type == MallNumberConstants.THREE) {
+            return MallResult.ok(super.getMenuService().queryOneSomeInfoByCondition(po));
+        } else {
+            return MallResult.ok(super.getMenuService().delete(po));
+        }
         return MallResult.ok();
+    }
+
+    /**
+     * 跳转到操作页码 1：新增 2：编辑 3：查看
+     *
+     * @param po po
+     * @return
+     */
+    @RequestMapping("/menu/toOperation/{type}")
+    public String toOperation(@PathVariable Short type, Menu po, HttpServletRequest request) throws Exception{
+        if (type == MallNumberConstants.THREE) {
+            request.setAttribute("type", "see");
+        }
+        if (type == MallNumberConstants.THREE || type == MallNumberConstants.TWO) {
+            Menu menu = getMenuService().queryOneSomeInfoByCondition(po);
+            request.setAttribute("obj", menu);
+        }
+        return "/menu/saveOrEditOrViewMenu";
+    }
+
+    /**
+     * 分页查询
+     * @return
+     */
+    @RequestMapping("/menu/paging")
+    @ResponseBody
+    public MallGridResult paging(Menu po, Integer number, Integer rows, String order) throws MallException {
+        return getMenuService().queryPageDataByCondition(po, number, rows, order);
     }
 
     /**

@@ -60,6 +60,10 @@ public class MallResult implements Serializable {
         return new MallResult(status, message, data);
     }
 
+    public static MallResult build(int status, String message) {
+        return new MallResult(status, message, null);
+    }
+
     public static MallResult ok(Object data) {
         return build(MallStatus.HTTP_STATUS_200, MallMessage.MESSAGE_SUCCESS, data);
     }

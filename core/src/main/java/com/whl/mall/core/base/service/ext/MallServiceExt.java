@@ -32,13 +32,18 @@ package com.whl.mall.core.base.service.ext;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.MallAjaxException;
 import com.whl.mall.core.MallException;
+import com.whl.mall.core.MallGridResult;
+import com.whl.mall.core.MallPagingResult;
 import com.whl.mall.core.base.dao.MallBaseMapper;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.base.service.MallBaseService;
 import com.whl.mall.core.common.constants.MallJavaTypeConstants;
+import com.whl.mall.core.common.constants.MallMessage;
 import com.whl.mall.core.common.constants.MallPojoFieldNameConstants;
 import com.whl.mall.core.common.constants.MallStatus;
+import com.whl.mall.core.common.utils.MallPagingUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
@@ -98,8 +103,29 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
         return baseMapper.queryOneSomeInfoByCondition(po);
     }
 
+    /**
+     * 根据主键更新
+     * @param idx
+     * @return
+     */
     public int updateByPrimaryKey(long idx) {
         return baseMapper.updateByPrimaryKey(idx);
+    }
+
+    /**
+     * 分页查询结果
+     * @param po po
+     * @param pageNum 页码
+     * @param rows 行数
+     * @param orderBy 排序
+     * @return
+     * @throws MallException 运行时异常
+     */
+    public MallGridResult queryPageDataByCondition(T po, Integer pageNum, Integer rows, String orderBy) throws MallException{
+        int[] beginAndEndRows = MallPagingUtils.getBeginAndEndRows(pageNum, rows);
+        int total = baseMapper.queryTotal(po);
+        List<T> data = baseMapper.queryPageDataByCondition(po, beginAndEndRows[0], beginAndEndRows[1], orderBy);
+        return MallGridResult.ok(data, total);
     }
 
     /**

@@ -183,7 +183,7 @@
      * @param idx
      */
     function editForMember(idx) {
-        var url = '/member/edit/' + idx;
+        var url = '/member/toOperation/2'+idx;
         var title = '修改个人信息';
         //页面层
         parent.layer.open({
@@ -207,7 +207,7 @@
      * @param idx
      */
     function showForMember(idx) {
-        var url = '/member/edit/' + idx + '?_type=view';
+        var url = '/member/toOperation/3/'+idx;
         var title = '查看个人信息';
         //页面层
         parent.layer.open({
@@ -228,7 +228,7 @@
             area: ['510px', '380px'],
             btn: ['保存', '取消'],
             resize:false,
-            content: ['/member/edit/memberPwd/' + idx, 'no'],
+            content: ['/member/toOperation/2/'+idx, 'no'],
             yes: function (index, layero) {
                 parent.layer.load(2, {shade: 0.01, time: 5000});
                 var iframeWin = parent.window[layero.find('iframe')[0]['name']];
@@ -245,7 +245,7 @@
             area: ['710px', '500px'],
             btn: ['保存', '取消'],
             resize:false,
-            content: ['/member/toAddMember', 'no'],
+            content: ['/member/toOperation/1', 'no'],
             yes: function (index, layero) {
                 var iframeWin = parent.window[layero.find('iframe')[0]['name']];
                 iframeWin.addFormInfo($('#memberlist'));

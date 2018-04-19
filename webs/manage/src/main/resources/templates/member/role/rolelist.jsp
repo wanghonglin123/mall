@@ -126,7 +126,7 @@
      * @param idx 主键idx
      */
     function editOrAddRole(idx) {
-        var url = idx ? '/role/edit/'+idx : '/role/add/1';
+        var url = idx ? '/role/toOperation/1' : '/role/toOperation/2';
         var title =idx ? '修改角色' : '新增角色';
         //页面层
         parent.layer.open({
@@ -149,7 +149,7 @@
      * @param idx 主键idx
      */
     function showForRole(idx) {
-        var url = '/role/view/'+idx ;
+        var url = '/role/toOperation/3' ;
         var title ='查看角色';
         //页面层
         parent.layer.open({

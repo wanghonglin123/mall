@@ -129,7 +129,7 @@
      * @param idx 主键idx
      */
     function editOrAddMemberCate(idx) {
-        var url = idx ? '/memberCate/edit/'+idx : '/memberCate/add/1';
+        var url = idx ? '/memberCate/toOperation/1/'+idx : '/memberCate/toOperation/2/';
         var title =idx ? '修改成员类别' : '新增成员类别';
         //页面层
         parent.layer.open({

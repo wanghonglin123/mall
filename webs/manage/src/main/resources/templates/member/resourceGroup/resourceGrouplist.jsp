@@ -46,7 +46,7 @@
 <script type="text/javascript">
     $(function(){
         $('#resourceGourplist').datagrid({
-            url : '/authManage/paging',
+            url : '/ResourceGroup/paging',
             fit : true,
             nowrap : true,
             fitColumns : true,
@@ -125,7 +125,7 @@
      * @param idx 主键idx
      */
     function editOrAddResourcesGroup(idx) {
-        var url = idx ? '/authManage/edit/'+idx : '/authManage/add/1';
+        var url = idx ? '/resourceGroup/toOperation/2' : '/resourceGroup/toOperation/1';
         var title =idx ? '修改资源组' : '新增资源组';
         //页面层
         parent.layer.open({

@@ -90,7 +90,7 @@
         params.remark = $("#remark").val();
         $.ajax({
             type: "POST",
-            url: "/menu/button/do-saveOrEdit",
+            url: "/button/operation/1",
             data: {
                 idx: params.idx,
                 name: params.name,

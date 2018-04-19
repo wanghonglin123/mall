@@ -70,7 +70,7 @@
         params.remark = $("#remark").val();
         $.ajax({
             type: "POST",
-            url: "/memberCate/do-saveOrEdit",
+            url: "/memberCate/operation/1/",
             data: {
                 idx: params.idx,
                 name: params.name,

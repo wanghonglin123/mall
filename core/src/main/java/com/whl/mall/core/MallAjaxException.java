@@ -38,24 +38,25 @@ package com.whl.mall.core;/**
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/4/3
  */
-public class MallAjaxException extends Exception{
-    public MallAjaxException() {
-        super();
+public class MallAjaxException extends MallException{
+    public MallAjaxException(int status) {
+        super(status);
     }
 
-    public MallAjaxException(String message) {
-        super(message);
+    public MallAjaxException(int status, String message) {
+        super(status, message);
     }
 
-    public MallAjaxException(String message, Throwable cause) {
-        super(message, cause);
+    public MallAjaxException(int status, String message, Throwable cause) {
+        super(status, message, cause);
     }
 
-    public MallAjaxException(Throwable cause) {
-        super(cause);
+    public MallAjaxException(int status, Throwable cause) {
+        super(status, cause);
     }
 
-    protected MallAjaxException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    protected MallAjaxException(int status, String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(status, message, cause, enableSuppression, writableStackTrace);
     }
+
 }

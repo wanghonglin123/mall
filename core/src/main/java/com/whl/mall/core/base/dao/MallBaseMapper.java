@@ -32,6 +32,7 @@ package com.whl.mall.core.base.dao;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 
 import java.util.List;
@@ -50,4 +51,6 @@ public interface MallBaseMapper<T extends MallBasePoJo> {
     T queryOneAllInfoByCondition(T po);
     T queryOneSomeInfoByCondition(T po);
     int updateByPrimaryKey(long idx);
+    List<T> queryPageDataByCondition(T po, Integer begin, Integer end, String orderBy);
+    int queryTotal(T po);
 }

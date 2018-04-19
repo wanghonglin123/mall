@@ -35,6 +35,7 @@ package com.whl.mall.core.base.service;
  */
 
 import com.whl.mall.core.MallException;
+import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 
 import java.util.List;
@@ -88,5 +89,9 @@ public interface MallBaseService<T extends MallBasePoJo> {
      * @return
      */
     T queryOneSomeInfoByCondition(T po) throws MallException;
+
+    int updateByPrimaryKey(long idx);
+
+    MallGridResult queryPageDataByCondition(T po, Integer pageNum, Integer rows, String orderBy) throws MallException;
 
 }

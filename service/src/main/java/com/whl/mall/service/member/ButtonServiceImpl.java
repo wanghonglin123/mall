@@ -32,14 +32,10 @@ package com.whl.mall.service.member;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.MallException;
 import com.whl.mall.core.base.service.ext.MallServiceExt;
-import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.interfaces.member.ButtonService;
 import com.whl.mall.pojo.member.Button;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 /**
  * @ClassName: ButtonServiceImpl
@@ -49,17 +45,4 @@ import java.util.Date;
  */
 @Service
 public class ButtonServiceImpl extends MallServiceExt<Button/*, MenuMapper*/> implements ButtonService {
-
-    @Override
-    public int saveButton(Button pojo) throws MallException {
-        long time = System.nanoTime();
-        pojo.setIdx(time);
-        pojo.setIdxCode(time);
-        pojo.setCreateTime(new Date());
-        pojo.setVersion(time);
-        pojo.setUpdateTime(new Date());
-        pojo.setExt("");
-        pojo.setStatus(MallStatus.STATUS_1);
-        return super.save(pojo);
-    }
 }
