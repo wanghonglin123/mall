@@ -115,7 +115,7 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
         </console>
 
         <!-- 文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用-->
-        <File name="log" fileName="${sys:user.dir}/${appName}/${appName}-log/log-temp/test.log" append="false">
+        <File name="log" fileName="${sys:user.dir}/webs/${appName}/${appName}-log/log-temp/test.log" append="false">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
         </File>
 
@@ -183,12 +183,15 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
         <!-- 异步方式的日志 ####### Begin ########### -->
         <!-- 定义根logger，根logger是必须的，这里我把根logger定义为异步的，也可为定义为普通的同步的，但是注意在同步根logger和异步根logger中只能存在一个，不能两个都配置 -->
         <!-- asyncRoot 所有模块通用，如果需要定制同步日志，则定义<Logger> 指定特别的包或者类-->
-        <asyncRoot level="info">
-            <!-- <AppenderRef ref="rollingFileDebug" />-->
-            <appender-ref ref="rollingFileDebug"/>
+        <asyncRoot level="warn">
+            <!-- 注释掉，开发环境不打印日志到文件,其它环境要取消注释，日志持久化占用空间-->
+            <!--<appender-ref ref="rollingFileDebug"/>
             <appender-ref ref="rollingFileInfo"/>
             <appender-ref ref="rollingFileWarn"/>
-            <appender-ref ref="rollingFileError"/>
+            <appender-ref ref="rollingFileError"/>-->
+            <!-- 打印到测试日志文件，重启后会清除以前的日志-->
+            <appender-ref ref="log"/>
+            <appender-ref ref="console"/>
         </asyncRoot>
 
         <!-- 定义一个普通的logger，这里我定义为异步的 -->
@@ -202,16 +205,16 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
 
         <!-- 以下asyncLogger 是对一些包定制私有日志配置-->
         <!-- 定义一个普通的logger，这里我定义为异步的 -->
-        <asyncLogger name="org.springframework" level="warn" additivity="false">
-            <!--<AppenderRef ref="rollingFileWarn" />
-            <AppenderRef ref="rollingRandomAccessFileAppender" />-->
+        <!--<asyncLogger name="org.springframework" level="warn" additivity="false">
+            &lt;!&ndash;<AppenderRef ref="rollingFileWarn" />
+            <AppenderRef ref="rollingRandomAccessFileAppender" />&ndash;&gt;
 
-            <!-- <appender-ref ref="rollingFileDebug"/>
-             <appender-ref ref="rollingFileInfo"/>-->
+            &lt;!&ndash; <appender-ref ref="rollingFileDebug"/>
+             <appender-ref ref="rollingFileInfo"/>&ndash;&gt;
             <appender-ref ref="rollingFileWarn"/>
             <appender-ref ref="rollingFileError"/>
             <appender-ref ref="console"></appender-ref>
-        </asyncLogger>
+        </asyncLogger>-->
 
         <!-- 定义一个普通的logger，这里我定义为异步的 -->
         <asyncLogger name="org.mybatis" level="warn" additivity="false">

@@ -75,12 +75,12 @@
         $.ajax({
             timeout : Ms.AJAX_TIME_OUT,
             type : "POST",
-            url : '/menu/getMenuData',
+            url : '/menu/listAll',
             cache : false
         }).done(function (result) {
             // 初始化树菜单，
             $tree.tree({
-                data : result,
+                data : JSON.parse(result.data),
                 animate:true,
                 onClick: function (node) {
                     $tree.tree('toggle', node.target).tree('select', node.target);
@@ -107,6 +107,8 @@
                     }
                 },
                 onLoadSuccess:function(){
+                    // 查询菜单列表
+                    $('#buttonRight').hide();
                     // remove menu
                     if('${hideMenuIdxs!}'){
                         var menuIdxs = '${hideMenuIdxs!}';

@@ -55,7 +55,7 @@ import java.util.*;
 public class MenuServiceImpl extends MallServiceExt<Menu> implements MenuService {
 
     @Override
-    public String getTreeData() throws MallException{
+    public List<MenuTree> getTreeData() throws MallException{
         List<Menu> menuData = queryDataByConditions(null, MallNumberConstants.ONE);
         return getTreeData(menuData);
     }
@@ -87,12 +87,12 @@ public class MenuServiceImpl extends MallServiceExt<Menu> implements MenuService
         return menuTree;
     }
 
-    private String getTreeData(List<Menu> menuData) throws MallException{
+    private List<MenuTree> getTreeData(List<Menu> menuData) throws MallException{
         List<MenuTree> data = new ArrayList<>();
         for (Menu menu : menuData) {
             data.add(getMenuTree(menu));
         }
-        return MallJsonUtils.objectToJson(data);
+        return data;
     }
 
 }

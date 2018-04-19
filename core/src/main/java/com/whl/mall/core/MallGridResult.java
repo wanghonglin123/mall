@@ -18,36 +18,71 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.common.constants;/**
- * @Title: MallNumberConstants
- * @Package: com.whl.mall.core.common.constants
+package com.whl.mall.core;/**
+ * @Title: MallGridResult
+ * @Package: com.whl.mall.core
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/4/18
+ * @Date: 2018/4/19
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/4/18
+ * @Modify-date: 2018/4/19
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.common.constants.MallMessage;
+import com.whl.mall.core.common.constants.MallNumberConstants;
+import com.whl.mall.core.common.constants.MallStatus;
+
+import java.util.ArrayList;
+
 /**
- * @ClassName: MallNumberConstants
- * @Description:
+ * @ClassName: MallGridResult
+ * @Description: 表格返回结果，easyui 对应
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/4/18
+ * @Date: 2018/4/19
  */
-public final class MallNumberConstants {
-    public static final Short ZERO = 0;
-    public static final Short ONE = 1;
-    public static final Short TWO = 2;
-    public static final Short THREE = 3;
-    public static final Short FOUR = 4;
-    public static final Short FIVE = 5;
-    public static final Short SIX = 6;
-    public static final Short SEVEN = 7;
-    public static final Short EIGHT = 8;
-    public static final Short NINE = 9;
-    public static final Short TEN = 10;
+public class MallGridResult extends MallResult{
+    private int total;
+
+    private MallGridResult() {
+    }
+
+    private MallGridResult(int status, String message, Object data, int total) {
+        super(status, message, data);
+        this.total = total;
+    }
+
+    public static MallGridResult build() {
+        return new MallGridResult();
+    }
+
+    public static MallGridResult ok() {
+        return ok(new ArrayList<>(), MallNumberConstants.ZERO);
+    }
+
+    public static MallGridResult ok(Object data, int total) {
+        return build(MallStatus.HTTP_STATUS_200, MallMessage.MESSAGE_SUCCESS, data, total);
+    }
+
+    public static MallGridResult build(int status, String message, Object data, int total) {
+        return new MallGridResult(status, message, data, total);
+    }
+
+
+    /**
+     * @return total
+     */
+    public int getTotal() {
+        return total;
+    }
+
+    /**
+     * @param total total
+     */
+    public void setTotal(int total) {
+        this.total = total;
+    }
 }

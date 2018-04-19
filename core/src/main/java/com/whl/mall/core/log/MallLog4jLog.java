@@ -58,7 +58,7 @@ public class MallLog4jLog extends MallLoggerExt {
 
     @Override
     public void error(Throwable ex) {
-        LOGGER.error(ex);
+        LOGGER.error(this.getClass().getName(), ex);
     }
 
     @Override

@@ -44,11 +44,13 @@ import java.io.Serializable;
  * @Date: 2018/4/8
  */
 public class MallResult implements Serializable {
+    protected MallResult() {}
+
     private int status;
     private String message;
     private Object data;
 
-    public MallResult(int status, String message, Object data) {
+    protected MallResult(int status, String message, Object data) {
         this.status = status;
         this.message = message;
         this.data = data;

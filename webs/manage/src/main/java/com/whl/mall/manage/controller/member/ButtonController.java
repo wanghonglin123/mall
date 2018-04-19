@@ -9,9 +9,12 @@ package com.whl.mall.manage.controller.member;
  */
 
 import com.whl.mall.core.MallResult;
+import com.whl.mall.core.log.MallLog4jLog;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.Button;
 import com.whl.mall.pojo.member.Menu;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +38,7 @@ public class ButtonController extends MallBaseController {
     public String toAddOrEditOrSee(@PathVariable String type, @PathVariable Long idx) {
         return "member/button/saveOrEditOrViewButton";
     }
-
+    private static final Logger LOGGER = LogManager.getLogger(ButtonController.class);
     /**
      * 新增或者修改
      *
@@ -48,4 +51,5 @@ public class ButtonController extends MallBaseController {
         super.getButtonService().save(po);
         return MallResult.ok();
     }
+
 }

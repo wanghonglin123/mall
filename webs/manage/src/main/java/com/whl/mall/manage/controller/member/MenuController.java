@@ -36,8 +36,10 @@ package com.whl.mall.manage.controller.member;
 
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallResult;
+import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.Menu;
+import com.whl.mall.pojo.member.MenuTree;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -95,15 +97,25 @@ public class MenuController extends MallBaseController {
     }
 
     /**
-     * 分页查询
-     *
-     * @param menu
+     * 获取全部菜单
      * @return
      */
-    @RequestMapping("/menu/page")
+    @RequestMapping("/menu/listAll")
     @ResponseBody
-    public int page(Menu menu) {
-        return 0;
+    public MallResult listAll() throws MallException{
+        List<MenuTree> treeList = super.getMenuService().getTreeData();
+        return MallResult.ok(MallJsonUtils.objectToJson(treeList));
+    }
+
+    /**
+     * 分页查询
+     * @return
+     */
+    @RequestMapping("/menu/paging")
+    @ResponseBody
+    public MallResult paging(Menu menu, Integer number, Integer rows) throws MallException{
+        List<MenuTree> treeList = super.getMenuService().getTreeData();
+        return MallResult.ok(MallJsonUtils.objectToJson(treeList));
     }
 
     /**
@@ -115,9 +127,7 @@ public class MenuController extends MallBaseController {
     @RequestMapping("/menu/getMenuData/{level}")
     @ResponseBody
     public MallResult getMenuData(@PathVariable Short level) throws MallException {
-        Menu menu = new Menu();
-        menu.setLevel(level);
-        List<Menu> list = super.getMenuService().queryDataByCondition(menu);
+        List<Menu> list = super.getMenuService().queryDataByConditions(null, level);
         return MallResult.ok(list);
     }
 }

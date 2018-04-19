@@ -35,8 +35,10 @@ package com.whl.mall.interfaces.member;/**
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.base.service.MallBaseService;
 import com.whl.mall.pojo.member.Menu;
+import com.whl.mall.pojo.member.MenuTree;
 
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * @ClassName: MenuService
@@ -49,7 +51,7 @@ public interface MenuService extends MallBaseService<Menu> {
      * 获取树行菜单数据
      * @return
      */
-    String getTreeData() throws MallException;
+    List<MenuTree> getTreeData() throws MallException;
 
     List<Menu> queryDataByConditions(Long pidx, Short level) throws MallException;
 }

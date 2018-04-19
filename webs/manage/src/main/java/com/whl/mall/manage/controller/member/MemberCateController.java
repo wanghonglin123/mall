@@ -10,6 +10,7 @@ package com.whl.mall.manage.controller.member;
 
 import com.whl.mall.core.MallResult;
 import com.whl.mall.ext.controller.MallBaseController;
+import com.whl.mall.pojo.member.Button;
 import com.whl.mall.pojo.member.Menu;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,7 +51,7 @@ public class MemberCateController extends MallBaseController {
      * @param menu
      * @return
      */
-    @RequestMapping("/menu/do-saveOrEdit")
+    @RequestMapping("/memberCate/do-saveOrEdit")
     @ResponseBody
     public MallResult saveOrEdit(Menu menu) throws Exception{
         super.getMenuService().save(menu);

@@ -29,7 +29,6 @@ public class ManageApplication implements ApplicationRunner{
 
 	@Override
 	public void run(ApplicationArguments applicationArguments) throws Exception {
-		logger.info("[{}]", "app 启动成功，正在初始化一些参数");
-		logger.error("Oops! We have an Error. OK");
+		logger.warn("[{}]", "app 启动成功，正在初始化一些参数");
 	}
 }
