@@ -48,12 +48,12 @@
         $.ajax({
             timeout : Ms.AJAX_TIME_OUT,
             type : "POST",
-            url : '/menu/getMenuData',
+            url : '/menu/listAll',
             cache : false
         }).done(function (result) {
               // 初始化树菜单，
             $mnTree.tree({
-                  data: result,
+                  data: JSON.parse(result.data),
                   animate: true,
                   checkbox:true,
                   onClick: function (node) {

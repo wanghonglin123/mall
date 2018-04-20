@@ -8,16 +8,16 @@
 
 <!-- start-->
 <input type="hidden" id="idx" value=""/>
-<input type="hidden" id="menuIdx" value="">
+<input type="hidden" id="menuIdx" value="${(menu.id)!}">
 <div id="resourceCapacity">
     <div class="winCont">
         <div class="winRow">
             <label class="brandName">当前菜单：</label>
-            <input id="menuName" class="brandTxt" type="text" value="" disabled="disabled">
+            <input id="menuName" class="brandTxt" type="text" value="${(menu.name)!}" disabled="disabled">
         </div>
         <div class="winRow">
             <label class="brandName">当前菜单编码：</label>
-            <input id="menuCode" class="brandTxt" type="text" value="" disabled="disabled">
+            <input id="menuCode" class="brandTxt" type="text" value="${(menu.code)!}" disabled="disabled">
         </div>
 
         <div class="winRow">
@@ -85,20 +85,14 @@
         params.idx = $("#idx").val();
         params.name = $("#name").val();
         params.code = $("#code").val();
-        params.menuIdx = $("#menuIdx").val();
+        params.menuIdxCode = $("#menuIdx").val();
+        alert(params.menuIdxCode);
         //params.iconUrl = $("#iconUrl").val();
         params.remark = $("#remark").val();
         $.ajax({
             type: "POST",
             url: "/button/operation/1",
-            data: {
-                idx: params.idx,
-                name: params.name,
-                code: params.code,
-                menuIdx: params.menuIdx,
-                //iconUrl:params.iconUrl,
-                remark: params.remark
-            },
+            data: params,
             dataType: 'json'
         }).done(function (data) {
             if (data.status == 200) {

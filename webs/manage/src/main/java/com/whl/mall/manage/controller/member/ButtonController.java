@@ -59,6 +59,7 @@ public class ButtonController extends MallBaseController {
     public MallResult operation(@PathVariable Short type, Button po) throws Exception{
         if (type == MallNumberConstants.ONE) { // 新增
             super.getButtonService().save(po);
+            return MallResult.ok();
         }
 
         Long idxCode = po.getIdxCode();
@@ -78,19 +79,25 @@ public class ButtonController extends MallBaseController {
     /**
      * 跳转到操作页码 1：新增 2：编辑 3：查看
      *
-     * @param po po
      * @return
      */
-    @RequestMapping("/button/toOperation/{type}")
-    public String toOperation(@PathVariable Short type, Button po, HttpServletRequest request) throws Exception{
-        if (type == MallNumberConstants.THREE) {
-            request.setAttribute("type", "see");
+    @RequestMapping("/button/toOperation/{type}/{idxCode}")
+    public String toOperation(@PathVariable String type, @PathVariable Long idxCode, HttpServletRequest request) throws Exception{
+        request.setAttribute("type", type);
+
+        if ("edit".equals(type) || "see".equals(type)) {
+            Button po = new Button();
+            po.setIdxCode(idxCode);
+            po = getButtonService().queryOneSomeInfoByCondition(po);
+            request.setAttribute("obj", po);
         }
-        if (type == MallNumberConstants.THREE || type == MallNumberConstants.TWO) {
-            Button button = getButtonService().queryOneSomeInfoByCondition(po);
-            request.setAttribute("obj", button);
+        if ("add".equals(type)) {
+            Menu menu = new Menu();
+            menu.setIdx(idxCode);
+            menu= getMenuService().queryOneSomeInfoByCondition(menu);
+            request.setAttribute("menu", menu);
         }
-        return "/button/saveOrEditOrViewButton";
+        return "/member/button/saveOrEditOrViewButton";
     }
 
     /**

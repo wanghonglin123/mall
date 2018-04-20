@@ -45,7 +45,6 @@ import java.util.Map;
  */
 public class MenuTree {
     private static final long serialVersionUID = 7023613456653960152L;
-
     /**
      * 菜单主键idx
      */

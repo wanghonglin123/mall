@@ -41,8 +41,8 @@ public final class MallPagingUtils {
                 || rows > max_rows || rows < MallNumberConstants.ONE) {
             throw new MallException(MallStatus.HTTP_STATUS_400, MallMessage.INVALID_PARAMETER);
         }
-        int startRows = pageNum * rows + MallNumberConstants.ONE;
-        int endRoes = (pageNum + 1) * rows;
+        int startRows = (pageNum - MallNumberConstants.ONE) * rows;
+        int endRoes = pageNum * rows;
         return new int[]{startRows,endRoes};
     }
 

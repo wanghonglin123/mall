@@ -184,7 +184,7 @@
         params.markButton = $("#markButton").val();
         $.ajax({
             type: "POST",
-            url: "/button/operation/1",
+            url: "/menu/operation/1",
             data: {
                 idx: params.idx,
                 name: params.name,

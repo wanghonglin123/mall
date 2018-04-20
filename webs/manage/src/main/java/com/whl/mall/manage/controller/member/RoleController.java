@@ -14,6 +14,7 @@ import com.whl.mall.core.common.constants.MallMessage;
 import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.ext.controller.MallBaseController;
+import com.whl.mall.pojo.member.Menu;
 import com.whl.mall.pojo.member.Role;
 import com.whl.mall.pojo.member.Role;
 import org.springframework.stereotype.Controller;
@@ -38,7 +39,7 @@ public class RoleController extends MallBaseController {
      */
     @RequestMapping("/role/toList")
     public String toList() {
-        return "member/role/rolelist";
+        return "/member/role/rolelist";
     }
 
     /**
@@ -48,7 +49,7 @@ public class RoleController extends MallBaseController {
      */
     @RequestMapping("/role/{type}/{idx}")
     public String toAddOrEditOrSee(@PathVariable String type, @PathVariable Long idx) {
-        return "member/role/saveOrEditOrViewRole";
+        return "/member/role/saveOrEditOrViewRole";
     }
 
     /**
@@ -81,17 +82,17 @@ public class RoleController extends MallBaseController {
     /**
      * 跳转到操作页码 1：新增 2：编辑 3：查看
      *
-     * @param po po
      * @return
      */
-    @RequestMapping("/role/toOperation/{type}")
-    public String toOperation(@PathVariable Short type, Role po, HttpServletRequest request) throws Exception{
-        if (type == MallNumberConstants.THREE) {
-            request.setAttribute("type", "see");
-        }
-        if (type == MallNumberConstants.THREE || type == MallNumberConstants.TWO) {
-            Role role = getRoleService().queryOneSomeInfoByCondition(po);
-            request.setAttribute("obj", role);
+    @RequestMapping("/role/toOperation/{type}/{idxCode}")
+    public String toOperation(@PathVariable String type, @PathVariable Long idxCode, HttpServletRequest request) throws Exception{
+        request.setAttribute("type", type);
+
+        if ("edit".equals(type) || "see".equals(type)) {
+            Role po = new Role();
+            po.setIdxCode(idxCode);
+            po = getRoleService().queryOneSomeInfoByCondition(po);
+            request.setAttribute("obj", po);
         }
         return "/role/saveOrEditOrViewRole";
     }

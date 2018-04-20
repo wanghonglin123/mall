@@ -207,8 +207,12 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
                     }
                 } else if (MallJavaTypeConstants.TYPE_REFERENCE_SHORT_NAME.equals(typeName)) {  // Short类型
                     if (null == value) {
-                        // Short 必须强制转换
-                        newValue = (short) 0;
+                        if (MallPojoFieldNameConstants.FIELD_STATUS.equals(fieldName)) {
+                            newValue = (short) 1;
+                        } else {
+                            // Short 必须强制转换
+                            newValue = (short) 0;
+                        }
                     }
                 }
                 field.set(pojo, newValue);

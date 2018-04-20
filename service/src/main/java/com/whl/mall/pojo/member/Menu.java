@@ -140,6 +140,20 @@ public class Menu implements MallBasePoJo{
     }
 
     /**
+     * @return id
+     */
+    public String getId() {
+        return this.idx + "";
+    }
+
+    /**
+     * @param id id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
      * @return url
      */
     public String getUrl() {

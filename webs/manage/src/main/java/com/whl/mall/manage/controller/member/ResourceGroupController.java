@@ -15,6 +15,7 @@ import com.whl.mall.core.common.constants.MallMessage;
 import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.ext.controller.MallBaseController;
+import com.whl.mall.pojo.member.Menu;
 import com.whl.mall.pojo.member.ResourceGroup;
 import com.whl.mall.pojo.member.ResourceGroup;
 import org.springframework.stereotype.Controller;
@@ -37,19 +38,9 @@ public class ResourceGroupController extends MallBaseController {
      *
      * @return
      */
-    @RequestMapping("/ResourceGroup/toList")
+    @RequestMapping("/resourceGroup/toList")
     public String toList() {
-        return "member/ResourceGroup/ResourceGrouplist";
-    }
-
-    /**
-     * 进入新增页面
-     *
-     * @return
-     */
-    @RequestMapping("/ResourceGroup/{type}/{idx}")
-    public String toAddOrEditOrSee(@PathVariable String type, @PathVariable Long idx) {
-        return "member/ResourceGroup/saveOrEditOrViewResourceGroup";
+        return "/member/resourceGroup/resourceGrouplist";
     }
 
     /**
@@ -82,19 +73,20 @@ public class ResourceGroupController extends MallBaseController {
     /**
      * 跳转到操作页码 1：新增 2：编辑 3：查看
      *
-     * @param po po
+     * @param idxCode idxCode
      * @return
      */
-    @RequestMapping("/resourceGroup/toOperation/{type}")
-    public String toOperation(@PathVariable Short type, ResourceGroup po, HttpServletRequest request) throws Exception{
-        if (type == MallNumberConstants.THREE) {
-            request.setAttribute("type", "see");
+    @RequestMapping("/resourceGroup/toOperation/{type}/{idxCode}")
+    public String toOperation(@PathVariable String type, @PathVariable Long idxCode, HttpServletRequest request) throws Exception{
+        request.setAttribute("type", type);
+
+        if ("edit".equals(type) || "see".equals(type)) {
+            ResourceGroup po = new ResourceGroup();
+            po.setIdxCode(idxCode);
+            po = getResourceGroupService().queryOneSomeInfoByCondition(po);
+            request.setAttribute("obj", po);
         }
-        if (type == MallNumberConstants.THREE || type == MallNumberConstants.TWO) {
-            ResourceGroup resourceGroup = getResourceGroupService().queryOneSomeInfoByCondition(po);
-            request.setAttribute("obj", resourceGroup);
-        }
-        return "/resourceGroup/saveOrEditOrViewResourceGroup";
+        return "/member/resourceGroup/saveOrEditOrViewResourceGroup";
     }
 
     /**

@@ -53,6 +53,8 @@ import java.util.*;
  */
 @Service
 public class MenuServiceImpl extends MallServiceExt<Menu> implements MenuService {
+    private static final String STATE_CLOSED = "closed";
+    private static final String STATE_OPEN = "closed";
 
     @Override
     public List<MenuTree> getTreeData() throws MallException{
@@ -84,6 +86,9 @@ public class MenuServiceImpl extends MallServiceExt<Menu> implements MenuService
         menuTree.setText(menuPo.getName());
         menuTree.setAttributes(attributes);
         menuTree.setChildren(menuTrees);
+        if (menuPo.getLevel() == MallNumberConstants.ONE) {
+            menuTree.setState(STATE_CLOSED);
+        }
         return menuTree;
     }
 

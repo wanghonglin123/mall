@@ -17,6 +17,7 @@ import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.Member;
 import com.whl.mall.pojo.member.Member;
+import com.whl.mall.pojo.member.Menu;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,17 +40,7 @@ public class MemberController extends MallBaseController{
      */
     @RequestMapping("/member/toList")
     public String toList() {
-        return "member/member/list";
-    }
-
-    /**
-     * 进入新增成员页面
-     *
-     * @return
-     */
-    @RequestMapping("/member/toAddMember")
-    public String toAddMember() {
-        return "member/member/addMemberInfo";
+        return "/member/member/list";
     }
 
     /**
@@ -82,19 +73,19 @@ public class MemberController extends MallBaseController{
     /**
      * 跳转到操作页码 1：新增 2：编辑 3：查看
      *
-     * @param po po
      * @return
      */
-    @RequestMapping("/member/toOperation/{type}")
-    public String toOperation(@PathVariable Short type, Member po, HttpServletRequest request) throws Exception{
-        if (type == MallNumberConstants.THREE) {
-            request.setAttribute("type", "see");
+    @RequestMapping("/member/toOperation/{type}/{idxCode}")
+    public String toOperation(@PathVariable String type, @PathVariable Long idxCode, HttpServletRequest request) throws Exception{
+        request.setAttribute("type", type);
+
+        if ("edit".equals(type) || "see".equals(type)) {
+            Member po = new Member();
+            po.setIdxCode(idxCode);
+            po = getMemberService().queryOneSomeInfoByCondition(po);
+            request.setAttribute("obj", po);
         }
-        if (type == MallNumberConstants.THREE || type == MallNumberConstants.TWO) {
-            Member member = getMemberService().queryOneSomeInfoByCondition(po);
-            request.setAttribute("obj", member);
-        }
-        return "/member/saveOrEditOrViewMember";
+        return "/member/member/addMemberInfo";
     }
 
     /**

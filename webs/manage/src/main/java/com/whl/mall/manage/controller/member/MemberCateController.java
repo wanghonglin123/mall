@@ -39,17 +39,7 @@ public class MemberCateController extends MallBaseController {
      */
     @RequestMapping("/memberCate/toList")
     public String toList() {
-        return "member/memberCate/memberCatelist";
-    }
-
-    /**
-     * 进入新增页面
-     *
-     * @return
-     */
-    @RequestMapping("/memberCate/{type}/{idx}")
-    public String toAddOrEditOrSee(@PathVariable String type, @PathVariable Long idx) {
-        return "member/memberCate/saveOrEditOrViewMemberCate";
+        return "/member/memberCate/memberCatelist";
     }
 
     /**
@@ -82,17 +72,17 @@ public class MemberCateController extends MallBaseController {
     /**
      * 跳转到操作页码 1：新增 2：编辑 3：查看
      *
-     * @param po po
      * @return
      */
-    @RequestMapping("/memberCate/toOperation/{type}")
-    public String toOperation(@PathVariable Short type, Button po, HttpServletRequest request) throws Exception{
-        if (type == MallNumberConstants.THREE) {
-            request.setAttribute("type", "see");
-        }
-        if (type == MallNumberConstants.THREE || type == MallNumberConstants.TWO) {
-            Button memberCate = getButtonService().queryOneSomeInfoByCondition(po);
-            request.setAttribute("obj", memberCate);
+    @RequestMapping("/memberCate/toOperation/{type}/{idxCode}")
+    public String toOperation(@PathVariable String type, @PathVariable Long idxCode, HttpServletRequest request) throws Exception{
+        request.setAttribute("type", type);
+
+        if ("edit".equals(type) || "see".equals(type)) {
+            Menu po = new Menu();
+            po.setIdxCode(idxCode);
+            Menu menu = getMenuService().queryOneSomeInfoByCondition(po);
+            request.setAttribute("obj", menu);
         }
         return "/memberCate/saveOrEditOrViewButton";
     }

@@ -48,7 +48,7 @@
   <select id="queryOneAllInfoByCondition" parameterType="com.whl.mall.pojo.member.Menu" resultType="com.whl.mall.pojo.member.Menu">
     SELECT
     <include refid="Base_Column_List" />
-    from tb_menu_p from tb_member where 1 = 1
+    from tb_menu_p from tb_member where 1 != 1
     <if test="name != null">
       and name = #{name}
     </if>
@@ -58,17 +58,38 @@
   </select>
 
   <select id="queryOneSomeInfoByCondition" parameterType="com.whl.mall.pojo.member.Menu" resultType="com.whl.mall.pojo.member.Menu">
-    SELECT  idx, idx_code, name, telphone, email from tb_menu_p where 1 = 1
-    <if test="name != null">
-      and name = #{name}
-    </if>
-    <if test="pwd != null">
-      and pwd = #{pwd}
+    SELECT  idx, idx_code, name, code from tb_menu_p where 1 = 1
+    <if test="idx != null">
+      and idx = #{idx}
     </if>
   </select>
 
   <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Menu" resultType="com.whl.mall.pojo.member.Menu">
     SELECT  <include refid="Base_Column_List" /> from tb_menu_p where 1 != 0
+    <if test="level != null">
+      and level = #{level}
+    </if>
+    <if test="pidx != null">
+      and pidx = #{pidx}
+    </if>
+  </select>
+
+  <select id="queryPageDataByCondition" resultType="com.whl.mall.pojo.member.Menu">
+    SELECT  <include refid="Base_Column_List" /> from tb_menu_p where 1 = 1
+    <if test="po.level != null">
+      and level = #{po.level}
+    </if>
+    <if test="po.pidx != null">
+      and pidx = #{po.pidx}
+    </if>
+    <if test="orderBy != null">
+      ORDER by ${orderBy}
+    </if>
+    limit #{begin}, #{end}
+  </select>
+
+  <select id="queryTotal" parameterType="com.whl.mall.pojo.member.Menu" resultType="java.lang.Integer">
+    SELECT COUNT(idx) FROM tb_menu_p where 1 = 1
     <if test="level != null">
       and level = #{level}
     </if>

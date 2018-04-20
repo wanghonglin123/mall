@@ -45,6 +45,7 @@ import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.Menu;
 import com.whl.mall.pojo.member.Menu;
 import com.whl.mall.pojo.member.MenuTree;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -73,7 +74,7 @@ public class MenuController extends MallBaseController {
      */
     @RequestMapping("/menu/toList")
     public String toList(Model model) {
-        return "member/menu/menuList";
+        return "/member/menu/menuList";
     }
 
     /**
@@ -100,6 +101,7 @@ public class MenuController extends MallBaseController {
     public MallResult operation(@PathVariable Short type, Menu po) throws Exception{
         if (type == MallNumberConstants.ONE) { // 新增
             super.getMenuService().save(po);
+            return MallResult.ok();
         }
 
         Long idxCode = po.getIdxCode();
@@ -117,21 +119,21 @@ public class MenuController extends MallBaseController {
     }
 
     /**
-     * 跳转到操作页码 1：新增 2：编辑 3：查看
+     * 跳转到操作页码 add：新增 edit：编辑 see：查看
      *
-     * @param po po
      * @return
      */
-    @RequestMapping("/menu/toOperation/{type}")
-    public String toOperation(@PathVariable Short type, Menu po, HttpServletRequest request) throws Exception{
-        if (type == MallNumberConstants.THREE) {
-            request.setAttribute("type", "see");
-        }
-        if (type == MallNumberConstants.THREE || type == MallNumberConstants.TWO) {
+    @RequestMapping("/menu/toOperation/{type}/{idxCode}")
+    public String toOperation(@PathVariable String type, @PathVariable Long idxCode, HttpServletRequest request) throws Exception{
+        request.setAttribute("type", type);
+
+        if ("edit".equals(type) || "see".equals(type)) {
+            Menu po = new Menu();
+            po.setIdxCode(idxCode);
             Menu menu = getMenuService().queryOneSomeInfoByCondition(po);
             request.setAttribute("obj", menu);
         }
-        return "/menu/saveOrEditOrViewMenu";
+        return "/member/menu/saveOrEditOrViewMenu";
     }
 
     /**
@@ -140,8 +142,8 @@ public class MenuController extends MallBaseController {
      */
     @RequestMapping("/menu/paging")
     @ResponseBody
-    public MallGridResult paging(Menu po, Integer number, Integer rows, String order) throws MallException {
-        return getMenuService().queryPageDataByCondition(po, number, rows, order);
+    public MallGridResult paging(Menu po, Integer page, Integer rows, String order) throws MallException {
+        return getMenuService().queryPageDataByCondition(po, page, rows, order);
     }
 
     /**
@@ -151,17 +153,6 @@ public class MenuController extends MallBaseController {
     @RequestMapping("/menu/listAll")
     @ResponseBody
     public MallResult listAll() throws MallException{
-        List<MenuTree> treeList = super.getMenuService().getTreeData();
-        return MallResult.ok(MallJsonUtils.objectToJson(treeList));
-    }
-
-    /**
-     * 分页查询
-     * @return
-     */
-    @RequestMapping("/menu/paging")
-    @ResponseBody
-    public MallResult paging(Menu menu, Integer number, Integer rows) throws MallException{
         List<MenuTree> treeList = super.getMenuService().getTreeData();
         return MallResult.ok(MallJsonUtils.objectToJson(treeList));
     }

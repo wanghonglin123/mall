@@ -23,4 +23,5 @@ public final class MallPojoFieldNameConstants {
     public static final String FIELD_VERSION = "version";
     public static final String FIELD_SERIALVERSIONUID = "serialVersionUID";
     public static final String FIELD_URL = "url";
+    public static final String FIELD_STATUS = "status";
 }

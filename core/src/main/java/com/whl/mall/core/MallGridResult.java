@@ -47,11 +47,14 @@ import java.util.ArrayList;
 public class MallGridResult extends MallResult{
     private int total;
 
+    private Object rows;
+
     private MallGridResult() {
     }
 
     private MallGridResult(int status, String message, Object data, int total) {
-        super(status, message, data);
+        super(status, message, null);
+        this.rows = data;
         this.total = total;
     }
 
@@ -88,5 +91,19 @@ public class MallGridResult extends MallResult{
      */
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    /**
+     * @return rows
+     */
+    public Object getRows() {
+        return rows;
+    }
+
+    /**
+     * @param rows rows
+     */
+    public void setRows(Object rows) {
+        this.rows = rows;
     }
 }

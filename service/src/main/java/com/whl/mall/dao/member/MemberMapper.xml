@@ -73,6 +73,16 @@
     </if>
   </select>
 
+  <select id="queryTotal" parameterType="com.whl.mall.pojo.member.Member">
+    SELECT COUNT(idx) FROM tb_member where 1 != 0
+    <if test="level != null">
+      and level = #{level}
+    </if>
+    <if test="pidx != null">
+      and pidx = #{pidx}
+    </if>
+  </select>
+
   <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Member">
     SELECT  <include refid="Base_Column_List" /> from tb_member where 1 != 0
     <if test="name != null">

@@ -125,7 +125,7 @@
      * @param idx 主键idx
      */
     function editOrAddResourcesGroup(idx) {
-        var url = idx ? '/resourceGroup/toOperation/2' : '/resourceGroup/toOperation/1';
+        var url = idx ? '/resourceGroup/toOperation/edit/'+idx : '/resourceGroup/toOperation/add/1';
         var title =idx ? '修改资源组' : '新增资源组';
         //页面层
         parent.layer.open({

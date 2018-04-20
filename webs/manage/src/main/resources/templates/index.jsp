@@ -59,6 +59,9 @@
             <div data-options="region:'center',fit:true,title:''">
                 <div id="tabs" data-options="tools:'#tab-tools',tabHeight:31" style="margin: 0;padding: 0;width: 100%;" class="easyui-tabs win-nav-cont">
                     <div title="主页" style="margin: 0;padding: 0 0 30px;width: 100%;background-color: white;box-sizing: border-box;">
+                            <div class="index-img-info" style="text-align: center">
+                                <img src="http://yantaodev-1253852034.cosgz.myqcloud.com/ueditor/20170703/20170703115052529_558.png" title="洋桃商城首页简介_01.png">
+                            </div>
                     </div>
                 </div>
             </div>

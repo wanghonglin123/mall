@@ -87,7 +87,7 @@
                     // 如果是最底层菜单查询按钮列表
                     if ($tree.tree("isLeaf", node.target)) {
                         var options = $('#buttonlist').datagrid('options');
-                        options.url = '/menu/button/paging';
+                        options.url = '/button/paging';
                         options.queryParams = {
                             menuIdx : node.id
                         };
@@ -300,7 +300,7 @@
      * @param idx 主键idx
      */
     function editOrAdd(idx) {
-        var url = idx ? '/menu/toOperation/1'+idx : '/menu/toOperation/2';
+        var url = idx ? '/menu/toOperation/edit/'+idx : '/menu/toOperation/add/1';
         var title =idx ? '修改菜单' : '新增菜单';
         //页面层
         parent.layer.open({
@@ -343,8 +343,7 @@
      * @param idx 主键idx
      */
     function editOrAddButton(idx) {
-        var node = $('#menuTree').tree('getSelected');
-        var url = idx ? '/button/toOperation/1' : '/button/toOperation/2';
+        var url = idx ? '/button/toOperation/edit/' + idx : '/button/toOperation/add/'+ $('#menuTree').tree('getSelected').id;;
         var title =idx ? '修改按钮' : '新增按钮';
         //页面层
         parent.layer.open({

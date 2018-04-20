@@ -34,6 +34,7 @@ package com.whl.mall.core.base.dao;/**
 
 import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -51,6 +52,6 @@ public interface MallBaseMapper<T extends MallBasePoJo> {
     T queryOneAllInfoByCondition(T po);
     T queryOneSomeInfoByCondition(T po);
     int updateByPrimaryKey(long idx);
-    List<T> queryPageDataByCondition(T po, Integer begin, Integer end, String orderBy);
+    List<T> queryPageDataByCondition(@Param("po")T po, @Param("begin")Integer begin, @Param("end")Integer end, @Param("orderBy")String orderBy);
     int queryTotal(T po);
 }

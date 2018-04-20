@@ -20,6 +20,16 @@
     create_time, update_time, ext, name, code
   </sql>
 
+  <select id="queryTotal" parameterType="com.whl.mall.pojo.member.Role">
+    SELECT COUNT(idx) FROM tb_role where 1 != 0
+    <if test="level != null">
+      and level = #{level}
+    </if>
+    <if test="pidx != null">
+      and pidx = #{pidx}
+    </if>
+  </select>
+
   <insert id="save" parameterType="com.whl.mall.pojo.member.Role">
     insert into tb_role (idx, idx_code, remark,
       status, version, create_by_member_idx,

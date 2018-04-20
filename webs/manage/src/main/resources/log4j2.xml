@@ -115,7 +115,7 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
         </console>
 
         <!-- 文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用-->
-        <File name="log" fileName="${sys:user.dir}/webs/${appName}/${appName}-log/log-temp/test.log" append="false">
+        <File name="log" fileName="${sys:user.dir}/${appName}/${appName}-log/log-temp/test.log" append="false">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
         </File>
 
@@ -194,14 +194,10 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
             <appender-ref ref="console"/>
         </asyncRoot>
 
-        <!-- 定义一个普通的logger，这里我定义为异步的 -->
-        <!--<asyncLogger name="cc.msonion" level="all" additivity="false">
-             <appender-ref ref="rollingFileDebug"/>
-             <appender-ref ref="rollingFileInfo"/>
-            <appender-ref ref="rollingFileWarn"/>
-            <appender-ref ref="rollingFileError"/>
-
-        </asyncLogger>-->
+        <!-- 打印sql日志，开发环境使用，其它环境关闭 -->
+        <asyncLogger name="com.whl.mall.dao" level="debug" additivity="false">
+            <appender-ref ref="console"/>
+        </asyncLogger>
 
         <!-- 以下asyncLogger 是对一些包定制私有日志配置-->
         <!-- 定义一个普通的logger，这里我定义为异步的 -->
@@ -225,7 +221,6 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
              <appender-ref ref="rollingFileInfo"/>-->
             <appender-ref ref="rollingFileWarn"/>
             <appender-ref ref="rollingFileError"/>
-
         </asyncLogger>
 
         <!-- 定义一个普通的logger，这里我定义为异步的 -->

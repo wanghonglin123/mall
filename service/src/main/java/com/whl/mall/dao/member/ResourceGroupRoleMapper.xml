@@ -21,6 +21,16 @@
     create_time, update_time, ext, role_idx_code, resource_group_idx_code
   </sql>
 
+  <select id="queryTotal" parameterType="com.whl.mall.pojo.member.ResourceGroupRole">
+    SELECT COUNT(idx) FROM tb_role_resource_group where 1 != 0
+    <if test="level != null">
+      and level = #{level}
+    </if>
+    <if test="pidx != null">
+      and pidx = #{pidx}
+    </if>
+  </select>
+
   <insert id="save" parameterType="com.whl.mall.pojo.member.ResourceGroupRole">
     insert into tb_role_resource_group (idx, idx_code, remark,
       status, version, create_by_member_idx,
@@ -34,10 +44,10 @@
       )
   </insert>
 
-  <select id="queryOneAllInfoByCondition" parameterType="com.whl.mall.pojo.member.Member">
+  <select id="queryOneAllInfoByCondition" parameterType="com.whl.mall.pojo.member.ResourceGroupRole">
     SELECT
     <include refid="Base_Column_List" />
-    from tb_out_store_stock_detail from tb_member where 1 = 1
+    from tb_out_store_stock_detail from tb_role_resource_group where 1 = 1
     <if test="name != null">
       and name = #{name}
     </if>
@@ -46,8 +56,8 @@
     </if>
   </select>
 
-  <select id="queryOneSomeInfoByCondition" parameterType="com.whl.mall.pojo.member.Member">
-    SELECT  idx, idx_code, name, telphone, email from tb_member where 1 = 1
+  <select id="queryOneSomeInfoByCondition" parameterType="com.whl.mall.pojo.member.ResourceGroupRole">
+    SELECT  idx, idx_code, name, telphone, email from tb_role_resource_group where 1 = 1
     <if test="name != null">
       and name = #{name}
     </if>
@@ -56,8 +66,8 @@
     </if>
   </select>
 
-  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Member">
-    SELECT  <include refid="Base_Column_List" /> from tb_member where 1 = 1
+  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.ResourceGroupRole">
+    SELECT  <include refid="Base_Column_List" /> from tb_role_resource_group where 1 = 1
     <if test="name != null">
       and name = #{name}
     </if>

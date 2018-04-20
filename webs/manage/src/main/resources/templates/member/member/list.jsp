@@ -245,7 +245,7 @@
             area: ['710px', '500px'],
             btn: ['保存', '取消'],
             resize:false,
-            content: ['/member/toOperation/1', 'no'],
+            content: ['/member/toOperation/add/1', 'no'],
             yes: function (index, layero) {
                 var iframeWin = parent.window[layero.find('iframe')[0]['name']];
                 iframeWin.addFormInfo($('#memberlist'));
