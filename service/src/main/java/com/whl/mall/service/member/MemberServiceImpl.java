@@ -51,25 +51,4 @@ import java.util.Date;
 @Service
 public class MemberServiceImpl extends MallServiceExt<Member/*, MenuMapper*/> implements MemberService {
 
-    @Override
-    public int saveMember(Member member) throws MallException {
-        long time = System.nanoTime();
-        member.setIdx(time);
-        member.setPwd(MallMd5Utils.md5ForData(member.getPwd()));
-        member.setIdxCode(time);
-        member.setCreateTime(new Date());
-        member.setVersion(time);
-        member.setUpdateTime(new Date());
-        member.setExt("");
-        member.setStatus(MallStatus.STATUS_1);
-        return super.save(member);
-    }
-
-    @Override
-    public Member login(Member member) throws MallException {
-        String pwd = member.getPwd();
-        pwd = MallMd5Utils.md5ForData(pwd);
-        member.setPwd(pwd);
-        return queryOneSomeInfoByCondition(member);
-    }
 }

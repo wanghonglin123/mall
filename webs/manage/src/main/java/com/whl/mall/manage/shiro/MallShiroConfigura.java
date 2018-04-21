@@ -64,7 +64,7 @@ import java.util.Map;
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2017/12/26
  */
-//@Configuration
+@Configuration
 public class MallShiroConfigura extends MallBeans {
     /**
      * sessionIdCookie

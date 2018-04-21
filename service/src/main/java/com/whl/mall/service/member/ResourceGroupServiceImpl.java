@@ -50,16 +50,4 @@ import java.util.Date;
 @Service
 public class ResourceGroupServiceImpl extends MallServiceExt<ResourceGroup/*, MenuMapper*/> implements ResourceGroupService {
 
-    @Override
-    public int saveResourceGroup(ResourceGroup pojo) throws MallException {
-        long time = System.nanoTime();
-        pojo.setIdx(time);
-        pojo.setIdxCode(time);
-        pojo.setCreateTime(new Date());
-        pojo.setVersion(time);
-        pojo.setUpdateTime(new Date());
-        pojo.setExt("");
-        pojo.setStatus(MallStatus.STATUS_1);
-        return super.save(pojo);
-    }
 }

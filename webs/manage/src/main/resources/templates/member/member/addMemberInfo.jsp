@@ -102,8 +102,8 @@
             url: "/member/operation/1",
             data: {
                 name: base64_encode(name),
-                password : base64_encode(password),
-                phone: base64_encode(phone),
+                pwd : base64_encode(password),
+                telphone: base64_encode(phone),
                 email: base64_encode(email),
                 remark: base64_encode(remark),
                 memberCateIdx: memberCate,
@@ -138,7 +138,7 @@
             var idxArr = idx.split("-");
             roleIdxArr.push(idxArr[1]);
         });
-        var url = '/member/chooseRole/'+idx + '?roleIdx=' + roleIdxArr.join(',');
+        var url = '/role/toChooseRolelist/'+null + '?roleIdx=' + roleIdxArr.join(',');
         var title ='选择角色';
         //页面层
         parent.layer.open({

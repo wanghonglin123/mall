@@ -86,7 +86,6 @@
         params.name = $("#name").val();
         params.code = $("#code").val();
         params.menuIdxCode = $("#menuIdx").val();
-        alert(params.menuIdxCode);
         //params.iconUrl = $("#iconUrl").val();
         params.remark = $("#remark").val();
         $.ajax({

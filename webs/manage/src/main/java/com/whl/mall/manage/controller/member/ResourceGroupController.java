@@ -14,16 +14,19 @@ import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallMessage;
 import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallStatus;
+import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.ext.controller.MallBaseController;
-import com.whl.mall.pojo.member.Menu;
+import com.whl.mall.pojo.member.*;
 import com.whl.mall.pojo.member.ResourceGroup;
-import com.whl.mall.pojo.member.ResourceGroup;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @ClassName: ResourceGroupController
@@ -44,6 +47,22 @@ public class ResourceGroupController extends MallBaseController {
     }
 
     /**
+     * 进入列表
+     *
+     * @return
+     */
+    @RequestMapping("/resourceGroup/toChooseResourceGroup/{roleIdx}")
+    public String toChooseResourceGroup(@PathVariable String roleIdx, HttpServletRequest request) throws MallException{
+        String resourceGroupIdx = request.getParameter("resourceGroupIdx");
+        String[] resourceGroupIdxs = null;
+        if (StringUtils.isNoneEmpty(resourceGroupIdx)) {
+            resourceGroupIdxs = resourceGroupIdx.split(",");
+        }
+        request.setAttribute("resourceGroupIdxsJson", MallJsonUtils.objectToJson(resourceGroupIdxs));
+        return "/member/resourceGroup/chooseResourceGroup";
+    }
+
+    /**
      * 操作 1：新增 2：编辑 3：查看 4：删除
      *
      * @param po po
@@ -51,9 +70,30 @@ public class ResourceGroupController extends MallBaseController {
      */
     @RequestMapping("/resourceGroup/operation/{type}")
     @ResponseBody
-    public MallResult operation(@PathVariable Short type, ResourceGroup po) throws Exception{
+    public MallResult operation(@PathVariable Short type, ResourceGroup po, String[] menuStr, String[] buttonsStr) throws Exception{
         if (type == MallNumberConstants.ONE) { // 新增
-            super.getResourceGroupService().save(po);
+            po = super.getResourceGroupService().save(po);
+            long resourcesGroupIdxCode = po.getIdxCode();
+            Resource resource = null;
+            Long idxCode = null;
+            for (String menu : menuStr) {
+                idxCode = Long.valueOf(menu);
+                resource = new Resource();
+                resource.setResourceGroupIdxCode(resourcesGroupIdxCode);
+                resource.setMenuButtonIdxCode(idxCode);
+                resource.setResourceType(MallNumberConstants.ONE);
+                getResourceService().save(resource);
+            }
+
+            for (String button : buttonsStr) {
+                idxCode = Long.valueOf(button);
+                resource = new Resource();
+                resource.setResourceGroupIdxCode(resourcesGroupIdxCode);
+                resource.setMenuButtonIdxCode(idxCode);
+                resource.setResourceType(MallNumberConstants.TWO);
+                getResourceService().save(resource);
+            }
+            return MallResult.ok();
         }
 
         Long idxCode = po.getIdxCode();
@@ -95,7 +135,7 @@ public class ResourceGroupController extends MallBaseController {
      */
     @RequestMapping("/resourceGroup/paging")
     @ResponseBody
-    public MallGridResult paging(ResourceGroup po, Integer number, Integer rows, String order) throws MallException {
-        return getResourceGroupService().queryPageDataByCondition(po, number, rows, order);
+    public MallGridResult paging(ResourceGroup po, Integer page, Integer rows, String order) throws MallException {
+        return getResourceGroupService().queryPageDataByCondition(po, page, rows, order);
     }
 }

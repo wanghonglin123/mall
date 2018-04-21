@@ -116,19 +116,19 @@
         $.ajax({
             timeout : Ms.AJAX_TIME_OUT,
             type : "POST",
-            url : '/menu/button/findButtonsByMenuIdx',
-            data : {menuIdx : menuIdx},
+            url : '/button/getButtionsByMenuIdx',
+            data : {menuIdxCode : menuIdx},
             cache : false,
         }).done(function (result) {
             if(Ms.SUC_CODE == result.status){
                 $buttonsDiv.empty();
                 var $p='';
                 $.each(result.data,function(i,item){
-                   var checkedHtml ='',str =item.menuIdx+'_'+item.idx;
+                   var checkedHtml ='',str =item.idx;
                    if($.inArray(str, buttonsArr)>-1){
                        checkedHtml ='checked="checked"';
                    }
-                   $p += '<p> <input class="checkbox" type="checkbox" value="'+item.idx+'" menuIdx="'+item.menuIdx+'" '+checkedHtml+' name="button-name" onclick="doArr(this);"/><label class="lb" style="cursor: pointer;width: 110px;" onclick="doArrTxt(this);" title="'+item.name+'">'+item.name+'</label> </p>';
+                   $p += '<p> <input class="checkbox" type="checkbox" value="'+item.idx+'" menuIdx="'+item.menuIdxCode+'" '+checkedHtml+' name="button-name" onclick="doArr(this);"/><label class="lb" style="cursor: pointer;width: 110px;" onclick="doArrTxt(this);" title="'+item.name+'">'+item.name+'</label> </p>';
 
                 });
                 if($p && $('#idx').val()){
@@ -148,7 +148,7 @@
      */
     function doArr(obj) {
         var $this = $(obj);
-        var str =$this.attr("menuIdx")+"_"+$this.val();
+        var str = $this.val();
         if (obj.checked) {
             // 从数组中清空
             buttonsArr.push(str);
@@ -189,7 +189,7 @@
         var menuStr = menusArr.join(",");
         $.ajax({
             type: "POST",
-            url: "/resourceGroup/toOperation/1",
+            url: "/resourceGroup/operation/1",
             data: {
                 idx: idx,
                 name: name,

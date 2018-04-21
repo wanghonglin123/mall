@@ -39,6 +39,7 @@ import com.whl.mall.core.common.constants.MallSessionConstants;
 import com.whl.mall.core.common.utils.MallBase64Utils;
 import com.whl.mall.core.common.utils.MallJdbcUtils;
 import com.whl.mall.core.common.utils.MallJsonUtils;
+import com.whl.mall.core.common.utils.MallMd5Utils;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.interfaces.member.MenuService;
 import com.whl.mall.pojo.member.Member;
@@ -114,9 +115,9 @@ public class SystemController extends MallBaseController{
             username = MallBase64Utils.decode(username);
             password = MallBase64Utils.decode(password);
             Member member = new Member();
-            member.setUserName(username);
-            member.setPwd(password);
-            member = getMemberService().login(member);
+            member.setName(username);
+            member.setPwd(MallMd5Utils.md5ForData(password));
+            member = getMemberService().queryOneSomeInfoByCondition(member);
             if (member == null) {
                 return MallResult.build(400, "账号或者用户不存在", null);
             }

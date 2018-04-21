@@ -1,11 +1,10 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <head>
     <title>洋桃跨境供应链后台管理中心-选择资源组列表</title>
-    <jsp:include page="../common/memberCommon.jsp"></jsp:include>
+    <#include "../../common/memberCommon.jsp"/>
 </head>
 <body>
-<link rel="stylesheet" href="${static$domain}/css/common/current.css?_v=${css$version}"/>
+<link rel="stylesheet" href="/css/common/current.css?_v="/>
 
 <section class="main" style="padding: 10px;background: #fff;">
     <div class="table-container" style="height: 543px;">
@@ -32,10 +31,10 @@
 
 </section>
 <script type="text/javascript">
-    var txtArr = [],defalutIdxArr = ${resourceGroupIdxsJson} ;
+    var txtArr = [],defalutIdxArr = ${resourceGroupIdxsJson! '[]'} ;
     $(function(){
         $('#resourceGourplist2').datagrid({
-            url : '/ResourceGroup/paging',
+            url : '/resourceGroup/paging',
             fit : true,
             nowrap : true,
             fitColumns : true,

@@ -64,10 +64,11 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
     private MallBaseMapper<T> baseMapper;
 
     @Override
-    public int save(T po) throws MallException{
+    public T save(T po) throws MallException{
         // 设置po公共属性值,不采用反射方式，比较消耗性能
         inspectPojoFieldValue(po);
-        return baseMapper.save(po);
+        baseMapper.save(po);
+        return po;
     }
 
     @Override

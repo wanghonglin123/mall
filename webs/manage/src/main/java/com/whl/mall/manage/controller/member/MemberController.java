@@ -14,9 +14,12 @@ import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallMessage;
 import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallStatus;
+import com.whl.mall.core.common.utils.MallBase64Utils;
+import com.whl.mall.core.common.utils.MallMd5Utils;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.Member;
 import com.whl.mall.pojo.member.Member;
+import com.whl.mall.pojo.member.MemberRole;
 import com.whl.mall.pojo.member.Menu;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,9 +54,25 @@ public class MemberController extends MallBaseController{
      */
     @RequestMapping("/member/operation/{type}")
     @ResponseBody
-    public MallResult operation(@PathVariable Short type, Member po) throws Exception{
+    public MallResult operation(@PathVariable Short type, Member po, String roleIdxStr) throws Exception{
         if (type == MallNumberConstants.ONE) { // 新增
-            super.getMemberService().save(po);
+            po.setName(MallBase64Utils.decode(po.getName()));
+            po.setPwd(MallMd5Utils.md5ForData(MallBase64Utils.decode(po.getPwd())));
+            po.setTelphone(MallBase64Utils.decode(po.getTelphone()));
+            po.setEmail(MallBase64Utils.decode(po.getEmail()));
+            po = super.getMemberService().save(po);
+            Long memberIdx = po.getIdx();
+            String[] roles = MallBase64Utils.decode(roleIdxStr).split(",");
+            Long roleIdx = null;
+            MemberRole memberRole = null;
+            for (String role : roles) {
+                roleIdx = Long.valueOf(role);
+                memberRole = new MemberRole();
+                memberRole.setMemberIdxCode(memberIdx);
+                memberRole.setRoleIdxCode(roleIdx);
+                super.getMemberRoleService().save(memberRole);
+            }
+            return MallResult.ok();
         }
 
         Long idxCode = po.getIdxCode();
@@ -94,7 +113,7 @@ public class MemberController extends MallBaseController{
      */
     @RequestMapping("/member/paging")
     @ResponseBody
-    public MallGridResult paging(Member po, Integer number, Integer rows, String order) throws MallException {
-        return getMemberService().queryPageDataByCondition(po, number, rows, order);
+    public MallGridResult paging(Member po, Integer page, Integer rows, String order) throws MallException {
+         return getMemberService().queryPageDataByCondition(po, page, rows, order);
     }
 }

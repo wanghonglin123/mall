@@ -40,15 +40,6 @@ import java.util.List;
 public class ButtonController extends MallBaseController {
 
     /**
-     * 进入新增页面
-     *
-     * @return
-     */
-    @RequestMapping("/button/{type}/{idx}")
-    public String toAddOrEditOrSee(@PathVariable String type, @PathVariable Long idx) {
-        return "member/button/saveOrEditOrViewButton";
-    }
-    /**
      * 操作 1：新增 2：编辑 3：查看 4：删除
      *
      * @param po po
@@ -106,7 +97,17 @@ public class ButtonController extends MallBaseController {
      */
     @RequestMapping("/button/paging")
     @ResponseBody
-    public MallGridResult paging(Button po, Integer number, Integer rows, String order) throws MallException {
-        return getButtonService().queryPageDataByCondition(po, number, rows, order);
+    public MallGridResult paging(Button po, Integer page, Integer rows, String order) throws MallException {
+        return getButtonService().queryPageDataByCondition(po, page, rows, order);
+    }
+
+    /**
+     * 分页查询
+     * @return
+     */
+    @RequestMapping("/button/getButtionsByMenuIdx")
+    @ResponseBody
+    public MallResult getButtionsByMenuIdx(Button po) throws MallException {
+        return MallResult.ok(getButtonService().queryDataByCondition(po));
     }
 }

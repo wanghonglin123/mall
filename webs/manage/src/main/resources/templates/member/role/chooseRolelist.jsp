@@ -1,11 +1,7 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <head>
     <title>洋桃跨境供应链后台管理中心-用户选择角色列表</title>
-    <jsp:include page="../common/memberCommon.jsp"></jsp:include>
+    <#include "../../common/memberCommon.jsp"/>
 </head>
 <body>
 <section class="main" >
@@ -27,7 +23,7 @@
     </div>
 </section>
 <script>
-    var txtArr = [],defalutIdxArr = ${roleIdxListJson} ;
+    var txtArr = [],defalutIdxArr = ${roleIdxListJson!'[]'} ;
     $(function(){
         $('#rolelist2').datagrid({
             url : '/role/paging',
@@ -120,7 +116,7 @@
 
 </script>
 <!-- 使用easyui的tabs head标签的东西，在首页读取不到，只会把css和js放在body中 -->
-<link rel="stylesheet" href="${static$domain}/css/common/current.css?_v=${css$version}"/>
+<link rel="stylesheet" href="/css/common/current.css?_v="/>
 
 </body>
 </html>

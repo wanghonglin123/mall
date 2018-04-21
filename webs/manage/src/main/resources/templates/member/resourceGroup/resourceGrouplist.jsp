@@ -46,7 +46,7 @@
 <script type="text/javascript">
     $(function(){
         $('#resourceGourplist').datagrid({
-            url : '/ResourceGroup/paging',
+            url : '/resourceGroup/paging',
             fit : true,
             nowrap : true,
             fitColumns : true,

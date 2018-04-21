@@ -43,5 +43,4 @@ import com.whl.mall.pojo.member.ResourceGroupRole;
  * @Date: 2018/4/9
  */
 public interface ResourceGroupRoleService extends MallBaseService<ResourceGroupRole> {
-    int saveResourceGroupRole(ResourceGroupRole pojo) throws MallException;
 }

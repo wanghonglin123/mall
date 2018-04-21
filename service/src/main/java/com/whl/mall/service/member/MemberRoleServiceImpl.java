@@ -50,16 +50,4 @@ import java.util.Date;
 @Service
 public class MemberRoleServiceImpl extends MallServiceExt<MemberRole/*, MenuMapper*/> implements MemberRoleService {
 
-    @Override
-    public int saveMemberRole(MemberRole member) throws MallException {
-        long time = System.nanoTime();
-        member.setIdx(time);
-        member.setIdxCode(time);
-        member.setCreateTime(new Date());
-        member.setVersion(time);
-        member.setUpdateTime(new Date());
-        member.setExt("");
-        member.setStatus(MallStatus.STATUS_1);
-        return super.save(member);
-    }
 }

@@ -89,7 +89,7 @@
                         var options = $('#buttonlist').datagrid('options');
                         options.url = '/button/paging';
                         options.queryParams = {
-                            menuIdx : node.id
+                            menuIdxCode : node.id
                         };
                         $("#buttonlist").datagrid('reload');
                         $('#buttonRight').show();

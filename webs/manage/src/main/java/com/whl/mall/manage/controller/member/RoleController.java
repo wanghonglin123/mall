@@ -13,10 +13,13 @@ import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallMessage;
 import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallStatus;
+import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.Menu;
+import com.whl.mall.pojo.member.ResourceGroupRole;
 import com.whl.mall.pojo.member.Role;
 import com.whl.mall.pojo.member.Role;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +46,22 @@ public class RoleController extends MallBaseController {
     }
 
     /**
+     * 进入列表
+     *
+     * @return
+     */
+    @RequestMapping("/role/toChooseRolelist/{idx}")
+    public String toChooseRolelist(@PathVariable String idx, HttpServletRequest request) throws MallException{
+        String roleIdx = request.getParameter("roleIdx");
+        String[] roles = null;
+        if (StringUtils.isNoneEmpty(roleIdx)) {
+            roles = roleIdx.split(",");
+        }
+        request.setAttribute("roleIdxListJson", MallJsonUtils.objectToJson(roles));
+        return "/member/role/chooseRolelist";
+    }
+
+    /**
      * 进入新增页面
      *
      * @return
@@ -60,9 +79,25 @@ public class RoleController extends MallBaseController {
      */
     @RequestMapping("/role/operation/{type}")
     @ResponseBody
-    public MallResult operation(@PathVariable Short type, Role po) throws Exception{
+    public MallResult operation(@PathVariable Short type, Role po, HttpServletRequest request) throws Exception{
         if (type == MallNumberConstants.ONE) { // 新增
-            super.getRoleService().save(po);
+            po = super.getRoleService().save(po);
+            Long roleIdx = po.getIdx();
+            String resourceGroupIdxStr = request.getParameter("resourceGroupIdxs");
+            String[] resourceGroupIdxs = null;
+            if (StringUtils.isNoneEmpty(resourceGroupIdxStr)) {
+                resourceGroupIdxs = resourceGroupIdxStr.split(",");
+                Long idx = null;
+                ResourceGroupRole resourceGroupRole = null;
+                for (String resourceGroupIdx : resourceGroupIdxs) {
+                    resourceGroupRole = new ResourceGroupRole();
+                    idx = Long.valueOf(resourceGroupIdx);
+                    resourceGroupRole.setRoleIdxCode(roleIdx);
+                    resourceGroupRole.setResourceGroupIdxCode(idx);
+                    super.getResourceGroupRoleService().save(resourceGroupRole);
+                }
+            }
+            return MallResult.ok();
         }
 
         Long idxCode = po.getIdxCode();
@@ -101,9 +136,9 @@ public class RoleController extends MallBaseController {
      * 分页查询
      * @return
      */
-    @RequestMapping("/Role/paging")
+    @RequestMapping("/role/paging")
     @ResponseBody
-    public MallGridResult paging(Role po, Integer number, Integer rows, String order) throws MallException {
-        return getRoleService().queryPageDataByCondition(po, number, rows, order);
+    public MallGridResult paging(Role po, Integer page, Integer rows, String order) throws MallException {
+        return getRoleService().queryPageDataByCondition(po, page, rows, order);
     }
 }

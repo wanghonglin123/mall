@@ -53,7 +53,7 @@ public interface MallBaseService<T extends MallBasePoJo> {
      * @param po
      * @return
      */
-    int save(T po) throws MallException;
+    T save(T po) throws MallException;
 
     /**
      * 删除

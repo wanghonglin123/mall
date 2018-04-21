@@ -28,7 +28,7 @@
         <div class="row-set">
             <div class="row-set-lf">
                 <label class="ms-userName">资源组设置：</label>
-                <button class="ms-set" type="button" onclick="chooseResourceGroup(${role.idx});">设置</button>
+                <button class="ms-set" type="button" onclick="chooseResourceGroup(${(role.idx)!});">设置</button>
             </div>
             <div class="row-set-lr" id="resource-group-text">
             </div>
@@ -72,7 +72,7 @@
             var idxArr = idx.split("-");
             resourceGroupIdx.push(idxArr[1]);
         });
-        var url = '/resourceGroup/paging/'+idx + '?resourceGroupIdx=' + resourceGroupIdx.join(',');
+        var url = '/resourceGroup/toChooseResourceGroup/'+idx + '?resourceGroupIdx=' + resourceGroupIdx.join(',');
         var title ='选择资源组';
         //页面层
         parent.layer.open({

@@ -100,41 +100,20 @@
                     }
                 },
                 {
-                    field: 'idxCodeS',
+                    field: 'idxCode',
                     align: 'center',
-                    width: '8%',
+                    width: '15%',
                     sortable: true,
                     title: 'ID'
                 },
                 {
                     field: 'name',
                     align: 'center',
-                    width: '10%',
+                    width: '15%',
                     sortable: true,
                     title: '成员名称'
                 }, {
-                    field: 'sex',
-                    align: 'center',
-                    sortable: true,
-                    width: '4%',
-                    title: '性别',
-                    formatter: function (value, rowData, rowIndex) {
-                        return "";
-                    }
-                }, {
-                    field: 'fullName',
-                    align: 'center',
-                    sortable: true,
-                    width: '10%',
-                    title: '全称'
-                }, {
-                    field: 'code',
-                    align: 'center',
-                    sortable: true,
-                    width: '10%',
-                    title: '成员编码'
-                }, {
-                    field: 'phone',
+                    field: 'telphone',
                     align: 'center',
                     sortable: true,
                     width: '11%',
@@ -143,22 +122,22 @@
                     field: 'email',
                     align: 'center',
                     sortable: true,
-                    width: '12%',
+                    width: '15%',
                     title: '电子邮箱'
                 }, {
                     field: 'lastLoginTimeEnYyyyMMddHHmmss',
                     align: 'center',
                     sortable: false,
-                    width: '12%',
+                    width: '15%',
                     title: '最后登录时间'
                 }, {
                     field: 'status',
                     align: 'center',
                     sortable: true,
-                    width: '5%',
+                    width: '15%',
                     title: '状态',
                     formatter: function (value, rowData, rowIndex) {
-                        return '<span class="state-' + value + '">' + '</span>';
+                        return "已启用";
                     }
                 }]],
             onLoadSuccess: function (data) {

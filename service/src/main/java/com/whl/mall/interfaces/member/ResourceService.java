@@ -43,5 +43,4 @@ import com.whl.mall.pojo.member.Resource;
  * @Date: 2018/4/9
  */
 public interface ResourceService extends MallBaseService<Resource> {
-    int saveResource(Resource pojo) throws MallException;
 }

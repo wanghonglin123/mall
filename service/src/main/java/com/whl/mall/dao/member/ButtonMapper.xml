@@ -46,33 +46,31 @@
     </if>
   </select>
 
-  <select id="queryOneSomeInfoByCondition" parameterType="com.whl.mall.pojo.member.Button">
-    SELECT  idx, idx_code, name, telphone, email from tb_button where 1 = 1
-    <if test="name != null">
-      and name = #{name}
-    </if>
-    <if test="pwd != null">
-      and pwd = #{pwd}
+  <select id="queryOneSomeInfoByCondition" parameterType="com.whl.mall.pojo.member.Button" resultType="com.whl.mall.pojo.member.Button">
+    SELECT  idx, idx_code, name, menu_idx_code from tb_button where 1 = 1
+    <if test="menuIdxCode != null">
+      and menu_idx_code = #{menuIdxCode}
     </if>
   </select>
 
-  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Button">
+  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Button" resultType="com.whl.mall.pojo.member.Button">
+    SELECT  idx, idx_code, name, menu_idx_code from tb_button where 1 = 1
+    <if test="menuIdxCode != null">
+      and menu_idx_code = #{menuIdxCode}
+    </if>
+  </select>
+
+  <select id="queryPageDataByCondition" resultType="com.whl.mall.pojo.member.Button">
     SELECT  <include refid="Base_Column_List" /> from tb_button where 1 = 1
-    <if test="name != null">
-      and name = #{name}
-    </if>
-    <if test="pwd != null">
-      and pwd = #{pwd}
+    <if test="po.menuIdxCode != null">
+      and menu_idx_code = #{po.menuIdxCode}
     </if>
   </select>
 
-  <select id="queryTotal" parameterType="com.whl.mall.pojo.member.Button">
-    SELECT COUNT(idx) FROM tb_button where 1 != 0
-    <if test="level != null">
-      and level = #{level}
-    </if>
-    <if test="pidx != null">
-      and pidx = #{pidx}
+  <select id="queryTotal" parameterType="com.whl.mall.pojo.member.Button" resultType="java.lang.Integer">
+    SELECT COUNT(idx) FROM tb_button where 1 = 1
+    <if test="menuIdxCode != null">
+      and menu_idx_code = #{menuIdxCode}
     </if>
   </select>
 </mapper>

@@ -18,7 +18,17 @@ public class Member implements MallBasePoJo {
     /**
      * 用户名
      */
-    private String userName;
+    private String name;
+
+    /**
+     * 手机号
+     */
+    private String telphone;
+
+    /**
+     * 邮箱
+     */
+    private String email;
 
     private String pwd;
 
@@ -46,146 +56,199 @@ public class Member implements MallBasePoJo {
      */
     private String id;
 
-    private String remark;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
     /**
-     * 主键idx
+     * @return idx
      */
     public Long getIdx() {
         return idx;
     }
 
     /**
-     * 主键idx
+     * @param idx idx
      */
     public void setIdx(Long idx) {
         this.idx = idx;
     }
 
     /**
-     * 外部关联idxCode
+     * @return idxCode
      */
     public Long getIdxCode() {
         return idxCode;
     }
 
     /**
-     * 外部关联idxCode
+     * @param idxCode idxCode
      */
     public void setIdxCode(Long idxCode) {
         this.idxCode = idxCode;
     }
 
     /**
-     * 用户名
+     * @return name
      */
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
     /**
-     * 用户名
+     * @param name name
      */
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
+    public void setName(String name) {
+        this.name = name;
     }
 
+    /**
+     * @return telphone
+     */
+    public String getTelphone() {
+        return telphone;
+    }
+
+    /**
+     * @param telphone telphone
+     */
+    public void setTelphone(String telphone) {
+        this.telphone = telphone;
+    }
+
+    /**
+     * @return email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email email
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @return pwd
+     */
     public String getPwd() {
         return pwd;
     }
 
+    /**
+     * @param pwd pwd
+     */
     public void setPwd(String pwd) {
-        this.pwd = pwd == null ? null : pwd.trim();
+        this.pwd = pwd;
     }
 
+    /**
+     * @return createTime
+     */
     public Date getCreateTime() {
         return createTime;
     }
 
+    /**
+     * @param createTime createTime
+     */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
+    /**
+     * @return updateTime
+     */
     public Date getUpdateTime() {
         return updateTime;
     }
 
+    /**
+     * @param updateTime updateTime
+     */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 
+    /**
+     * @return createByMemberIdxCode
+     */
     public Long getCreateByMemberIdxCode() {
         return createByMemberIdxCode;
     }
 
+    /**
+     * @param createByMemberIdxCode createByMemberIdxCode
+     */
     public void setCreateByMemberIdxCode(Long createByMemberIdxCode) {
         this.createByMemberIdxCode = createByMemberIdxCode;
     }
 
+    /**
+     * @return updateByMemberIdxCode
+     */
     public Long getUpdateByMemberIdxCode() {
         return updateByMemberIdxCode;
     }
 
+    /**
+     * @param updateByMemberIdxCode updateByMemberIdxCode
+     */
     public void setUpdateByMemberIdxCode(Long updateByMemberIdxCode) {
         this.updateByMemberIdxCode = updateByMemberIdxCode;
     }
 
+    /**
+     * @return version
+     */
     public Long getVersion() {
         return version;
     }
 
+    /**
+     * @param version version
+     */
     public void setVersion(Long version) {
         this.version = version;
     }
 
+    /**
+     * @return status
+     */
     public Short getStatus() {
         return status;
     }
 
+    /**
+     * @param status status
+     */
     public void setStatus(Short status) {
         this.status = status;
     }
 
+    /**
+     * @return ext
+     */
     public String getExt() {
         return ext;
     }
 
+    /**
+     * @param ext ext
+     */
     public void setExt(String ext) {
-        this.ext = ext == null ? null : ext.trim();
+        this.ext = ext;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", idx=").append(idx);
-        sb.append(", idxCode=").append(idxCode);
-        sb.append(", userName=").append(userName);
-        sb.append(", pwd=").append(pwd);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", createByMemberIdxCode=").append(createByMemberIdxCode);
-        sb.append(", updateByMemberIdxCode=").append(updateByMemberIdxCode);
-        sb.append(", version=").append(version);
-        sb.append(", status=").append(status);
-        sb.append(", ext=").append(ext);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append(", id=").append(id);
-        sb.append("]");
-        return sb.toString();
+    /**
+     * @return id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id id
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 }

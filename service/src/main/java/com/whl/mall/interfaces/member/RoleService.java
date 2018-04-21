@@ -43,5 +43,4 @@ import com.whl.mall.pojo.member.Role;
  * @Date: 2018/4/9
  */
 public interface RoleService extends MallBaseService<Role> {
-    int saveRole(Role pojo) throws MallException;
 }
