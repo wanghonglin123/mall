@@ -36,6 +36,8 @@ import com.whl.mall.core.MallException;
 import com.whl.mall.core.base.service.MallBaseService;
 import com.whl.mall.pojo.member.MemberRole;
 
+import java.util.List;
+
 /**
  * @ClassName: MemberRoleRoleService
  * @Description: 成员角色服务
@@ -43,4 +45,5 @@ import com.whl.mall.pojo.member.MemberRole;
  * @Date: 2018/4/9
  */
 public interface MemberRoleService extends MallBaseService<MemberRole> {
+
 }

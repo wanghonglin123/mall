@@ -20,12 +20,22 @@
  */
 package com.whl.mall.manage.shiro.filter;
 
+import com.whl.mall.interfaces.member.MemberService;
+import com.whl.mall.pojo.member.Member;
+import com.whl.mall.pojo.member.MenuTree;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: TimoAnyRolesFilter
@@ -36,7 +46,10 @@ import javax.servlet.ServletResponse;
  */
 public class MallAnyRolesFilter extends AccessControlFilter {
     private static final String LOGIN_URL = "/toLogin";
-    private short status = 0;
+    private Short status = null;
+    @Autowired
+    private MemberService memberService;
+
     /**
      * 判断是否允许访问， true 允许， flase 不允许
      * @param servletRequest
@@ -52,7 +65,17 @@ public class MallAnyRolesFilter extends AccessControlFilter {
             status = 1;
             return false;
         }
-        return false;
+        Session session = subject.getSession(false);
+        Member member = (Member)session.getAttribute("session_member");
+        if (member == null) {
+            status = 1;
+            return false;
+        }
+        List<MenuTree> menuTreeList = (List<MenuTree>) session.getAttribute("session_menus");
+        if (menuTreeList == null) {
+
+        }
+        return true;
     }
 
     /**
@@ -65,11 +88,10 @@ public class MallAnyRolesFilter extends AccessControlFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         if (status == 1) {
-
+            WebUtils.issueRedirect(servletRequest, servletResponse, LOGIN_URL);
         } else {
 
         }
-        WebUtils.issueRedirect(servletRequest, servletResponse, LOGIN_URL);
         return false;
     }
 }

@@ -32,6 +32,7 @@ package com.whl.mall.core.base.dao;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import org.apache.ibatis.annotations.Param;
@@ -54,4 +55,6 @@ public interface MallBaseMapper<T extends MallBasePoJo> {
     int updateByPrimaryKey(long idx);
     List<T> queryPageDataByCondition(@Param("po")T po, @Param("begin")Integer begin, @Param("end")Integer end, @Param("orderBy")String orderBy);
     int queryTotal(T po);
+    List<T> queryDataIn(List<Long> idxs) throws MallException;
+    List<T> queryDataByCondition(T po, @Param("idxs") List<Long> idxs) throws MallException;
 }

@@ -77,6 +77,13 @@ public interface MallBaseService<T extends MallBasePoJo> {
     List<T> queryDataByCondition(T po) throws MallException;
 
     /**
+     * 根据条件查询结果
+     * @param po
+     * @return
+     */
+    List<T> queryDataByCondition(T po, List<Long> idxs) throws MallException;
+
+    /**
      * 查询单个数据所有信息
      * @param po
      * @return
@@ -93,5 +100,7 @@ public interface MallBaseService<T extends MallBasePoJo> {
     int updateByPrimaryKey(long idx);
 
     MallGridResult queryPageDataByCondition(T po, Integer pageNum, Integer rows, String orderBy) throws MallException;
+
+    List<T> queryDataIn(List<Long> idxs) throws MallException;
 
 }

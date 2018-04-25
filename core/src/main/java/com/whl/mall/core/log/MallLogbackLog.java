@@ -51,8 +51,8 @@ public class MallLogbackLog extends MallLoggerExt {
     private static final Logger LOGGER = LogManager.getLogger(MallLogbackLog.class);
 
     @Override
-    public void info(Throwable ex) {
-        LOGGER.info(ex);
+    public void info(String msg) {
+        LOGGER.info(msg);
     }
 
     @Override

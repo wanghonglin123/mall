@@ -36,10 +36,16 @@ import com.whl.mall.core.MallException;
 import com.whl.mall.core.base.service.ext.MallServiceExt;
 import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.interfaces.member.MemberRoleService;
+import com.whl.mall.interfaces.member.RoleService;
 import com.whl.mall.pojo.member.MemberRole;
+import com.whl.mall.pojo.member.Role;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: MemberRoleRoleServiceImpl

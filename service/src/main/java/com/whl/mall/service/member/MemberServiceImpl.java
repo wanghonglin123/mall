@@ -34,13 +34,18 @@ package com.whl.mall.service.member;/**
 
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.base.service.ext.MallServiceExt;
+import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallMd5Utils;
-import com.whl.mall.interfaces.member.MemberService;
-import com.whl.mall.pojo.member.Member;
+import com.whl.mall.interfaces.member.*;
+import com.whl.mall.pojo.member.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: MemberServiceImpl
@@ -50,5 +55,54 @@ import java.util.Date;
  */
 @Service
 public class MemberServiceImpl extends MallServiceExt<Member/*, MenuMapper*/> implements MemberService {
+    @Autowired
+    private RoleService roleService;
 
+    @Autowired
+    private MemberRoleService memberRoleService;
+
+    @Autowired
+    private ResourceService resourceService;
+
+    @Autowired
+    private ResourceGroupService resourceGroupService;
+
+    @Autowired
+    private ButtonService buttonService;
+
+    @Override
+    public List<String> getRoleByUserIdx(Long userIdx) throws MallException{
+        List<Role> roles = getMemberRoles(userIdx);
+        List<String> roleCodes = roles.stream().collect(Collectors.mapping(Role :: getCode, Collectors.toList()));
+        return roleCodes;
+    }
+
+    private List<Role> getMemberRoles(Long userIdx) throws MallException{
+        MemberRole memberRole = new MemberRole();
+        memberRole.setMemberIdxCode(userIdx);
+        List<MemberRole> memberRoles = memberRoleService.queryDataByCondition(memberRole);
+        List<Long> roleIdxs =
+                memberRoles.stream().collect(Collectors.mapping(MemberRole :: getRoleIdxCode, Collectors.toList()));
+        return roleService.queryDataIn(roleIdxs);
+    }
+
+    @Override
+    public Set<String> getPermissions(Long userIdx) throws MallException {
+        List<Button> buttons = null;
+        if (userIdx == null) {
+            buttons = buttonService.queryDataByCondition(null);
+        } else {
+            List<Role> roles = getMemberRoles(userIdx);
+            List<Long> idxs = roles.stream().collect(Collectors.mapping(Role :: getIdx, Collectors.toList()));
+            List<ResourceGroup> resourceGroups = resourceGroupService.queryDataIn(idxs);
+            idxs = resourceGroups.stream().collect(Collectors.mapping(ResourceGroup :: getIdx, Collectors.toList()));
+            Resource resource = new Resource();
+            resource.setResourceType(MallNumberConstants.TWO);
+            List<Resource> resources = resourceService.queryDataByCondition(resource, idxs);
+            idxs = resources.stream().collect(Collectors.mapping(Resource :: getMenuButtonIdxCode, Collectors.toList()));
+            buttons = buttonService.queryDataIn(idxs);
+        }
+        Set<String> permissions = buttons.stream().collect(Collectors.mapping(Button :: getCode, Collectors.toSet()));
+        return permissions;
+    }
 }

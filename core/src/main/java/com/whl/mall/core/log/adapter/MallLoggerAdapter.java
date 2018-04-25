@@ -44,9 +44,9 @@ package com.whl.mall.core.log.adapter;
 public interface MallLoggerAdapter {
     /**
      * info 日志
-     * @param ex
+     * @param msg
      */
-    void info(Throwable ex);
+    void info(String msg);
 
     /**
      * error 日志

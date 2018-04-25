@@ -37,16 +37,26 @@ package com.whl.mall.manage.shiro.pojo;
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.common.constants.MallMessage;
 import com.whl.mall.core.common.utils.MallMd5Utils;
+import com.whl.mall.core.log.MallLog4jLog;
+import com.whl.mall.interfaces.member.MemberRoleService;
 import com.whl.mall.interfaces.member.MemberService;
 import com.whl.mall.pojo.member.Member;
+import com.whl.mall.pojo.member.MemberRole;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 /**
@@ -63,16 +73,43 @@ public class MallShiroRealm extends AuthorizingRealm{
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private MallLog4jLog log4jLog;
+
+    @Value("supperName")
+    private String supperName;
+
     /**
      * 授权
-     * @param principalCollection
+     * @param principals
      * @return
      */
     @Override
-    public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection){
-        principalCollection;
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        return info;
+    public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals){
+        String principal = (String)principals.fromRealm(getName()).iterator().next();
+        String[] objs = principal.split(",");
+        Long userId = Long.valueOf(principal.split(",")[0]);
+        String userName = objs[1];
+        MemberRole memberRole = new MemberRole();
+        memberRole.setMemberIdxCode(userId);
+        try {
+            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+            List<String> roles = memberService.getRoleByUserIdx(userId);
+            info.addRoles(roles);
+            log4jLog.info("当前用户：" + userName + ", roleList: " + roles);
+            Set<String> permissions = null;
+            if (MallMessage.SUPPER_NAME.equals(supperName)) {
+                permissions = memberService.getPermissions(null);
+            } else {
+                permissions = memberService.getPermissions(userId);
+            }
+            info.addStringPermissions(permissions);
+            log4jLog.info("当前用户：" + userName + ", permissions: " + permissions);
+            return info;
+        } catch (Exception e) {
+            log4jLog.error(e);
+        }
+        return null;
     }
 
     /**
@@ -95,9 +132,12 @@ public class MallShiroRealm extends AuthorizingRealm{
                 throw new AuthenticationException(MallMessage.LOGIN_MESSAGE);
             }
         } catch (MallException e) {
-            throw new AuthenticationException(MallMessage.system_fail);
+            throw new AuthenticationException(MallMessage.SYSTEM_FAIL);
         }
-        return new SimpleAuthenticationInfo(UUID.randomUUID().toString() + "," + password, password, getName());
+        Subject subject = SecurityUtils.getSubject();
+        Session session = subject.getSession();
+        session.setAttribute("session_member", member);
+        return new SimpleAuthenticationInfo(member.getIdx() + "," + userName + "," + password, password, getName());
     }
 
 }

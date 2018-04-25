@@ -100,6 +100,11 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
         return baseMapper.queryOneSomeInfoByCondition(po);
     }
 
+    @Override
+    public List<T> queryDataByCondition(T po, List<Long> idxs) throws MallException {
+        return baseMapper.queryDataByCondition(po, idxs);
+    }
+
     /**
      * 根据主键更新
      * @param idx
@@ -123,6 +128,11 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
         int total = baseMapper.queryTotal(po);
         List<T> data = baseMapper.queryPageDataByCondition(po, beginAndEndRows[0], beginAndEndRows[1], orderBy);
         return MallGridResult.ok(data, total);
+    }
+
+    @Override
+    public List<T> queryDataIn(List<Long> idxs) throws MallException {
+        return baseMapper.queryDataIn(idxs);
     }
 
     /**
