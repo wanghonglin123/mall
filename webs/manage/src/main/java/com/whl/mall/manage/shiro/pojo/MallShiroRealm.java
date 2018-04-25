@@ -65,11 +65,12 @@ public class MallShiroRealm extends AuthorizingRealm{
 
     /**
      * 授权
-     * @param var1
+     * @param principalCollection
      * @return
      */
     @Override
-    public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection var1){
+    public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection){
+        principalCollection;
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         return info;
     }

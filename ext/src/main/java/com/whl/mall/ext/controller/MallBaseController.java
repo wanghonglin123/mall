@@ -36,10 +36,9 @@ import com.whl.mall.ext.beans.MallBeansExt;
 
 /**
  * @ClassName: MallBaseController
- * @Description:
+ * @Description: 顶级父类Controller
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/4/17
  */
 public class MallBaseController extends MallBeansExt{
-
 }
