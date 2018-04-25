@@ -35,17 +35,21 @@ package com.whl.mall.core;
  */
 
 import com.whl.mall.core.common.beans.MallBeans;
+import com.whl.mall.core.common.constants.MallMessage;
+import com.whl.mall.core.common.constants.MallStatus;
+import org.apache.shiro.authc.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * @ClassName: ShopExceptionHandle
- * @Description: shop 全局异常处理器
+ * @Description: shop 全局异常处理器, 暂不使用，ajax异常处理会打印多条重复日志
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/3/23
@@ -55,44 +59,67 @@ public class MallExceptionHandler extends MallBeans{
     /**
      * 异常页面路径
      */
-    private static final String ERROR_PATH = "error/";
+    private static final String ERROR_PATH = "/error/";
 
     /**
-     * 异常处理，返回页面，也可以自定义实体,JSON等
+     * MallException 异常处理
      * @param request
      * @param ex
      * @return
      */
-    @ExceptionHandler(MallException.class)
-    ModelAndView handleControllerMallException(HttpServletRequest request, Throwable ex) {
-        HttpStatus status = getStatus(request);
-        super.getLog4jLog().error(ex);
-        return new ModelAndView(ERROR_PATH + status);
-    }
-
-    /**
-     * 所有Controller异常处理，返回页面
-     * @param request
-     * @param ex
-     * @return
-     */
-    @ExceptionHandler(Exception.class)
-    ModelAndView handleControllerException(HttpServletRequest request, Throwable ex) {
-        return handleControllerMallException(request, ex);
-    }
-
-    /**
-     * Ajax请求异常处理，返回json
-     * @param request
-     * @param ex
-     * @return
-     */
-    @ExceptionHandler(MallAjaxException.class)
     @ResponseBody
-    String handleControllerAjaxException(HttpServletRequest request, Throwable ex) {
-        HttpStatus status = getStatus(request);
-        super.getLog4jLog().error(ex);
-        return "ajax fail";
+    @ExceptionHandler(Exception.class)
+    Object exceptionHandle(HttpServletRequest request, Exception ex) {
+        MallException exception = null;
+        boolean isPage = false;
+        if (ex instanceof MallException) {
+            if (ex instanceof MallGridException) {
+                isPage = true;
+            }
+            exception = (MallException) ex;
+        } else if (ex instanceof AuthenticationException) {
+            AuthenticationException authenticationException = (AuthenticationException) ex;
+            String msg = authenticationException.getMessage();
+            if (MallMessage.LOGIN_MESSAGE.equals(msg)) {
+                exception = new MallException(MallStatus.HTTP_STATUS_400, msg);
+            } else {
+                exception = new MallException(MallStatus.HTTP_STATUS_500, msg);
+            }
+        } else {
+            exception = new MallException(MallStatus.HTTP_STATUS_500, ex);
+        }
+        return exceptionHandle(exception, isPage, request);
+    }
+
+    /**
+     * MallException异常处理
+     * @param exception 异常
+     * @param isPage 是否返回分页结果
+     * @return
+     */
+    private Object exceptionHandle(MallException exception, boolean isPage, HttpServletRequest request) {
+        boolean isAjax = isAjax(request);
+        int status = exception.getStatus(); // 异常状态
+        boolean isException = false; // 是否是500异常
+        if (status == MallStatus.HTTP_STATUS_500) {
+            printLog(exception);
+            isException = true;
+        }
+        if (!isAjax) {
+            HttpStatus httpStatus = getStatus(request);
+            return new ModelAndView(ERROR_PATH + httpStatus);
+        }
+        String msg = exception.getMessage();
+        if (isPage) {
+            if (isException) {
+                return MallGridResult.fail(status, msg);
+            }
+        }
+        return MallResult.build(status, msg);
+    }
+
+    private void printLog(MallException ex) {
+        getLog4jLog().error(ex);
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {
@@ -101,5 +128,29 @@ public class MallExceptionHandler extends MallBeans{
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return HttpStatus.valueOf(statusCode);
+    }
+
+    /**
+     * 是否是Ajax请求
+     *
+     * @param request 请求对象
+     * @return 结果
+     */
+    public static boolean isAjax(ServletRequest request) {
+        return isAjax((HttpServletRequest)request);
+    }
+
+    /**
+     * 是否是Ajax请求
+     *
+     * @param request 请求对象
+     * @return 结果
+     */
+    public static boolean isAjax(HttpServletRequest request) {
+        String header = request.getHeader("X-Requested-With");
+        if ("XMLHttpRequest".equalsIgnoreCase(header)) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 }

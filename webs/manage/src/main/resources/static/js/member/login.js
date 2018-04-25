@@ -58,10 +58,10 @@ $(function(){
         $(".sex-woman").addClass("sex-womanCur");
         $(".sex-man").removeClass("sex-manCur");
     });
-    /* 点击登录事件 */
+    /*/!* 点击登录事件 *!/
     $('#login-btn').on("click", function () {
         doLogin(1,false);
-    });
+    });*/
 
     /* 获取手机验证码 */
     if($('.verification-code a').attr('data-cookie')){

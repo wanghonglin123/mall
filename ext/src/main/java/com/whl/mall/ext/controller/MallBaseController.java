@@ -41,4 +41,5 @@ import com.whl.mall.ext.beans.MallBeansExt;
  * @Date: 2018/4/17
  */
 public class MallBaseController extends MallBeansExt{
+
 }

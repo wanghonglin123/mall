@@ -32,32 +32,24 @@ package com.whl.mall.manage.controller;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.MallAjaxException;
 import com.whl.mall.core.MallResult;
-import com.whl.mall.core.common.beans.MallBeans;
 import com.whl.mall.core.common.constants.MallSessionConstants;
 import com.whl.mall.core.common.utils.MallBase64Utils;
-import com.whl.mall.core.common.utils.MallJdbcUtils;
 import com.whl.mall.core.common.utils.MallJsonUtils;
-import com.whl.mall.core.common.utils.MallMd5Utils;
 import com.whl.mall.ext.controller.MallBaseController;
-import com.whl.mall.interfaces.member.MenuService;
-import com.whl.mall.pojo.member.Member;
 import com.whl.mall.pojo.member.Menu;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
 
 /**
  * @ClassName: SystemController
@@ -75,18 +67,16 @@ public class SystemController extends MallBaseController{
      * @throws Exception Exception
      */
     @RequestMapping("/toLogin")
-    public String toLogin(Model model) throws MallAjaxException {
+    public String toLogin(Model model) throws Exception{
         // 获取访问主体Subject
         Subject subject = SecurityUtils.getSubject();
         // subject.getSession(false) 设置为true，会动态代码创建一个Session,但是这里不需要使用Session，所以设置为false
         Session session = subject.getSession(false);
-
         // 如果session存在，name判断会话是否存在登录成员信息，因为用户未登录或者登录失败或者退出操作,或者清空Session操作，
         // name会话会清空成员属性，或者不能创建成员属性，只有登录成功才会存在成员属性
         if (session != null && session.getAttribute(MallSessionConstants.SESSION_MEMBER) == null) {
             return "redirect:/";
         }
-
         return getLoginName();
     }
 
@@ -105,29 +95,16 @@ public class SystemController extends MallBaseController{
      * @return
      * @throws Exception Exception
      */
-    @PostMapping("/doLogin")
+    @RequestMapping("/doLogin")
     @ResponseBody
     public MallResult doLogin(String username, String password) throws Exception{
         Subject subject = SecurityUtils.getSubject();
-
-        try {
-            // 登陆验证
-            username = MallBase64Utils.decode(username);
-            password = MallBase64Utils.decode(password);
-            Member member = new Member();
-            member.setName(username);
-            member.setPwd(MallMd5Utils.md5ForData(password));
-            member = getMemberService().queryOneSomeInfoByCondition(member);
-            if (member == null) {
-                return MallResult.build(400, "账号或者用户不存在", null);
-            }
-
-            // Shiro token唯一标识，登陆成功保存认证信息和授权信息
-            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-            subject.login(token);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // 登陆验证
+        username = MallBase64Utils.decode(username);
+        password = MallBase64Utils.decode(password);
+        // Shiro token唯一标识，登陆成功保存认证信息和授权信息
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        subject.login(token);
         return MallResult.ok();
     }
 

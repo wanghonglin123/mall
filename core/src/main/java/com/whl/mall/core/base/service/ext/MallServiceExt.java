@@ -32,17 +32,13 @@ package com.whl.mall.core.base.service.ext;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.MallAjaxException;
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallGridResult;
-import com.whl.mall.core.MallPagingResult;
 import com.whl.mall.core.base.dao.MallBaseMapper;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.base.service.MallBaseService;
 import com.whl.mall.core.common.constants.MallJavaTypeConstants;
-import com.whl.mall.core.common.constants.MallMessage;
 import com.whl.mall.core.common.constants.MallPojoFieldNameConstants;
-import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallPagingUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

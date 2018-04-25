@@ -8,7 +8,6 @@ package com.whl.mall.manage.controller.member;
  * @Version: V2.0.0
  */
 
-import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallMessage;
@@ -39,7 +38,7 @@ public class MemberCateController extends MallBaseController {
      */
     @RequestMapping("/memberCate/toList")
     public String toList() {
-        return "/member/memberCate/memberCatelist";
+        return "member/memberCate/memberCatelist";
     }
 
     /**
@@ -84,7 +83,7 @@ public class MemberCateController extends MallBaseController {
             Menu menu = getMenuService().queryOneSomeInfoByCondition(po);
             request.setAttribute("obj", menu);
         }
-        return "/memberCate/saveOrEditOrViewButton";
+        return "memberCate/saveOrEditOrViewButton";
     }
 
     /**
@@ -93,7 +92,7 @@ public class MemberCateController extends MallBaseController {
      */
     @RequestMapping("/memberCate/paging")
     @ResponseBody
-    public MallGridResult paging(Button po, Integer number, Integer rows, String order) throws MallException {
+    public MallGridResult paging(Button po, Integer number, Integer rows, String order) throws Exception {
         return getButtonService().queryPageDataByCondition(po, number, rows, order);
     }
 }

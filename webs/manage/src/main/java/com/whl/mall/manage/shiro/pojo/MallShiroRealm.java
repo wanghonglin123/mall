@@ -34,7 +34,11 @@ package com.whl.mall.manage.shiro.pojo;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.MallException;
+import com.whl.mall.core.common.constants.MallMessage;
+import com.whl.mall.core.common.utils.MallMd5Utils;
 import com.whl.mall.interfaces.member.MemberService;
+import com.whl.mall.pojo.member.Member;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -81,10 +85,18 @@ public class MallShiroRealm extends AuthorizingRealm{
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken)authcToken;
         String userName = usernamePasswordToken.getUsername();
         String password = String.valueOf(usernamePasswordToken.getPassword());
-        if (userName != null) {
-            return new SimpleAuthenticationInfo(UUID.randomUUID().toString() + "," + password, password, getName());
+        Member member = new Member();
+        member.setName(userName);
+        try {
+            member.setPwd(MallMd5Utils.md5ForData(password));
+            member = memberService.queryOneSomeInfoByCondition(member);
+            if (member == null) {
+                throw new AuthenticationException(MallMessage.LOGIN_MESSAGE);
+            }
+        } catch (MallException e) {
+            throw new AuthenticationException(MallMessage.system_fail);
         }
-        return null;
+        return new SimpleAuthenticationInfo(UUID.randomUUID().toString() + "," + password, password, getName());
     }
 
 }

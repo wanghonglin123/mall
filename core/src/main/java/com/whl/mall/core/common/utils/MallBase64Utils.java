@@ -8,7 +8,6 @@ package com.whl.mall.core.common.utils;
  * @Version: V2.0.0
  */
 
-import com.whl.mall.core.MallAjaxException;
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.common.constants.MallMessage;
 import com.whl.mall.core.common.constants.MallStatus;

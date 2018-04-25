@@ -8,7 +8,6 @@ package com.whl.mall.manage.controller.member;
  * @Version: V2.0.0
  */
 
-import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallMessage;
@@ -16,7 +15,7 @@ import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.ext.controller.MallBaseController;
-import com.whl.mall.pojo.member.*;
+import com.whl.mall.pojo.member.Resource;
 import com.whl.mall.pojo.member.ResourceGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -25,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * @ClassName: ResourceGroupController
@@ -43,7 +40,7 @@ public class ResourceGroupController extends MallBaseController {
      */
     @RequestMapping("/resourceGroup/toList")
     public String toList() {
-        return "/member/resourceGroup/resourceGrouplist";
+        return "member/resourceGroup/resourceGrouplist";
     }
 
     /**
@@ -52,14 +49,14 @@ public class ResourceGroupController extends MallBaseController {
      * @return
      */
     @RequestMapping("/resourceGroup/toChooseResourceGroup/{roleIdx}")
-    public String toChooseResourceGroup(@PathVariable String roleIdx, HttpServletRequest request) throws MallException{
+    public String toChooseResourceGroup(@PathVariable String roleIdx, HttpServletRequest request) throws Exception{
         String resourceGroupIdx = request.getParameter("resourceGroupIdx");
         String[] resourceGroupIdxs = null;
         if (StringUtils.isNoneEmpty(resourceGroupIdx)) {
             resourceGroupIdxs = resourceGroupIdx.split(",");
         }
         request.setAttribute("resourceGroupIdxsJson", MallJsonUtils.objectToJson(resourceGroupIdxs));
-        return "/member/resourceGroup/chooseResourceGroup";
+        return "member/resourceGroup/chooseResourceGroup";
     }
 
     /**
@@ -126,7 +123,7 @@ public class ResourceGroupController extends MallBaseController {
             po = getResourceGroupService().queryOneSomeInfoByCondition(po);
             request.setAttribute("obj", po);
         }
-        return "/member/resourceGroup/saveOrEditOrViewResourceGroup";
+        return "member/resourceGroup/saveOrEditOrViewResourceGroup";
     }
 
     /**
@@ -135,7 +132,7 @@ public class ResourceGroupController extends MallBaseController {
      */
     @RequestMapping("/resourceGroup/paging")
     @ResponseBody
-    public MallGridResult paging(ResourceGroup po, Integer page, Integer rows, String order) throws MallException {
+    public MallGridResult paging(ResourceGroup po, Integer page, Integer rows, String order) throws Exception {
         return getResourceGroupService().queryPageDataByCondition(po, page, rows, order);
     }
 }

@@ -8,7 +8,6 @@ package com.whl.mall.manage.controller.member;
  * @Version: V2.0.0
  */
 
-import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallMessage;
@@ -18,9 +17,7 @@ import com.whl.mall.core.common.utils.MallBase64Utils;
 import com.whl.mall.core.common.utils.MallMd5Utils;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.Member;
-import com.whl.mall.pojo.member.Member;
 import com.whl.mall.pojo.member.MemberRole;
-import com.whl.mall.pojo.member.Menu;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +40,7 @@ public class MemberController extends MallBaseController{
      */
     @RequestMapping("/member/toList")
     public String toList() {
-        return "/member/member/list";
+        return "member/member/list";
     }
 
     /**
@@ -104,7 +101,7 @@ public class MemberController extends MallBaseController{
             po = getMemberService().queryOneSomeInfoByCondition(po);
             request.setAttribute("obj", po);
         }
-        return "/member/member/addMemberInfo";
+        return "member/member/addMemberInfo";
     }
 
     /**
@@ -113,7 +110,7 @@ public class MemberController extends MallBaseController{
      */
     @RequestMapping("/member/paging")
     @ResponseBody
-    public MallGridResult paging(Member po, Integer page, Integer rows, String order) throws MallException {
+    public MallGridResult paging(Member po, Integer page, Integer rows, String order) throws Exception {
          return getMemberService().queryPageDataByCondition(po, page, rows, order);
     }
 }

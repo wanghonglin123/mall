@@ -201,16 +201,15 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
 
         <!-- 以下asyncLogger 是对一些包定制私有日志配置-->
         <!-- 定义一个普通的logger，这里我定义为异步的 -->
-        <!--<asyncLogger name="org.springframework" level="warn" additivity="false">
-            &lt;!&ndash;<AppenderRef ref="rollingFileWarn" />
-            <AppenderRef ref="rollingRandomAccessFileAppender" />&ndash;&gt;
+        <asyncLogger name="org.springframework" level="WARN" additivity="false">
+            <!--<AppenderRef ref="rollingFileWarn" />
+            <AppenderRef ref="rollingRandomAccessFileAppender" />-->
 
-            &lt;!&ndash; <appender-ref ref="rollingFileDebug"/>
-             <appender-ref ref="rollingFileInfo"/>&ndash;&gt;
+            <!-- <appender-ref ref="rollingFileDebug"/>
+             <appender-ref ref="rollingFileInfo"/>-->
             <appender-ref ref="rollingFileWarn"/>
             <appender-ref ref="rollingFileError"/>
-            <appender-ref ref="console"></appender-ref>
-        </asyncLogger>-->
+        </asyncLogger>
 
         <!-- 定义一个普通的logger，这里我定义为异步的 -->
         <asyncLogger name="org.mybatis" level="warn" additivity="false">
@@ -260,11 +259,11 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
         </asyncLogger>
 
         <!-- 定义一个普通的logger，这里我定义为异步的 -->
-        <asyncLogger name="org.apache" level="warn" additivity="false">
+        <asyncLogger name="org.apache" level="WARN" additivity="false">
             <!--<AppenderRef ref="rollingFileWarn" />
-            <AppenderRef ref="rollingRandomAccessFileAppender" />-->
+            <AppenderRef ref="rollingRandomAccessFileAppender" />
 
-            <!-- <appender-ref ref="rollingFileDebug"/>
+             <appender-ref ref="rollingFileDebug"/>
              <appender-ref ref="rollingFileInfo"/>-->
             <appender-ref ref="rollingFileWarn"/>
             <appender-ref ref="rollingFileError"/>

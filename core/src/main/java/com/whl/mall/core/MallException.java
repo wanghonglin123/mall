@@ -52,6 +52,10 @@ public class MallException extends Exception{
         this.status = status;
     }
 
+    public MallException(Throwable cause) {
+        super(cause);
+    }
+
     public MallException(int status, String message) {
         super(message);
         this.status = status;

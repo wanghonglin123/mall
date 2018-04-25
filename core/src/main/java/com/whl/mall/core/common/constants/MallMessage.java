@@ -45,4 +45,6 @@ public final class MallMessage {
     public static final String CONTROLLER_INVALID_PARAMETER = "Controller参数非法";
     public static final String SERVICE_INVALID_PARAMETER = "service参数非法";
     public static final String INVALID_PARAMETER = "参数非法";
+    public static final String LOGIN_MESSAGE = "用户名或者密码错误";
+    public static final String system_fail = "系统忙，请稍后重试";
 }

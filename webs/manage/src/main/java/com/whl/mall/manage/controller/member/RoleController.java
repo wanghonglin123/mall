@@ -7,7 +7,6 @@ package com.whl.mall.manage.controller.member; /**
  * @Version: V2.0.0
  */
 
-import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallMessage;
@@ -15,9 +14,7 @@ import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.ext.controller.MallBaseController;
-import com.whl.mall.pojo.member.Menu;
 import com.whl.mall.pojo.member.ResourceGroupRole;
-import com.whl.mall.pojo.member.Role;
 import com.whl.mall.pojo.member.Role;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -42,7 +39,7 @@ public class RoleController extends MallBaseController {
      */
     @RequestMapping("/role/toList")
     public String toList() {
-        return "/member/role/rolelist";
+        return "member/role/rolelist";
     }
 
     /**
@@ -51,14 +48,14 @@ public class RoleController extends MallBaseController {
      * @return
      */
     @RequestMapping("/role/toChooseRolelist/{idx}")
-    public String toChooseRolelist(@PathVariable String idx, HttpServletRequest request) throws MallException{
+    public String toChooseRolelist(@PathVariable String idx, HttpServletRequest request) throws Exception{
         String roleIdx = request.getParameter("roleIdx");
         String[] roles = null;
         if (StringUtils.isNoneEmpty(roleIdx)) {
             roles = roleIdx.split(",");
         }
         request.setAttribute("roleIdxListJson", MallJsonUtils.objectToJson(roles));
-        return "/member/role/chooseRolelist";
+        return "member/role/chooseRolelist";
     }
 
     /**
@@ -68,7 +65,7 @@ public class RoleController extends MallBaseController {
      */
     @RequestMapping("/role/{type}/{idx}")
     public String toAddOrEditOrSee(@PathVariable String type, @PathVariable Long idx) {
-        return "/member/role/saveOrEditOrViewRole";
+        return "member/role/saveOrEditOrViewRole";
     }
 
     /**
@@ -129,7 +126,7 @@ public class RoleController extends MallBaseController {
             po = getRoleService().queryOneSomeInfoByCondition(po);
             request.setAttribute("obj", po);
         }
-        return "/role/saveOrEditOrViewRole";
+        return "role/saveOrEditOrViewRole";
     }
 
     /**
@@ -138,7 +135,7 @@ public class RoleController extends MallBaseController {
      */
     @RequestMapping("/role/paging")
     @ResponseBody
-    public MallGridResult paging(Role po, Integer page, Integer rows, String order) throws MallException {
+    public MallGridResult paging(Role po, Integer page, Integer rows, String order) throws Exception {
         return getRoleService().queryPageDataByCondition(po, page, rows, order);
     }
 }

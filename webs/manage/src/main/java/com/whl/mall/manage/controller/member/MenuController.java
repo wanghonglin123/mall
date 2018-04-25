@@ -34,7 +34,6 @@ package com.whl.mall.manage.controller.member;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallMessage;
@@ -43,9 +42,7 @@ import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.Menu;
-import com.whl.mall.pojo.member.Menu;
 import com.whl.mall.pojo.member.MenuTree;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,7 +71,7 @@ public class MenuController extends MallBaseController {
      */
     @RequestMapping("/menu/toList")
     public String toList(Model model) {
-        return "/member/menu/menuList";
+        return "member/menu/menuList";
     }
 
     /**
@@ -87,7 +84,7 @@ public class MenuController extends MallBaseController {
     @RequestMapping("/menu/{type}/{idx}")
     public String toSaveOrEditOrViewMenu(@PathVariable String type, @PathVariable Long idx, ModelAndView view) {
         view.addObject("type", type);
-        return "/member/menu/saveOrEditOrViewMenu";
+        return "member/menu/saveOrEditOrViewMenu";
     }
 
     /**
@@ -133,7 +130,7 @@ public class MenuController extends MallBaseController {
             Menu menu = getMenuService().queryOneSomeInfoByCondition(po);
             request.setAttribute("obj", menu);
         }
-        return "/member/menu/saveOrEditOrViewMenu";
+        return "member/menu/saveOrEditOrViewMenu";
     }
 
     /**
@@ -142,7 +139,7 @@ public class MenuController extends MallBaseController {
      */
     @RequestMapping("/menu/paging")
     @ResponseBody
-    public MallGridResult paging(Menu po, Integer page, Integer rows, String order) throws MallException {
+    public MallGridResult paging(Menu po, Integer page, Integer rows, String order) throws Exception {
         return getMenuService().queryPageDataByCondition(po, page, rows, order);
     }
 
@@ -152,7 +149,7 @@ public class MenuController extends MallBaseController {
      */
     @RequestMapping("/menu/listAll")
     @ResponseBody
-    public MallResult listAll() throws MallException{
+    public MallResult listAll() throws Exception{
         List<MenuTree> treeList = super.getMenuService().getTreeData();
         return MallResult.ok(MallJsonUtils.objectToJson(treeList));
     }
@@ -165,7 +162,7 @@ public class MenuController extends MallBaseController {
      */
     @RequestMapping("/menu/getMenuData/{level}")
     @ResponseBody
-    public MallResult getMenuData(@PathVariable Short level) throws MallException {
+    public MallResult getMenuData(@PathVariable Short level) throws Exception {
         List<Menu> list = super.getMenuService().queryDataByConditions(null, level);
         return MallResult.ok(list);
     }

@@ -23,7 +23,7 @@
                     <span class="avoid">1天内免登录</span>
                     <a class="forget" href="/sys/to-forget" target="_blank">忘记密码？</a>
                 </div>
-                <button class="login-btn-active" type="submit" id="login-btn" onclick="doLogin()">登录</button>
+                <button class="login-btn-active"  id="login-btn" onclick="doLogin()">登录</button>
                 <div class="hint-d"><i class="icon icon-warn"></i><span class="hint"></span> </div>
             </div>
         </div>
