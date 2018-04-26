@@ -134,6 +134,7 @@ public class MallShiroRealm extends AuthorizingRealm{
         } catch (MallException e) {
             throw new AuthenticationException(MallMessage.SYSTEM_FAIL);
         }
+
         Subject subject = SecurityUtils.getSubject();
         Session session = subject.getSession();
         session.setAttribute("session_member", member);

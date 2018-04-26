@@ -20,7 +20,10 @@
  */
 package com.whl.mall.manage.shiro.filter;
 
+import com.whl.mall.core.common.constants.MallMessage;
+import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.interfaces.member.MemberService;
+import com.whl.mall.interfaces.member.MenuService;
 import com.whl.mall.pojo.member.Member;
 import com.whl.mall.pojo.member.MenuTree;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -47,8 +50,12 @@ import java.util.stream.Collectors;
 public class MallAnyRolesFilter extends AccessControlFilter {
     private static final String LOGIN_URL = "/toLogin";
     private Short status = null;
+
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private MenuService menuService;
 
     /**
      * 判断是否允许访问， true 允许， flase 不允许
@@ -62,19 +69,25 @@ public class MallAnyRolesFilter extends AccessControlFilter {
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
         Subject subject = getSubject(servletRequest, servletResponse);
         if (subject.getPrincipal() == null) {
-            status = 1;
-            return false;
+            return failHandle();
         }
         Session session = subject.getSession(false);
         Member member = (Member)session.getAttribute("session_member");
         if (member == null) {
-            status = 1;
-            return false;
+            return failHandle();
         }
-        List<MenuTree> menuTreeList = (List<MenuTree>) session.getAttribute("session_menus");
-        if (menuTreeList == null) {
 
+        // 获取可以访问的菜单
+        List<MenuTree> menuTreeList = (List<MenuTree>) session.getAttribute("session_menuJson");
+        if (menuTreeList != null) {
+            if (MallMessage.SUPPER_NAME.equals(member.getName())) {
+                menuTreeList = menuService.getTreeData();
+            } else {
+                menuTreeList = menuService.getTreeData();
+            }
+            session.setAttribute("session_menuJson", MallJsonUtils.objectToJson(menuTreeList));
         }
+
         return true;
     }
 
@@ -94,4 +107,11 @@ public class MallAnyRolesFilter extends AccessControlFilter {
         }
         return false;
     }
+
+    private boolean failHandle() {
+        status = 1;
+        return false;
+    }
+
+
 }
