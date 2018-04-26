@@ -20,23 +20,33 @@
  */
 package com.whl.mall.manage.shiro.filter;
 
+import com.whl.mall.core.MallException;
+import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallMessage;
 import com.whl.mall.core.common.utils.MallJsonUtils;
+import com.whl.mall.core.common.utils.MallWebUtils;
+import com.whl.mall.core.log.MallLog4jLog;
 import com.whl.mall.interfaces.member.MemberService;
 import com.whl.mall.interfaces.member.MenuService;
 import com.whl.mall.pojo.member.Member;
 import com.whl.mall.pojo.member.MenuTree;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.StringUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,6 +59,7 @@ import java.util.stream.Collectors;
  */
 public class MallAnyRolesFilter extends AccessControlFilter {
     private static final String LOGIN_URL = "/toLogin";
+    private static final String UNAUTHORIZED_URL = "/sys/unauthorized";
     private Short status = null;
 
     @Autowired
@@ -56,6 +67,9 @@ public class MallAnyRolesFilter extends AccessControlFilter {
 
     @Autowired
     private MenuService menuService;
+
+    @Autowired
+    private MallLog4jLog log4jLog;
 
     /**
      * 判断是否允许访问， true 允许， flase 不允许
@@ -77,18 +91,23 @@ public class MallAnyRolesFilter extends AccessControlFilter {
             return failHandle();
         }
 
-        // 获取可以访问的菜单
-        List<MenuTree> menuTreeList = (List<MenuTree>) session.getAttribute("session_menuJson");
-        if (menuTreeList != null) {
-            if (MallMessage.SUPPER_NAME.equals(member.getName())) {
-                menuTreeList = menuService.getTreeData();
-            } else {
-                menuTreeList = menuService.getTreeData();
-            }
-            session.setAttribute("session_menuJson", MallJsonUtils.objectToJson(menuTreeList));
+        // 初始化访问的菜单
+        List<MenuTree> menuTreeList = initMenus(subject, session, member);
+
+        String requestURI = getPathWithinApplication(servletRequest);
+        if (requestURI.equals("/")) { // 登录成功页直接放过
+            return true;
         }
 
-        return true;
+        // 获取可以访问菜单所有的Url
+        List<String> urlMappingList = getUrlMappingList(menuTreeList, session);
+        int size = urlMappingList.size();
+        for (int i = 0; i < size; i++) {
+            if (pathMatcher.matches(urlMappingList.get(i), requestURI)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -100,10 +119,25 @@ public class MallAnyRolesFilter extends AccessControlFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
+        boolean isAjax = MallWebUtils.isAjax(servletRequest);
         if (status == 1) {
+            if (isAjax) {
+                MallWebUtils.out(servletResponse, log4jLog, 1, "当前用户已失效，请重新登录");
+            }
             WebUtils.issueRedirect(servletRequest, servletResponse, LOGIN_URL);
         } else {
-
+            //
+            if (StringUtils.hasText(UNAUTHORIZED_URL)) {
+                if (isAjax) {
+                    MallWebUtils.out(servletResponse, log4jLog, 2, "您没有该请求的权限，请联系管理员");
+                } else {
+                    // 如果有未授权页面跳转过去
+                    WebUtils.issueRedirect(servletRequest, servletResponse, UNAUTHORIZED_URL);
+                }
+            } else {
+                // 否则返回401未授权状态码
+                WebUtils.toHttp(servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            }
         }
         return false;
     }
@@ -113,5 +147,49 @@ public class MallAnyRolesFilter extends AccessControlFilter {
         return false;
     }
 
+    /**
+     * 初始化菜单
+     */
+    private List<MenuTree> initMenus(Subject subject, Session session, Member member) throws MallException{
+        // 获取可以访问的菜单
+        List<MenuTree> menuTreeList = (List<MenuTree>) session.getAttribute("session_menuJson");
+        if (menuTreeList == null) {
+            if (!subject.hasRole(MallMessage.SUPPER_NAME)) {
+                menuTreeList = menuService.getTreeData();
+                log4jLog.info("当前用户：" + member.getName() + ", menuIdxList:" + menuTreeList);
+            }
+            session.setAttribute("session_menuJson", MallJsonUtils.objectToJson(menuTreeList));
+        }
+        return menuTreeList;
+    }
+    /**
+     * 获取所有urlMapping 集合 （bfs）
+     * @param trees 拥有的菜单
+     * @return urlMapping 集合
+     */
+    private List<String> getUrlMappingList(List<MenuTree> trees, Session session) {
+        List<String> menuUrlList = (List<String>) session.getAttribute("session_urlMapping");
+        if (menuUrlList == null) {
+            menuUrlList = new ArrayList<>();
+            menuUrlList.add("/sys/*");
+            menuUrlList = getUrlMappingList(trees, menuUrlList);
+            session.setAttribute("session_urlMapping", menuUrlList);
+        }
+        return menuUrlList;
+    }
 
+    private List<String> getUrlMappingList(List<MenuTree> trees, List<String> urlList) {
+        if (trees == null) {
+            return urlList;
+        }
+        Map attributes = null;
+        List<MenuTree> childrens = null;
+        for (MenuTree menuTree : trees) {
+            attributes = menuTree.getAttributes();
+            urlList.add(attributes.get("url").toString());
+            childrens = menuTree.getChildren();
+            getUrlMappingList(childrens, urlList);
+        }
+        return urlList;
+    }
 }
