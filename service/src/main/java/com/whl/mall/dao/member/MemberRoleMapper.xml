@@ -47,31 +47,19 @@
     SELECT
     <include refid="Base_Column_List" />
     from tb_out_store_stock_detail from tb_member_role where 1 = 1
-    <if test="name != null">
-      and name = #{name}
-    </if>
-    <if test="pwd != null">
-      and pwd = #{pwd}
-    </if>
   </select>
 
   <select id="queryOneSomeInfoByCondition" parameterType="com.whl.mall.pojo.member.MemberRole">
-    SELECT  idx, idx_code, name, telphone, email from tb_member_role where 1 = 1
-    <if test="name != null">
-      and name = #{name}
-    </if>
-    <if test="pwd != null">
-      and pwd = #{pwd}
-    </if>
   </select>
 
-  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.MemberRole">
-    SELECT  <include refid="Base_Column_List" /> from tb_member_role where 1 = 1
-    <if test="name != null">
-      and name = #{name}
-    </if>
-    <if test="pwd != null">
-      and pwd = #{pwd}
-    </if>
+  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.MemberRole" resultType="com.whl.mall.pojo.member.MemberRole">
+    SELECT  <include refid="Base_Column_List" /> from tb_member_role where member_idx_code = #{memberIdxCode}
+  </select>
+
+  <select id="queryDataIn" parameterType="java.util.List" resultType="com.whl.mall.pojo.member.MemberRole">
+    SELECT  <include refid="Base_Column_List" /> from tb_member_role where
+    <foreach collection="list" open="(" close=")" separator="," item="idx">
+      #{idx}
+    </foreach>
   </select>
 </mapper>

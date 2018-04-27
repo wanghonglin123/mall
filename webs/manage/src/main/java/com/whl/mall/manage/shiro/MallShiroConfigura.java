@@ -48,6 +48,7 @@ import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -139,13 +140,17 @@ public class MallShiroConfigura extends MallBeans {
     }
 
     @Bean
-    public ShiroFilterFactoryBean shiroFilters(DefaultWebSecurityManager securityManager) {
+    public MallAnyRolesFilter anyRolesFilter() {
+        return new MallAnyRolesFilter();
+    }
+    @Bean
+    public ShiroFilterFactoryBean shiroFilters(DefaultWebSecurityManager securityManager, MallAnyRolesFilter anyRolesFilter) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
         Map<String, Filter> filterMap = new HashMap<>();
         filterMap.put("authc", new PassThruAuthenticationFilter());
-        filterMap.put("anyRoles", new MallAnyRolesFilter());
+        filterMap.put("anyRoles", anyRolesFilter);
         shiroFilterFactoryBean.setFilters(filterMap);
 
         shiroFilterFactoryBean.setFilterChainDefinitions(getFilterChainDefinitions());
@@ -189,7 +194,7 @@ public class MallShiroConfigura extends MallBeans {
         StringBuilder filterChainDefinitions = new StringBuilder();
         //filterChainDefinitions.append("/rebuild/item/index = anon \n");
         // <!-- anon表示此地址不需要任何权限即可访问 -->
-        filterChainDefinitions.append("/*Login=anon \n");
+        filterChainDefinitions.append("/sys/*=anon \n");
         filterChainDefinitions.append("/css/**=anon \n");
         filterChainDefinitions.append("/images/**=anon \n");
         filterChainDefinitions.append("/img/**=anon \n");

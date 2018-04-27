@@ -34,6 +34,7 @@ package com.whl.mall.manage.controller;/**
 
 import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallSessionConstants;
+import com.whl.mall.core.common.constants.MallUrlConstants;
 import com.whl.mall.core.common.utils.MallBase64Utils;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.ext.controller.MallBaseController;
@@ -66,7 +67,7 @@ public class SystemController extends MallBaseController{
      * @return
      * @throws Exception Exception
      */
-    @RequestMapping("/toLogin")
+    @RequestMapping("/sys/toLogin")
     public String toLogin(Model model) throws Exception{
         // 获取访问主体Subject
         Subject subject = SecurityUtils.getSubject();
@@ -95,7 +96,7 @@ public class SystemController extends MallBaseController{
      * @return
      * @throws Exception Exception
      */
-    @RequestMapping("/doLogin")
+    @RequestMapping("/sys/doLogin")
     @ResponseBody
     public MallResult doLogin(String username, String password) throws Exception{
         Subject subject = SecurityUtils.getSubject();
@@ -109,11 +110,21 @@ public class SystemController extends MallBaseController{
     }
 
     /**
+     * 跳转到未授权页面
+     * @return
+     * @throws Exception Exception
+     */
+    @RequestMapping(MallUrlConstants.UNAUTHORIZED_URL)
+    public String unauthorized() throws Exception{
+        return "error/unauthorized";
+    }
+
+    /**
      * 进入首页
      *
      * @return
      */
-    @RequestMapping("/")
+    @RequestMapping(MallUrlConstants.INDEX_URL)
     public String index(HttpServletRequest request, Menu po) throws Exception{
         String json = MallJsonUtils.objectToJson(super.getMenuService().getTreeData());
         request.setAttribute("menuJson", json);

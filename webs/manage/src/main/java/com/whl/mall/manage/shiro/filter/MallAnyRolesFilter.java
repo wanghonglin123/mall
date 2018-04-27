@@ -23,6 +23,7 @@ package com.whl.mall.manage.shiro.filter;
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallMessage;
+import com.whl.mall.core.common.constants.MallUrlConstants;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.core.common.utils.MallWebUtils;
 import com.whl.mall.core.log.MallLog4jLog;
@@ -37,6 +38,10 @@ import org.apache.shiro.util.StringUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -58,12 +63,8 @@ import java.util.stream.Collectors;
  * @Date: 2017/11/22
  */
 public class MallAnyRolesFilter extends AccessControlFilter {
-    private static final String LOGIN_URL = "/toLogin";
-    private static final String UNAUTHORIZED_URL = "/sys/unauthorized";
-    private Short status = null;
 
-    @Autowired
-    private MemberService memberService;
+    private Short status = null;
 
     @Autowired
     private MenuService menuService;
@@ -81,31 +82,35 @@ public class MallAnyRolesFilter extends AccessControlFilter {
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
-        Subject subject = getSubject(servletRequest, servletResponse);
-        if (subject.getPrincipal() == null) {
-            return failHandle();
-        }
-        Session session = subject.getSession(false);
-        Member member = (Member)session.getAttribute("session_member");
-        if (member == null) {
-            return failHandle();
-        }
+        try {
+            Subject subject = getSubject(servletRequest, servletResponse);
+            if (subject.getPrincipal() == null) {
+                return failHandle();
+            }
+            Session session = subject.getSession(false);
+            Member member = (Member) session.getAttribute("session_member");
+            if (member == null) {
+                return failHandle();
+            }
 
-        // 初始化访问的菜单
-        List<MenuTree> menuTreeList = initMenus(subject, session, member);
+            // 初始化访问的菜单
+            List<MenuTree> menuTreeList = initMenus(subject, session, member);
 
-        String requestURI = getPathWithinApplication(servletRequest);
-        if (requestURI.equals("/")) { // 登录成功页直接放过
-            return true;
-        }
-
-        // 获取可以访问菜单所有的Url
-        List<String> urlMappingList = getUrlMappingList(menuTreeList, session);
-        int size = urlMappingList.size();
-        for (int i = 0; i < size; i++) {
-            if (pathMatcher.matches(urlMappingList.get(i), requestURI)) {
+            String requestURI = getPathWithinApplication(servletRequest);
+            if (requestURI.equals(MallUrlConstants.INDEX_URL)) { // 登录成功页直接放过
                 return true;
             }
+
+            // 获取可以访问菜单所有的Url
+            List<String> urlMappingList = getUrlMappingList(menuTreeList, session);
+            int size = urlMappingList.size();
+            for (int i = 0; i < size; i++) {
+                if (pathMatcher.matches(urlMappingList.get(i), requestURI)) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
@@ -123,16 +128,17 @@ public class MallAnyRolesFilter extends AccessControlFilter {
         if (status == 1) {
             if (isAjax) {
                 MallWebUtils.out(servletResponse, log4jLog, 1, "当前用户已失效，请重新登录");
+            } else {
+                WebUtils.issueRedirect(servletRequest, servletResponse, MallUrlConstants.LOGIN_URL);
             }
-            WebUtils.issueRedirect(servletRequest, servletResponse, LOGIN_URL);
         } else {
             //
-            if (StringUtils.hasText(UNAUTHORIZED_URL)) {
+            if (StringUtils.hasText(MallUrlConstants.UNAUTHORIZED_URL)) {
                 if (isAjax) {
                     MallWebUtils.out(servletResponse, log4jLog, 2, "您没有该请求的权限，请联系管理员");
                 } else {
                     // 如果有未授权页面跳转过去
-                    WebUtils.issueRedirect(servletRequest, servletResponse, UNAUTHORIZED_URL);
+                    WebUtils.issueRedirect(servletRequest, servletResponse, MallUrlConstants.UNAUTHORIZED_URL);
                 }
             } else {
                 // 否则返回401未授权状态码

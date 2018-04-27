@@ -51,7 +51,7 @@
         $('#login-btn').html("登录中...").addClass("login-btn").removeClass("login-btn-active");
         $.ajax({
             type : "POST",
-            url : "/doLogin",
+            url : "/sys/doLogin",
             cache : false,
             data :param
         }).done(function (result) {

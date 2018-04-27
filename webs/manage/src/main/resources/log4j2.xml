@@ -201,7 +201,7 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
 
         <!-- 以下asyncLogger 是对一些包定制私有日志配置-->
         <!-- 定义一个普通的logger，这里我定义为异步的 -->
-        <asyncLogger name="org.springframework" level="WARN" additivity="false">
+        <asyncLogger name="org.springframework" level="warn" additivity="false">
             <!--<AppenderRef ref="rollingFileWarn" />
             <AppenderRef ref="rollingRandomAccessFileAppender" />-->
 
@@ -267,7 +267,6 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
              <appender-ref ref="rollingFileInfo"/>-->
             <appender-ref ref="rollingFileWarn"/>
             <appender-ref ref="rollingFileError"/>
-
         </asyncLogger>
 
         <!-- 定义一个普通的logger，这里我定义为异步的  ## Netty   -->

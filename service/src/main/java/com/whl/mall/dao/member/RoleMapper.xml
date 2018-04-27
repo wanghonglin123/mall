@@ -74,4 +74,11 @@
   <select id="queryTotal" parameterType="com.whl.mall.pojo.member.Role" resultType="java.lang.Integer">
     SELECT COUNT(idx) FROM tb_role where 1 = 1
   </select>
+
+  <select id="queryDataIn" parameterType="java.util.List" resultType="com.whl.mall.pojo.member.Role">
+    SELECT  <include refid="Base_Column_List" /> from tb_role where idx IN
+    <foreach collection="list" item="idx" open="(" close=")" separator=",">
+      #{idx}
+    </foreach>
+  </select>
 </mapper>

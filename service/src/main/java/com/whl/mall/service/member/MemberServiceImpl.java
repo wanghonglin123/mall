@@ -39,6 +39,7 @@ import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallMd5Utils;
 import com.whl.mall.interfaces.member.*;
 import com.whl.mall.pojo.member.*;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -94,6 +95,9 @@ public class MemberServiceImpl extends MallServiceExt<Member/*, MenuMapper*/> im
         } else {
             List<Role> roles = getMemberRoles(userIdx);
             List<Long> idxs = roles.stream().collect(Collectors.mapping(Role :: getIdx, Collectors.toList()));
+            if (CollectionUtils.isEmpty(idxs)) {
+                return null;
+            }
             List<ResourceGroup> resourceGroups = resourceGroupService.queryDataIn(idxs);
             idxs = resourceGroups.stream().collect(Collectors.mapping(ResourceGroup :: getIdx, Collectors.toList()));
             Resource resource = new Resource();

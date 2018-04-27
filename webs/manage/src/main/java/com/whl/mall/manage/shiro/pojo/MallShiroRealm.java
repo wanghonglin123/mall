@@ -36,12 +36,15 @@ package com.whl.mall.manage.shiro.pojo;
 
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.common.constants.MallMessage;
+import com.whl.mall.core.common.constants.MallNumberConstants;
+import com.whl.mall.core.common.constants.MallSymbolConstants;
 import com.whl.mall.core.common.utils.MallMd5Utils;
 import com.whl.mall.core.log.MallLog4jLog;
 import com.whl.mall.interfaces.member.MemberRoleService;
 import com.whl.mall.interfaces.member.MemberService;
 import com.whl.mall.pojo.member.Member;
 import com.whl.mall.pojo.member.MemberRole;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -76,9 +79,6 @@ public class MallShiroRealm extends AuthorizingRealm{
     @Autowired
     private MallLog4jLog log4jLog;
 
-    @Value("supperName")
-    private String supperName;
-
     /**
      * 授权
      * @param principals
@@ -87,9 +87,9 @@ public class MallShiroRealm extends AuthorizingRealm{
     @Override
     public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals){
         String principal = (String)principals.fromRealm(getName()).iterator().next();
-        String[] objs = principal.split(",");
-        Long userId = Long.valueOf(principal.split(",")[0]);
-        String userName = objs[1];
+        String[] objs = principal.split(MallSymbolConstants.COMMA);
+        Long userId = Long.valueOf(principal.split(MallSymbolConstants.COMMA)[MallNumberConstants.ZERO]);
+        String userName = objs[MallNumberConstants.ONE];
         MemberRole memberRole = new MemberRole();
         memberRole.setMemberIdxCode(userId);
         try {
@@ -98,12 +98,14 @@ public class MallShiroRealm extends AuthorizingRealm{
             info.addRoles(roles);
             log4jLog.info("当前用户：" + userName + ", roleList: " + roles);
             Set<String> permissions = null;
-            if (MallMessage.SUPPER_NAME.equals(supperName)) {
+            if (MallMessage.SUPPER_NAME.equals(userName)) {
                 permissions = memberService.getPermissions(null);
             } else {
                 permissions = memberService.getPermissions(userId);
             }
-            info.addStringPermissions(permissions);
+            if (CollectionUtils.isNotEmpty(permissions)) {
+                info.addStringPermissions(permissions);
+            }
             log4jLog.info("当前用户：" + userName + ", permissions: " + permissions);
             return info;
         } catch (Exception e) {
@@ -138,7 +140,8 @@ public class MallShiroRealm extends AuthorizingRealm{
         Subject subject = SecurityUtils.getSubject();
         Session session = subject.getSession();
         session.setAttribute("session_member", member);
-        return new SimpleAuthenticationInfo(member.getIdx() + "," + userName + "," + password, password, getName());
+        String principal = member.getIdx() + MallSymbolConstants.COMMA + userName + MallSymbolConstants.COMMA + password;
+        return new SimpleAuthenticationInfo(principal, password, getName());
     }
 
 }
