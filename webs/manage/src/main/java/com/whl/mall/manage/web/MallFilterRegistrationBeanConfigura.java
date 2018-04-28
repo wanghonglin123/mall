@@ -18,32 +18,56 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.common.constants;/**
- * @Title: MallUrlConstants
- * @Package: com.whl.mall.core.common.constants
+package com.whl.mall.manage.web;/**
+ * @Title: MallWebConfigura
+ * @Package: com.whl.mall.manage.web
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/4/27
+ * @Date: 2018/4/28
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/4/27
+ * @Modify-date: 2018/4/28
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.common.constants.MallNumberConstants;
+import com.whl.mall.manage.shiro.filter.MallAnyRolesFilter;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.web.filter.DelegatingFilterProxy;
+
 /**
- * @ClassName: MallUrlConstants
- * @Description: url 常量
+ * @ClassName: MallWebConfigura
+ * @Description: ==  过滤器注册bean
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/4/27
+ * @Date: 2018/4/28
  */
-public final class MallUrlConstants {
-    private MallUrlConstants() {
+@Configuration
+public class MallFilterRegistrationBeanConfigura {
+    /**
+     * 配置Shiro过滤器
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean shiroFilterRegistrationBean() {
+        FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
+        filterRegistration.setFilter(new DelegatingFilterProxy("shiroFilter"));
+        //  该值缺省为false,表示生命周期由SpringApplicationContext管理,设置为true则表示由ServletContainer管理
+        filterRegistration.addInitParameter("targetFilterLifecycle", "true");
+        filterRegistration.setEnabled(true);
+        filterRegistration.addUrlPatterns("/*");
+        filterRegistration.setOrder(MallNumberConstants.ONE);
+        return filterRegistration;
     }
 
-    public static final String LOGIN_URL = "/sys/toLogin";
-    public static final String UNAUTHORIZED_URL = "/sys/unauthorized";
-    public static final String INDEX_URL = "/**";
-    public static final String ERROR_URL = "/sys/error";
+    @Bean(name = "lifecycleBeanPostProcessor")
+    public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
 }

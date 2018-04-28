@@ -120,6 +120,16 @@ public class SystemController extends MallBaseController{
     }
 
     /**
+     * 跳转到未授权页面
+     * @return
+     * @throws Exception Exception
+     */
+    @RequestMapping(MallUrlConstants.ERROR_URL)
+    public String error() throws Exception{
+        return "error/500";
+    }
+
+    /**
      * 进入首页
      *
      * @return

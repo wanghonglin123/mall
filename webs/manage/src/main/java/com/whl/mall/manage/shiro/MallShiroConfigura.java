@@ -42,17 +42,24 @@ import com.whl.mall.manage.shiro.pojo.MallShiroSessionListener;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.filter.authc.PassThruAuthenticationFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
 import javax.servlet.Filter;
+import javax.servlet.annotation.WebFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -139,18 +146,31 @@ public class MallShiroConfigura extends MallBeans {
         return defaultWebSecurityManager;
     }
 
-    @Bean
+    /*@Bean
     public MallAnyRolesFilter anyRolesFilter() {
         return new MallAnyRolesFilter();
-    }
-    @Bean
-    public ShiroFilterFactoryBean shiroFilters(DefaultWebSecurityManager securityManager, MallAnyRolesFilter anyRolesFilter) {
+    }*/
+
+    /*@Bean(name="shiroFilter")
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager, MallAnyRolesFilter anyRolesFilter) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-
         Map<String, Filter> filterMap = new HashMap<>();
         filterMap.put("authc", new PassThruAuthenticationFilter());
         filterMap.put("anyRoles", anyRolesFilter);
+        shiroFilterFactoryBean.setFilters(filterMap);
+
+        shiroFilterFactoryBean.setFilterChainDefinitions(getFilterChainDefinitions());
+
+        return shiroFilterFactoryBean;
+    }*/
+    @Bean(name="shiroFilter")
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        Map<String, Filter> filterMap = new HashMap<>();
+        filterMap.put("authc", new PassThruAuthenticationFilter());
+        filterMap.put("anyRoles", new MallAnyRolesFilter());
         shiroFilterFactoryBean.setFilters(filterMap);
 
         shiroFilterFactoryBean.setFilterChainDefinitions(getFilterChainDefinitions());
@@ -209,4 +229,5 @@ public class MallShiroConfigura extends MallBeans {
         /*<!--所有的请求(除去配置的静态资源请求或请求地址为anon的请求)都要通过登录验证,如果未登录则跳到/loginUrl -->*/
         return filterChainDefinitions.toString();
     }
+
 }

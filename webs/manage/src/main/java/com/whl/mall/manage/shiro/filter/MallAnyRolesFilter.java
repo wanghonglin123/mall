@@ -38,6 +38,7 @@ import org.apache.shiro.util.StringUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -45,6 +46,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
@@ -64,13 +66,16 @@ import java.util.stream.Collectors;
  */
 public class MallAnyRolesFilter extends AccessControlFilter {
 
-    private Short status = null;
-
     @Autowired
     private MenuService menuService;
 
+    private Short status = null;
+
     @Autowired
     private MallLog4jLog log4jLog;
+
+    public MallAnyRolesFilter() {
+    }
 
     /**
      * 判断是否允许访问， true 允许， flase 不允许
@@ -82,12 +87,13 @@ public class MallAnyRolesFilter extends AccessControlFilter {
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
+        Subject subject = null; Session session = null;
         try {
-            Subject subject = getSubject(servletRequest, servletResponse);
+            subject = getSubject(servletRequest, servletResponse);
             if (subject.getPrincipal() == null) {
                 return failHandle();
             }
-            Session session = subject.getSession(false);
+            session = subject.getSession(false);
             Member member = (Member) session.getAttribute("session_member");
             if (member == null) {
                 return failHandle();
@@ -109,7 +115,9 @@ public class MallAnyRolesFilter extends AccessControlFilter {
                     return true;
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception e) { // 直接退出
+            subject.logout();
+            status = 3;
             e.printStackTrace();
         }
         return false;
@@ -131,7 +139,7 @@ public class MallAnyRolesFilter extends AccessControlFilter {
             } else {
                 WebUtils.issueRedirect(servletRequest, servletResponse, MallUrlConstants.LOGIN_URL);
             }
-        } else {
+        } else if(status == null) {
             //
             if (StringUtils.hasText(MallUrlConstants.UNAUTHORIZED_URL)) {
                 if (isAjax) {
@@ -144,6 +152,9 @@ public class MallAnyRolesFilter extends AccessControlFilter {
                 // 否则返回401未授权状态码
                 WebUtils.toHttp(servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED);
             }
+        } else if(status == 3) {
+            // 如果有未授权页面跳转过去
+            WebUtils.issueRedirect(servletRequest, servletResponse, MallUrlConstants.ERROR_URL);
         }
         return false;
     }
