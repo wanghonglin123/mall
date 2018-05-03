@@ -26,11 +26,11 @@ public class MallBeans {
     /**
      * @return log4jLog
      */
-    protected MallLoggerAdapter getLog4jLog() {
+    public MallLoggerAdapter getLog4jLog() {
         return log4jLog;
     }
 
-    protected MallDomain getDomain() {
+    public MallDomain getDomain() {
         return domain;
     }
 }

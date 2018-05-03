@@ -209,6 +209,7 @@ http://blog.csdn.net/lianjunzongsiling/article/details/78848844
              <appender-ref ref="rollingFileInfo"/>-->
             <appender-ref ref="rollingFileWarn"/>
             <appender-ref ref="rollingFileError"/>
+            <appender-ref ref="console"/>
         </asyncLogger>
 
         <!-- 定义一个普通的logger，这里我定义为异步的 -->

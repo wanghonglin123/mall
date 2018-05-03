@@ -1,4 +1,3 @@
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
@@ -30,5 +29,5 @@
 <script type="text/javascript" src="/plugins/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
 
 <script type="text/javascript" src="/js/common/center.js" ></script>
-<script type="text/javascript" charset="utf-8" src="/plugins/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="/plugins/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="/plugins/My97DatePicker/WdatePicker.js"></script>

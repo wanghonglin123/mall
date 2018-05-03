@@ -35,6 +35,7 @@ package com.whl.mall.interfaces.member;/**
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.base.service.MallBaseService;
 import com.whl.mall.pojo.member.Member;
+import com.whl.mall.pojo.member.MenuTree;
 
 import java.util.List;
 import java.util.Set;
@@ -46,12 +47,5 @@ import java.util.Set;
  * @Date: 2018/4/8
  */
 public interface MemberService extends MallBaseService<Member> {
-    /**
-     * 获取用户所有角色编码
-     * @param userIdx
-     * @return
-     */
-    List<String> getRoleByUserIdx(Long userIdx) throws MallException;
 
-    Set<String> getPermissions(Long userIdx) throws MallException;
 }

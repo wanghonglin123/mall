@@ -65,10 +65,6 @@ import java.util.stream.Collectors;
  * @Date: 2017/11/22
  */
 public class MallAnyRolesFilter extends AccessControlFilter {
-
-    @Autowired
-    private MenuService menuService;
-
     private Short status = null;
 
     @Autowired
@@ -116,7 +112,9 @@ public class MallAnyRolesFilter extends AccessControlFilter {
                 }
             }
         } catch (Exception e) { // 直接退出
-            subject.logout();
+            if (subject != null) {
+                subject.logout();
+            }
             status = 3;
             e.printStackTrace();
         }
@@ -172,7 +170,7 @@ public class MallAnyRolesFilter extends AccessControlFilter {
         List<MenuTree> menuTreeList = (List<MenuTree>) session.getAttribute("session_menuJson");
         if (menuTreeList == null) {
             if (!subject.hasRole(MallMessage.SUPPER_NAME)) {
-                menuTreeList = menuService.getTreeData();
+                //menuTreeList = menuService.getTreeData();
                 log4jLog.info("当前用户：" + member.getName() + ", menuIdxList:" + menuTreeList);
             }
             session.setAttribute("session_menuJson", MallJsonUtils.objectToJson(menuTreeList));
@@ -188,7 +186,7 @@ public class MallAnyRolesFilter extends AccessControlFilter {
         List<String> menuUrlList = (List<String>) session.getAttribute("session_urlMapping");
         if (menuUrlList == null) {
             menuUrlList = new ArrayList<>();
-            menuUrlList.add("/sys/*");
+            menuUrlList.add("/sys/**");
             menuUrlList = getUrlMappingList(trees, menuUrlList);
             session.setAttribute("session_urlMapping", menuUrlList);
         }

@@ -56,57 +56,5 @@ import java.util.stream.Collectors;
  */
 @Service
 public class MemberServiceImpl extends MallServiceExt<Member/*, MenuMapper*/> implements MemberService {
-    @Autowired
-    private RoleService roleService;
 
-    @Autowired
-    private MemberRoleService memberRoleService;
-
-    @Autowired
-    private ResourceService resourceService;
-
-    @Autowired
-    private ResourceGroupService resourceGroupService;
-
-    @Autowired
-    private ButtonService buttonService;
-
-    @Override
-    public List<String> getRoleByUserIdx(Long userIdx) throws MallException{
-        List<Role> roles = getMemberRoles(userIdx);
-        List<String> roleCodes = roles.stream().collect(Collectors.mapping(Role :: getCode, Collectors.toList()));
-        return roleCodes;
-    }
-
-    private List<Role> getMemberRoles(Long userIdx) throws MallException{
-        MemberRole memberRole = new MemberRole();
-        memberRole.setMemberIdxCode(userIdx);
-        List<MemberRole> memberRoles = memberRoleService.queryDataByCondition(memberRole);
-        List<Long> roleIdxs =
-                memberRoles.stream().collect(Collectors.mapping(MemberRole :: getRoleIdxCode, Collectors.toList()));
-        return roleService.queryDataIn(roleIdxs);
-    }
-
-    @Override
-    public Set<String> getPermissions(Long userIdx) throws MallException {
-        List<Button> buttons = null;
-        if (userIdx == null) {
-            buttons = buttonService.queryDataByCondition(null);
-        } else {
-            List<Role> roles = getMemberRoles(userIdx);
-            List<Long> idxs = roles.stream().collect(Collectors.mapping(Role :: getIdx, Collectors.toList()));
-            if (CollectionUtils.isEmpty(idxs)) {
-                return null;
-            }
-            List<ResourceGroup> resourceGroups = resourceGroupService.queryDataIn(idxs);
-            idxs = resourceGroups.stream().collect(Collectors.mapping(ResourceGroup :: getIdx, Collectors.toList()));
-            Resource resource = new Resource();
-            resource.setResourceType(MallNumberConstants.TWO);
-            List<Resource> resources = resourceService.queryDataByCondition(resource, idxs);
-            idxs = resources.stream().collect(Collectors.mapping(Resource :: getMenuButtonIdxCode, Collectors.toList()));
-            buttons = buttonService.queryDataIn(idxs);
-        }
-        Set<String> permissions = buttons.stream().collect(Collectors.mapping(Button :: getCode, Collectors.toSet()));
-        return permissions;
-    }
 }

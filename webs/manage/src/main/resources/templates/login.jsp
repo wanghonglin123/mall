@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
 <html>
 <head>
 	<title>洋桃跨境供应链后台管理中心-登录</title>
 	<#include "../../common/memberCommon.jsp"/>
-	<link rel="stylesheet" href="${static$domain!}/style/login.css?_v=${css$version!}" />
+	<link rel="stylesheet" href="/style/login.css?_v=" />
 </head>
 <body>
 <div class="wrapper wrapper-login-bg">
@@ -29,9 +29,9 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="${static$domain!}/js/member/login.js?_v=${js$version!}" ></script>
-<script type="text/javascript" src="${static$domain!}/plugins/picture-code/jquery-picture-code.js?_v=${js$version!}" ></script>
-<link rel="stylesheet" href="${static$domain!}/plugins/picture-code/css/picture-code.css?_v=${css$version!!}"/>
+<script type="text/javascript" src="/js/member/login.js?_v=" ></script>
+<script type="text/javascript" src="/plugins/picture-code/jquery-picture-code.js?_v=" ></script>
+<link rel="stylesheet" href="/plugins/picture-code/css/picture-code.css?_v="/>
 <script type="text/javascript">
     function doLogin() {
         var userName = $.trim($('#userName').val());

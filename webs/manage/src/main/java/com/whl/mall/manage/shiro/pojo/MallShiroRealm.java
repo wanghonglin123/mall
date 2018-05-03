@@ -40,6 +40,7 @@ import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallSymbolConstants;
 import com.whl.mall.core.common.utils.MallMd5Utils;
 import com.whl.mall.core.log.MallLog4jLog;
+import com.whl.mall.ext.component.AuthorityComponent;
 import com.whl.mall.interfaces.member.MemberRoleService;
 import com.whl.mall.interfaces.member.MemberService;
 import com.whl.mall.pojo.member.Member;
@@ -71,13 +72,10 @@ import java.util.stream.Collectors;
  */
 public class MallShiroRealm extends AuthorizingRealm{
     /**
-     * 成员服务
+     * 权限组件
      */
     @Autowired
-    private MemberService memberService;
-
-    @Autowired
-    private MallLog4jLog log4jLog;
+    private AuthorityComponent authorityComponent;
 
     /**
      * 授权
@@ -93,23 +91,28 @@ public class MallShiroRealm extends AuthorizingRealm{
         MemberRole memberRole = new MemberRole();
         memberRole.setMemberIdxCode(userId);
         try {
-            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-            List<String> roles = memberService.getRoleByUserIdx(userId);
-            info.addRoles(roles);
-            log4jLog.info("当前用户：" + userName + ", roleList: " + roles);
-            Set<String> permissions = null;
-            if (MallMessage.SUPPER_NAME.equals(userName)) {
-                permissions = memberService.getPermissions(null);
-            } else {
-                permissions = memberService.getPermissions(userId);
+            Subject subject = SecurityUtils.getSubject();
+            Session session = subject.getSession(false);
+            SimpleAuthorizationInfo info = (SimpleAuthorizationInfo) session.getAttribute("session_info");
+            if (info == null) {
+                List<String> roles = authorityComponent.getRoleByUserIdx(userId);
+                info.addRoles(roles);
+                authorityComponent.getLog4jLog().info("当前用户：" + userName + ", roleList: " + roles);
+                Set<String> permissions = null;
+                if (MallMessage.SUPPER_NAME.equals(userName)) {
+                    permissions = authorityComponent.getPermissions(null);
+                } else {
+                    permissions = authorityComponent.getPermissions(userId);
+                }
+                if (CollectionUtils.isNotEmpty(permissions)) {
+                    info.addStringPermissions(permissions);
+                }
+                session.setAttribute("session_info", info);
+                authorityComponent.getLog4jLog().info("当前用户：" + userName + ", permissions: " + permissions);
             }
-            if (CollectionUtils.isNotEmpty(permissions)) {
-                info.addStringPermissions(permissions);
-            }
-            log4jLog.info("当前用户：" + userName + ", permissions: " + permissions);
             return info;
         } catch (Exception e) {
-            log4jLog.error(e);
+            authorityComponent.getLog4jLog().error(e);
         }
         return null;
     }
@@ -129,7 +132,7 @@ public class MallShiroRealm extends AuthorizingRealm{
         member.setName(userName);
         try {
             member.setPwd(MallMd5Utils.md5ForData(password));
-            member = memberService.queryOneSomeInfoByCondition(member);
+            member = authorityComponent.getMemberService().queryOneSomeInfoByCondition(member);
             if (member == null) {
                 throw new AuthenticationException(MallMessage.LOGIN_MESSAGE);
             }
@@ -140,6 +143,7 @@ public class MallShiroRealm extends AuthorizingRealm{
         Subject subject = SecurityUtils.getSubject();
         Session session = subject.getSession();
         session.setAttribute("session_member", member);
+
         String principal = member.getIdx() + MallSymbolConstants.COMMA + userName + MallSymbolConstants.COMMA + password;
         return new SimpleAuthenticationInfo(principal, password, getName());
     }

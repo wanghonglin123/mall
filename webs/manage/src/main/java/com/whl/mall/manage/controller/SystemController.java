@@ -67,7 +67,7 @@ public class SystemController extends MallBaseController{
      * @return
      * @throws Exception Exception
      */
-    @RequestMapping("/sys/toLogin")
+    @RequestMapping(MallUrlConstants.LOGIN_URL)
     public String toLogin(Model model) throws Exception{
         // 获取访问主体Subject
         Subject subject = SecurityUtils.getSubject();
@@ -138,6 +138,6 @@ public class SystemController extends MallBaseController{
     public String index(HttpServletRequest request, Menu po) throws Exception{
         String json = MallJsonUtils.objectToJson(super.getMenuService().getTreeData());
         request.setAttribute("menuJson", json);
-        return "/index";
+        return "index";
     }
 }

@@ -44,6 +44,6 @@ public final class MallUrlConstants {
 
     public static final String LOGIN_URL = "/sys/toLogin";
     public static final String UNAUTHORIZED_URL = "/sys/unauthorized";
-    public static final String INDEX_URL = "/**";
+    public static final String INDEX_URL = "/";
     public static final String ERROR_URL = "/sys/error";
 }

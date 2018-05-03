@@ -61,11 +61,11 @@ public class MallBeansExt extends MallBeans {
     private ResourceGroupRoleService resourceGroupRoleService;
 
 
-    protected MemberService getMemberService() {
+    public MemberService getMemberService() {
         return memberService;
     }
 
-    protected MenuService getMenuService() {
+    public MenuService getMenuService() {
         return menuService;
     }
 
