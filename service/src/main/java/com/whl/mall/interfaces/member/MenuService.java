@@ -54,4 +54,8 @@ public interface MenuService extends MallBaseService<Menu> {
     List<MenuTree> getTreeData() throws MallException;
 
     List<Menu> queryDataByConditions(Long pidx, Short level) throws MallException;
+
+    List<MenuTree> getTreeData(List<Menu> menuData) throws MallException;
+
+    MenuTree getMenuTree(Menu menuPo, List<MenuTree> menuTrees);
 }

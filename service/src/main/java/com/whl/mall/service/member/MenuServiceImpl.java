@@ -54,7 +54,7 @@ import java.util.*;
 @Service
 public class MenuServiceImpl extends MallServiceExt<Menu> implements MenuService {
     private static final String STATE_CLOSED = "closed";
-    private static final String STATE_OPEN = "closed";
+    private static final String STATE_OPEN = "open";
 
     @Override
     public List<MenuTree> getTreeData() throws MallException{
@@ -78,7 +78,7 @@ public class MenuServiceImpl extends MallServiceExt<Menu> implements MenuService
         return getMenuTree(menuPo, menuTrees);
     }
 
-    private MenuTree getMenuTree(Menu menuPo, List<MenuTree> menuTrees) {
+    public MenuTree getMenuTree(Menu menuPo, List<MenuTree> menuTrees) {
         MenuTree menuTree = new MenuTree();
         Map<String, Object> attributes = new HashMap<>();
         attributes.put(MallPojoFieldNameConstants.FIELD_URL, menuPo.getUrl());
@@ -92,7 +92,7 @@ public class MenuServiceImpl extends MallServiceExt<Menu> implements MenuService
         return menuTree;
     }
 
-    private List<MenuTree> getTreeData(List<Menu> menuData) throws MallException{
+    public List<MenuTree> getTreeData(List<Menu> menuData) throws MallException{
         List<MenuTree> data = new ArrayList<>();
         for (Menu menu : menuData) {
             data.add(getMenuTree(menu));

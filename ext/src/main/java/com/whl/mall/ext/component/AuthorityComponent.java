@@ -119,7 +119,31 @@ public class AuthorityComponent extends MallBeansExt {
 
     public List<MenuTree> getMemberMenuTree(Long userIdx) throws MallException {
         List<Long> idxs = getMemberMenuOrButtonIdxs(userIdx, MallNumberConstants.ONE);
-        return null;
+        Menu po = new Menu();
+        po.setIdx((long) MallNumberConstants.ZERO);
+        return getMemberMenuTree(idxs, po);
+    }
+
+    private List<MenuTree> getMemberMenuTree(List<Long> idxs, Menu po) throws MallException {
+        List<MenuTree> data = new ArrayList<>();
+        List<Menu> menus = getMenuService().queryDataByConditions(po.getIdx(), null);
+        for (Menu menu : menus) {
+            if (idxs.contains(menu.getIdx())) {
+                data.add(getMenuTree(menu, idxs));
+            }
+        }
+        return data;
+    }
+
+    private MenuTree getMenuTree(Menu menuPo, List<Long> idxs) throws MallException{
+        List<Menu> menus = getMenuService().queryDataByConditions(menuPo.getIdx(), null);
+        List<MenuTree> menuTrees = new ArrayList<>();
+        for (Menu menu : menus) {
+            if (idxs.contains(menu.getIdx())) {
+                menuTrees.add(getMenuTree(menu, idxs));
+            }
+        }
+        return getMenuService().getMenuTree(menuPo, menuTrees);
     }
 
     public void setSession() {
