@@ -35,16 +35,14 @@ package com.whl.mall.ext.component;/**
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.ext.beans.MallBeansExt;
-import com.whl.mall.interfaces.member.MenuService;
 import com.whl.mall.pojo.member.*;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Component;
 
-import javax.security.auth.Subject;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -57,8 +55,6 @@ import java.util.stream.Collectors;
  */
 @Component
 public class AuthorityComponent extends MallBeansExt {
-
-    private Session session = null;
     /**
      * 获取菜单树
      *
@@ -146,7 +142,8 @@ public class AuthorityComponent extends MallBeansExt {
         return getMenuService().getMenuTree(menuPo, menuTrees);
     }
 
-    public void setSession() {
-
+    public Session getSession(boolean create) {
+        Subject subject = SecurityUtils.getSubject();
+        return subject.getSession(create);
     }
 }

@@ -94,17 +94,18 @@ public class MallAnyRolesFilter extends AccessControlFilter {
             if (member == null) {
                 return failHandle();
             }
-
-            // 初始化访问的菜单
-            List<MenuTree> menuTreeList = initMenus(subject, session, member);
+            // 调用MallShiroRealm.doGetAuthorizationInfo() 进行授权和存放一些信息
+            subject.hasRole(MallMessage.SUPPER_NAME);
 
             String requestURI = getPathWithinApplication(servletRequest);
             if (requestURI.equals(MallUrlConstants.INDEX_URL)) { // 登录成功页直接放过
                 return true;
             }
 
+            // 初始化访问的菜单
+            List<MenuTree> menuTreeList = (List<MenuTree>) session.getAttribute("session_menuJson");
             // 获取可以访问菜单所有的Url
-            List<String> urlMappingList = getUrlMappingList(menuTreeList, session);
+            List<String> urlMappingList = (List<String>) session.getAttribute("session_urlMapping");
             int size = urlMappingList.size();
             for (int i = 0; i < size; i++) {
                 if (pathMatcher.matches(urlMappingList.get(i), requestURI)) {
@@ -160,51 +161,5 @@ public class MallAnyRolesFilter extends AccessControlFilter {
     private boolean failHandle() {
         status = 1;
         return false;
-    }
-
-    /**
-     * 初始化菜单
-     */
-    private List<MenuTree> initMenus(Subject subject, Session session, Member member) throws MallException{
-        // 获取可以访问的菜单
-        List<MenuTree> menuTreeList = (List<MenuTree>) session.getAttribute("session_menuJson");
-        if (menuTreeList == null) {
-            if (!subject.hasRole(MallMessage.SUPPER_NAME)) {
-                //menuTreeList = menuService.getTreeData();
-                log4jLog.info("当前用户：" + member.getName() + ", menuIdxList:" + menuTreeList);
-            }
-            session.setAttribute("session_menuJson", MallJsonUtils.objectToJson(menuTreeList));
-        }
-        return menuTreeList;
-    }
-    /**
-     * 获取所有urlMapping 集合 （bfs）
-     * @param trees 拥有的菜单
-     * @return urlMapping 集合
-     */
-    private List<String> getUrlMappingList(List<MenuTree> trees, Session session) {
-        List<String> menuUrlList = (List<String>) session.getAttribute("session_urlMapping");
-        if (menuUrlList == null) {
-            menuUrlList = new ArrayList<>();
-            menuUrlList.add("/sys/**");
-            menuUrlList = getUrlMappingList(trees, menuUrlList);
-            session.setAttribute("session_urlMapping", menuUrlList);
-        }
-        return menuUrlList;
-    }
-
-    private List<String> getUrlMappingList(List<MenuTree> trees, List<String> urlList) {
-        if (trees == null) {
-            return urlList;
-        }
-        Map attributes = null;
-        List<MenuTree> childrens = null;
-        for (MenuTree menuTree : trees) {
-            attributes = menuTree.getAttributes();
-            urlList.add(attributes.get("url").toString());
-            childrens = menuTree.getChildren();
-            getUrlMappingList(childrens, urlList);
-        }
-        return urlList;
     }
 }

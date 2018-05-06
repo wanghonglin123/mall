@@ -38,13 +38,17 @@ import com.whl.mall.core.MallException;
 import com.whl.mall.core.common.constants.MallMessage;
 import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallSymbolConstants;
+import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.core.common.utils.MallMd5Utils;
 import com.whl.mall.core.log.MallLog4jLog;
+import com.whl.mall.core.log.adapter.MallLoggerAdapter;
 import com.whl.mall.ext.component.AuthorityComponent;
 import com.whl.mall.interfaces.member.MemberRoleService;
 import com.whl.mall.interfaces.member.MemberService;
+import com.whl.mall.interfaces.member.MenuService;
 import com.whl.mall.pojo.member.Member;
 import com.whl.mall.pojo.member.MemberRole;
+import com.whl.mall.pojo.member.MenuTree;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -57,9 +61,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -84,35 +86,46 @@ public class MallShiroRealm extends AuthorizingRealm{
      */
     @Override
     public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals){
-        String principal = (String)principals.fromRealm(getName()).iterator().next();
-        String[] objs = principal.split(MallSymbolConstants.COMMA);
-        Long userId = Long.valueOf(principal.split(MallSymbolConstants.COMMA)[MallNumberConstants.ZERO]);
-        String userName = objs[MallNumberConstants.ONE];
-        MemberRole memberRole = new MemberRole();
-        memberRole.setMemberIdxCode(userId);
+        Session session = authorityComponent.getSession(false);
+
+        // 获取登录成员信息
+        Member member = (Member) session.getAttribute("session_member");
+        Long userId = member.getIdx();
+        String userName = member.getName();
+        MallLoggerAdapter loggerAdapter = authorityComponent.getLog4jLog();
         try {
-            Subject subject = SecurityUtils.getSubject();
-            Session session = subject.getSession(false);
             SimpleAuthorizationInfo info = (SimpleAuthorizationInfo) session.getAttribute("session_info");
             if (info == null) {
+                // 获取角色
                 List<String> roles = authorityComponent.getRoleByUserIdx(userId);
+                loggerAdapter.info("当前用户：" + userName + ", roleList: " + roles);
                 info.addRoles(roles);
-                authorityComponent.getLog4jLog().info("当前用户：" + userName + ", roleList: " + roles);
+
+                // 获取许可
                 Set<String> permissions = null;
+                List<MenuTree> menuTreeList = null;
+                MenuService menuService = authorityComponent.getMenuService();
                 if (MallMessage.SUPPER_NAME.equals(userName)) {
                     permissions = authorityComponent.getPermissions(null);
+                    menuTreeList = menuService.getTreeData();
                 } else {
                     permissions = authorityComponent.getPermissions(userId);
+                    menuTreeList = authorityComponent.getMemberMenuTree(userId);
                 }
                 if (CollectionUtils.isNotEmpty(permissions)) {
+                    loggerAdapter.info("当前用户：" + userName + ", permissions: " + permissions);
                     info.addStringPermissions(permissions);
                 }
+
+                // 获取所有urlMapping 集合 （bfs）
+                getUrlMappingList(menuTreeList, session);
+
                 session.setAttribute("session_info", info);
-                authorityComponent.getLog4jLog().info("当前用户：" + userName + ", permissions: " + permissions);
+                session.setAttribute("session_menuJson", MallJsonUtils.objectToJson(menuTreeList));
             }
             return info;
         } catch (Exception e) {
-            authorityComponent.getLog4jLog().error(e);
+            loggerAdapter.error(e);
         }
         return null;
     }
@@ -140,12 +153,39 @@ public class MallShiroRealm extends AuthorizingRealm{
             throw new AuthenticationException(MallMessage.SYSTEM_FAIL);
         }
 
-        Subject subject = SecurityUtils.getSubject();
-        Session session = subject.getSession();
-        session.setAttribute("session_member", member);
+        authorityComponent.getSession(true).setAttribute("session_member", member);
 
         String principal = member.getIdx() + MallSymbolConstants.COMMA + userName + MallSymbolConstants.COMMA + password;
         return new SimpleAuthenticationInfo(principal, password, getName());
     }
 
+    /**
+     * 获取所有urlMapping 集合 （bfs）
+     * @param trees 拥有的菜单
+     * @return urlMapping 集合
+     */
+    private void getUrlMappingList(List<MenuTree> trees, Session session) {
+        List<String> menuUrlList = (List<String>) session.getAttribute("session_urlMapping");
+        if (menuUrlList == null) {
+            menuUrlList = new ArrayList<>();
+            menuUrlList.add("/sys/**");
+            menuUrlList = getUrlMappingList(trees, menuUrlList);
+            session.setAttribute("session_urlMapping", menuUrlList);
+        }
+    }
+
+    private List<String> getUrlMappingList(List<MenuTree> trees, List<String> urlList) {
+        if (trees == null) {
+            return urlList;
+        }
+        Map attributes = null;
+        List<MenuTree> childrens = null;
+        for (MenuTree menuTree : trees) {
+            attributes = menuTree.getAttributes();
+            urlList.add(attributes.get("url").toString());
+            childrens = menuTree.getChildren();
+            getUrlMappingList(childrens, urlList);
+        }
+        return urlList;
+    }
 }
