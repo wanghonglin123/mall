@@ -56,5 +56,5 @@ public interface MallBaseMapper<T extends MallBasePoJo> {
     List<T> queryPageDataByCondition(@Param("po")T po, @Param("begin")Integer begin, @Param("end")Integer end, @Param("orderBy")String orderBy);
     int queryTotal(T po);
     List<T> queryDataIn(List<Long> idxs) throws MallException;
-    List<T> queryDataByCondition(T po, @Param("idxs") List<Long> idxs) throws MallException;
+    List<T> queryDataByConditions(@Param("po") T po, @Param("idxs") List<Long> idxs) throws MallException;
 }

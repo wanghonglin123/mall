@@ -75,4 +75,11 @@
       and pwd = #{pwd}
     </if>
   </select>
+
+  <select id="queryDataIn" resultType="com.whl.mall.pojo.member.ResourceGroupRole" resultMap="BaseResultMap">
+    SELECT  <include refid="Base_Column_List" /> from tb_role_resource_group where role_idx_code in
+    <foreach collection="list" open="(" close=")" separator="," item="idx">
+      #{idx}
+    </foreach>
+  </select>
 </mapper>

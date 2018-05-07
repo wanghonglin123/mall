@@ -53,8 +53,7 @@
   </select>
 
   <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.MemberRole" resultMap="BaseResultMap">
-    SELECT  idx, idx_code, remark, status, version, create_by_member_idx, update_by_member_idx,
-    create_time, update_time, ext, member_idx_code, role_idx_code from tb_member_role where member_idx_code = #{memberIdxCode}
+    SELECT  <include refid="Base_Column_List" /> from tb_member_role where member_idx_code = #{memberIdxCode}
   </select>
 
   <select id="queryDataIn" parameterType="java.util.List" resultType="com.whl.mall.pojo.member.MemberRole">

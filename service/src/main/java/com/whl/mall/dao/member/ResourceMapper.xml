@@ -74,4 +74,17 @@
       and pwd = #{pwd}
     </if>
   </select>
+
+  <select id="queryDataByConditions" resultMap="BaseResultMap">
+    SELECT  <include refid="Base_Column_List" /> from tb_resource where 1 = 1
+    <if test="po.resourceType != null">
+      and resource_type = #{po.resourceType}
+    </if>
+    <if test="idxs != null">
+      and resource_group_idx_code in
+      <foreach collection="idxs" open="(" close=")" separator="," item="idx">
+        #{idx}
+      </foreach>
+    </if>
+  </select>
 </mapper>

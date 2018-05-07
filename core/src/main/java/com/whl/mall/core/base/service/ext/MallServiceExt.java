@@ -102,7 +102,7 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
 
     @Override
     public List<T> queryDataByCondition(T po, List<Long> idxs) throws MallException {
-        return baseMapper.queryDataByCondition(po, idxs);
+        return baseMapper.queryDataByConditions(po, idxs);
     }
 
     /**
