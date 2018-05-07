@@ -28,8 +28,8 @@ import org.springframework.retry.support.RetryTemplate;
  * @Author: WangHongLin
  * @Date: 2018-05-06 下午 5:35
  */
-@Configuration
-@AutoConfigureBefore(MallRabbitmqTemplateConfigura.class)
+//@Configuration
+//@AutoConfigureBefore(MallRabbitmqTemplateConfigura.class)
 public class MallRabbitmqTemplateConfigura extends MallBeans{
 
     @Autowired

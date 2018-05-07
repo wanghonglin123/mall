@@ -38,21 +38,9 @@ public class MemberRole implements MallBasePoJo {
     private Long version;
 
     /**
-     被哪位成员（member_idx）创建的，不可以为null创建成员idx，不可以为，
-     MyBatis逆向工程，动态生成字符串类型
-     */
-    private String createByMemberIdxDynamicS;
-
-    /**
      * 被哪位成员（member_idx）创建的，不可以为null创建成员idx，不可以为
      */
     private Long createByMemberIdx;
-
-    /**
-     被哪位成员（member_idx）修改的，不可以为null创建成员idx，不可以为，
-     MyBatis逆向工程，动态生成字符串类型
-     */
-    private String updateByMemberIdxDynamicS;
 
     /**
      * 被哪位成员（member_idx）修改的，不可以为null创建成员idx，不可以为
@@ -60,21 +48,9 @@ public class MemberRole implements MallBasePoJo {
     private Long updateByMemberIdx;
 
     /**
-    创建时间，后续不可以再更新时间，
-    日期格式：yyyy-MM-dd HH:mm:ss，例如：2017-05-02 22:12:28
-     */
-    private String createTimeEnYyyyMMddHHmmss;
-
-    /**
      * 创建时间，后续不可以再更新时间
      */
     private Date createTime;
-
-    /**
-    更新时间，每一次都要更新，
-    日期格式：yyyy-MM-dd HH:mm:ss，例如：2017-05-02 22:12:28
-     */
-    private String updateTimeEnYyyyMMddHHmmss;
 
     /**
      * 更新时间，每一次都要更新
@@ -185,22 +161,6 @@ public class MemberRole implements MallBasePoJo {
     }
 
     /**
-     被哪位成员（member_idx）创建的，不可以为null创建成员idx，不可以为，
-     MyBatis逆向工程，动态生成字符串类型
-     */
-    public String getCreateByMemberIdxDynamicS() {
-        return this.createByMemberIdxDynamicS;
-    }
-
-    /**
-     被哪位成员（member_idx）创建的，不可以为null创建成员idx，不可以为，
-     MyBatis逆向工程，动态生成字符串类型
-     */
-    public void setCreateByMemberIdxDynamicS(String createByMemberIdxDynamicS) {
-         this.createByMemberIdxDynamicS = createByMemberIdxDynamicS;
-    }
-
-    /**
      * 被哪位成员（member_idx）创建的，不可以为null创建成员idx，不可以为
      */
     public Long getCreateByMemberIdx() {
@@ -212,22 +172,6 @@ public class MemberRole implements MallBasePoJo {
      */
     public void setCreateByMemberIdx(Long createByMemberIdx) {
         this.createByMemberIdx = createByMemberIdx;
-    }
-
-    /**
-     被哪位成员（member_idx）修改的，不可以为null创建成员idx，不可以为，
-     MyBatis逆向工程，动态生成字符串类型
-     */
-    public String getUpdateByMemberIdxDynamicS() {
-        return this.updateByMemberIdxDynamicS;
-    }
-
-    /**
-     被哪位成员（member_idx）修改的，不可以为null创建成员idx，不可以为，
-     MyBatis逆向工程，动态生成字符串类型
-     */
-    public void setUpdateByMemberIdxDynamicS(String updateByMemberIdxDynamicS) {
-         this.updateByMemberIdxDynamicS = updateByMemberIdxDynamicS;
     }
 
     /**
@@ -326,13 +270,9 @@ public class MemberRole implements MallBasePoJo {
         sb.append(", remark=").append(remark);
         sb.append(", status=").append(status);
         sb.append(", version=").append(version);
-        sb.append(", createByMemberIdxDynamicS=").append(createByMemberIdxDynamicS);
         sb.append(", createByMemberIdx=").append(createByMemberIdx);
-        sb.append(", updateByMemberIdxDynamicS=").append(updateByMemberIdxDynamicS);
         sb.append(", updateByMemberIdx=").append(updateByMemberIdx);
-        sb.append(", createTimeEnYyyyMMddHHmmss=").append(createTimeEnYyyyMMddHHmmss);
         sb.append(", createTime=").append(createTime);
-        sb.append(", updateTimeEnYyyyMMddHHmmss=").append(updateTimeEnYyyyMMddHHmmss);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", ext=").append(ext);
         sb.append(", memberIdxCode=").append(memberIdxCode);

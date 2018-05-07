@@ -32,7 +32,7 @@ import java.util.concurrent.Executors;
  * @Author: WangHongLin
  * @Date: 2018-05-05 下午 10:35
  */
-@Configuration
+//@Configuration
 public class MallRabbitmqConfigura extends MallBeans{
     @Autowired
     private MallRabbitMQProperties rabbitMQProperties;

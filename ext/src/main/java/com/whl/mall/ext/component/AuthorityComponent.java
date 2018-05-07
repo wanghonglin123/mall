@@ -70,12 +70,24 @@ public class AuthorityComponent extends MallBeansExt {
         return treeList;
     }
 
+    /**
+     * 获取成员用于的角色
+     * @param userIdx
+     * @return
+     * @throws MallException
+     */
     public List<String> getRoleByUserIdx(Long userIdx) throws MallException{
         List<Role> roles = getMemberRoles(userIdx);
         List<String> roleCodes = roles.stream().collect(Collectors.mapping(Role :: getCode, Collectors.toList()));
         return roleCodes;
     }
 
+    /**
+     * 获取成员角色
+     * @param userIdx
+     * @return
+     * @throws MallException
+     */
     private List<Role> getMemberRoles(Long userIdx) throws MallException{
         MemberRole memberRole = new MemberRole();
         memberRole.setMemberIdxCode(userIdx);
@@ -85,6 +97,12 @@ public class AuthorityComponent extends MallBeansExt {
         return getRoleService().queryDataIn(roleIdxs);
     }
 
+    /**
+     * 获取允许多个
+     * @param userIdx
+     * @return
+     * @throws MallException
+     */
     public Set<String> getPermissions(Long userIdx) throws MallException {
         List<Button> buttons = null;
         if (userIdx == null) {
@@ -97,15 +115,21 @@ public class AuthorityComponent extends MallBeansExt {
         return permissions;
     }
 
-    
+    /**
+     * 获取成员拥有的菜单和按钮
+     * @param userIdx
+     * @param resourceType
+     * @return
+     * @throws MallException
+     */
     public List<Long> getMemberMenuOrButtonIdxs(Long userIdx, Short resourceType) throws MallException {
+        // 获取角色
         List<Role> roles = getMemberRoles(userIdx);
         List<Long> idxs = roles.stream().collect(Collectors.mapping(Role :: getIdx, Collectors.toList()));
-        if (CollectionUtils.isEmpty(idxs)) {
-            return null;
-        }
-        List<ResourceGroup> resourceGroups = getResourceGroupService().queryDataIn(idxs);
-        idxs = resourceGroups.stream().collect(Collectors.mapping(ResourceGroup :: getIdx, Collectors.toList()));
+        // 获取资源组
+        List<ResourceGroupRole> resourceGroupRoles = getResourceGroupRoleService().queryDataIn(idxs);
+        idxs = resourceGroupRoles.stream().collect(Collectors.mapping(ResourceGroupRole :: getResourceGroupIdxCode, Collectors.toList()));
+        // 获取资源
         Resource resource = new Resource();
         resource.setResourceType(resourceType);
         List<Resource> resources = getResourceService().queryDataByCondition(resource, idxs);
@@ -113,6 +137,12 @@ public class AuthorityComponent extends MallBeansExt {
         return idxs;
     }
 
+    /**
+     * 获取成员拥有的菜单树
+     * @param userIdx
+     * @return
+     * @throws MallException
+     */
     public List<MenuTree> getMemberMenuTree(Long userIdx) throws MallException {
         List<Long> idxs = getMemberMenuOrButtonIdxs(userIdx, MallNumberConstants.ONE);
         Menu po = new Menu();
@@ -120,6 +150,13 @@ public class AuthorityComponent extends MallBeansExt {
         return getMemberMenuTree(idxs, po);
     }
 
+    /**
+     * 获取成员菜单树
+     * @param idxs
+     * @param po
+     * @return
+     * @throws MallException
+     */
     private List<MenuTree> getMemberMenuTree(List<Long> idxs, Menu po) throws MallException {
         List<MenuTree> data = new ArrayList<>();
         List<Menu> menus = getMenuService().queryDataByConditions(po.getIdx(), null);
@@ -131,6 +168,13 @@ public class AuthorityComponent extends MallBeansExt {
         return data;
     }
 
+    /**
+     * N层菜单树封装
+     * @param menuPo
+     * @param idxs
+     * @return
+     * @throws MallException
+     */
     private MenuTree getMenuTree(Menu menuPo, List<Long> idxs) throws MallException{
         List<Menu> menus = getMenuService().queryDataByConditions(menuPo.getIdx(), null);
         List<MenuTree> menuTrees = new ArrayList<>();

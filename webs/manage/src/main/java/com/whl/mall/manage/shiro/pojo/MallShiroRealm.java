@@ -96,6 +96,7 @@ public class MallShiroRealm extends AuthorizingRealm{
         try {
             SimpleAuthorizationInfo info = (SimpleAuthorizationInfo) session.getAttribute("session_info");
             if (info == null) {
+                info = new SimpleAuthorizationInfo();
                 // 获取角色
                 List<String> roles = authorityComponent.getRoleByUserIdx(userId);
                 loggerAdapter.info("当前用户：" + userName + ", roleList: " + roles);
@@ -149,8 +150,8 @@ public class MallShiroRealm extends AuthorizingRealm{
             if (member == null) {
                 throw new AuthenticationException(MallMessage.LOGIN_MESSAGE);
             }
-        } catch (MallException e) {
-            throw new AuthenticationException(MallMessage.SYSTEM_FAIL);
+        } catch (Exception e) {
+            throw new AuthenticationException(e.getMessage(), e);
         }
 
         authorityComponent.getSession(true).setAttribute("session_member", member);
