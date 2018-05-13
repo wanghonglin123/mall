@@ -48,5 +48,5 @@ public interface MallBaseMQService<T extends MallBasePoJo> {
      * 发送MQ消息
      * @return
      */
-    int sendMsg();
+    void sendMsg(T po);
 }

@@ -36,6 +36,10 @@ package com.whl.mall.core.base.service.ext.impl;
 
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.base.service.ext.MallMQServiceExt;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,10 +52,15 @@ import java.util.List;
  * @Date: 2018/3/28
  */
 @Service
-public abstract class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServiceExt<T> {
+public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServiceExt<T> {
+    /**
+     * rabbitTemplate
+     */
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
-    public int sendMsg() {
-        return 0;
+    public void sendMsg(T po) {
+        rabbitTemplate.convertAndSend(po);
     }
 }

@@ -36,6 +36,7 @@ import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.base.dao.MallBaseMapper;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
+import com.whl.mall.core.base.service.MallBaseMQService;
 import com.whl.mall.core.base.service.MallBaseService;
 import com.whl.mall.core.common.constants.MallJavaTypeConstants;
 import com.whl.mall.core.common.constants.MallPojoFieldNameConstants;
@@ -59,11 +60,17 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
     @Autowired
     private MallBaseMapper<T> baseMapper;
 
+    @Autowired
+    private MallBaseMQService mqService;
+
     @Override
     public T save(T po) throws MallException{
-        // 设置po公共属性值,不采用反射方式，比较消耗性能
-        inspectPojoFieldValue(po);
+        // init PoJo Field value
+        initPojoFieldValue(po);
+        // save DB
         baseMapper.save(po);
+        // send MQ
+        mqService.sendMsg(po);
         return po;
     }
 
@@ -140,7 +147,7 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
      * @param pojo 实体类
      * @throws MallException
      */
-    protected void inspectPojoFieldValue(T pojo) throws MallException{
+    protected void initPojoFieldValue(T pojo) throws MallException{
         // 获取类注解，到时候开发
 
         // 执行所有字段，设置新值

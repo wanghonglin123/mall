@@ -39,7 +39,7 @@ import com.whl.mall.core.base.service.MallBaseCacheService;
 
 /**
  * @ClassName: ShopCacheServiceExt
- * @Description:
+ * @Description: 缓存服务扩展
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/3/26
