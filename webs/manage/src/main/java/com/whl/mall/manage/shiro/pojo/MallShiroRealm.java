@@ -99,36 +99,34 @@ public class MallShiroRealm extends AuthorizingRealm {
         String userName = member.getName();
         MallLoggerAdapter loggerAdapter = authorityComponent.getLog4jLog();
         try {
-            SimpleAuthorizationInfo info = (SimpleAuthorizationInfo) session.getAttribute("session_info");
-            if (info == null) {
-                info = new SimpleAuthorizationInfo();
-                // 获取角色
-                List<String> roles = authorityComponent.getRoleByUserIdx(userId);
-                loggerAdapter.info("当前用户：" + userName + ", roleList: " + roles);
-                info.addRoles(roles);
+            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();;
+            // 获取角色
+            List<String> roles = authorityComponent.getRoleByUserIdx(userId);
+            loggerAdapter.info("当前用户：" + userName + ", roleList: " + roles);
+            info.addRoles(roles);
 
-                // 获取许可
-                Set<String> permissions = null;
-                List<MenuTree> menuTreeList = null;
-                MenuService menuService = authorityComponent.getMenuService();
-                if (MallMessage.SUPPER_NAME.equals(userName)) {
-                    permissions = authorityComponent.getPermissions(null);
-                    menuTreeList = menuService.getTreeData();
-                } else {
-                    permissions = authorityComponent.getPermissions(userId);
-                    menuTreeList = authorityComponent.getMemberMenuTree(userId);
-                }
-                if (CollectionUtils.isNotEmpty(permissions)) {
-                    loggerAdapter.info("当前用户：" + userName + ", permissions: " + permissions);
-                    info.addStringPermissions(permissions);
-                }
-
-                // 获取所有urlMapping 集合 （bfs）
-                getUrlMappingList(menuTreeList, session);
-
-                session.setAttribute("session_info", info);
-                session.setAttribute("session_menuJson", MallJsonUtils.objectToJson(menuTreeList));
+            // 获取许可
+            Set<String> permissions = null;
+            List<MenuTree> menuTreeList = null;
+            MenuService menuService = authorityComponent.getMenuService();
+            if (MallMessage.SUPPER_NAME.equals(userName)) {
+                permissions = authorityComponent.getPermissions(null);
+                menuTreeList = menuService.getTreeData();
+            } else {
+                permissions = authorityComponent.getPermissions(userId);
+                menuTreeList = authorityComponent.getMemberMenuTree(userId);
             }
+            if (CollectionUtils.isNotEmpty(permissions)) {
+                loggerAdapter.info("当前用户：" + userName + ", permissions: " + permissions);
+                info.addStringPermissions(permissions);
+            }
+
+            // 获取所有urlMapping 集合 （bfs）
+            getUrlMappingList(menuTreeList, session);
+
+            session.setAttribute("session_info", info);
+            session.setAttribute("session_menuJson", MallJsonUtils.objectToJson(menuTreeList));
+
             return info;
         } catch (Exception e) {
             loggerAdapter.error(e);

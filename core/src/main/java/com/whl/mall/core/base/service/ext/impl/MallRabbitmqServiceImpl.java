@@ -34,8 +34,10 @@ package com.whl.mall.core.base.service.ext.impl;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.base.pojo.MQMessage;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.base.service.ext.MallMQServiceExt;
+import com.whl.mall.core.configura.rabbitmq.pojo.RabbitMQMessage;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -61,6 +63,8 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
 
     @Override
     public void sendMsg(T po) {
-        rabbitTemplate.convertAndSend(po);
+        // 组装 mq message
+        MQMessage message = assembleMQmessage(po);
+        rabbitTemplate.convertAndSend(message);
     }
 }

@@ -18,43 +18,27 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.base.service.ext;
-
-/**
- * @Title: ShopMQServiceExt
- * @Package: com.shop.common.base.service.ext
+package com.whl.mall.core.base.pojo;/**
+ * @Title: MQMessage
+ * @Package: com.whl.mall.core.base.pojo
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/3/26
- * @Version: V2.0.10
+ * @Date: 2018/5/14
+ * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/3/26
- * @Modify-version: 2.1.5
+ * @Modify-date: 2018/5/14
+ * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.base.pojo.MQMessage;
-import com.whl.mall.core.base.pojo.MallBasePoJo;
-import com.whl.mall.core.base.service.MallBaseMQService;
-import com.whl.mall.core.configura.rabbitmq.pojo.RabbitMQMessage;
-
-import java.util.List;
-
 /**
- * @ClassName: ShopMQServiceExt
- * @Description: 顶级MQ接口扩展
- * @Company: 广州市两棵树网络科技有限公司
+ * @ClassName: MQMessage
+ * @Description: MQ message
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/3/26
+ * @Date: 2018/5/14
  */
-public abstract class MallMQServiceExt<T extends MallBasePoJo> implements MallBaseMQService<T> {
-    /**
-     * 组装MQ信息
-     * @return
-     */
-    protected MQMessage assembleMQmessage(T po) {
-        po.getClass().getAnnotation()
-        return new RabbitMQMessage();
-    }
+@D
+public abstract class MQMessage implements MallBasePoJo{
+    private
 }

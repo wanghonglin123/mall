@@ -42,9 +42,12 @@ import com.whl.mall.core.common.constants.MallJavaTypeConstants;
 import com.whl.mall.core.common.constants.MallPojoFieldNameConstants;
 import com.whl.mall.core.common.utils.MallPagingUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
@@ -70,8 +73,13 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
         // save DB
         baseMapper.save(po);
         // send MQ
-        mqService.sendMsg(po);
+        sendMQMsg(po);
         return po;
+    }
+
+    private void sendMQMsg(T po) throws MallException{
+        po.getClass().getAnnotation()
+        this.save(po);
     }
 
     @Override
