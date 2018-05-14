@@ -73,13 +73,19 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
         // save DB
         baseMapper.save(po);
         // send MQ
-        sendMQMsg(po);
+        if (po.getModule() != null) {
+            sendMQMsg(po);
+        }
         return po;
     }
 
+    /**
+     * save and send MQ
+     * @param po
+     * @throws MallException
+     */
     private void sendMQMsg(T po) throws MallException{
-        po.getClass().getAnnotation()
-        this.save(po);
+        mqService.sendMsg(po, this);
     }
 
     @Override

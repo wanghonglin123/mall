@@ -34,6 +34,7 @@ package com.whl.mall.core.base.service;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.MallException;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 
 /**
@@ -46,7 +47,8 @@ import com.whl.mall.core.base.pojo.MallBasePoJo;
 public interface MallBaseMQService<T extends MallBasePoJo> {
     /**
      * 发送MQ消息
+     *
      * @return
      */
-    void sendMsg(T po);
+    void sendMsg(T po, MallBaseService targetService) throws MallException;
 }

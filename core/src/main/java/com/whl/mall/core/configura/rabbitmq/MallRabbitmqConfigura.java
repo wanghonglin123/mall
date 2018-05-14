@@ -8,19 +8,24 @@ package com.whl.mall.core.configura.rabbitmq;
  * @Version: V2.0.0
  */
 
+import com.rabbitmq.client.AMQP;
 import com.whl.mall.core.common.beans.MallBeans;
 import com.whl.mall.core.common.pojo.MallThreadFactory;
 import com.whl.mall.core.configura.rabbitmq.propeties.MallRabbitMQProperties;
 import com.whl.mall.core.configura.rabbitmq.listeners.RabbitMQChannelListenner;
 import com.whl.mall.core.configura.rabbitmq.listeners.RabbitMQCollectionListener;
 import com.whl.mall.core.configura.rabbitmq.listeners.RabbitRecoveryListener;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ChannelListener;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionListener;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +38,15 @@ import java.util.concurrent.Executors;
  * @Date: 2018-05-05 下午 10:35
  */
 //@Configuration
-public class MallRabbitmqConfigura extends MallBeans{
+public class MallRabbitmqConfigura extends MallBeans {
     @Autowired
     private MallRabbitMQProperties rabbitMQProperties;
 
     private static final String NAMEPREFIX = "ConnectionFactoryExecurotThread";
+
     /**
      * 缓存连接工厂模式为：CONNECTION, 可以缓存连接和通道，实用于连接实例多的场景，集群场景
+     *
      * @return
      */
     @Bean
@@ -52,7 +59,38 @@ public class MallRabbitmqConfigura extends MallBeans{
     }
 
     /**
+     * 获取rabbitAdmin
+     *
+     * @return
+     */
+    @Bean
+    public RabbitAdmin rabbitAdmin() {
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactoryCacheModeCONNECTION());
+        Queue queue = new Queue("test");
+        TopicExchange topicExchange = new TopicExchange("test");
+        Binding binding = BindingBuilder.bind(queue).to(topicExchange).with("test");
+        rabbitAdmin.declareBinding(binding);
+
+        queue = new Queue("test1");
+        topicExchange = new TopicExchange("test1");
+        binding = BindingBuilder.bind(queue).to(topicExchange).with("test1");
+        rabbitAdmin.declareBinding(binding);
+
+        queue = new Queue("test2");
+        topicExchange = new TopicExchange("test2");
+        binding = BindingBuilder.bind(queue).to(topicExchange).with("test2");
+        rabbitAdmin.declareBinding(binding);
+
+        queue = new Queue("test3");
+        topicExchange = new TopicExchange("test3");
+        binding = BindingBuilder.bind(queue).to(topicExchange).with("test3");
+        rabbitAdmin.declareBinding(binding);
+        return rabbitAdmin;
+    }
+
+    /**
      * 缓存连接工厂模式为：CAANNEL, 只可以缓存通道，实用连接实例少的场景
+     *
      * @return
      */
     @Bean
@@ -65,6 +103,7 @@ public class MallRabbitmqConfigura extends MallBeans{
 
     /**
      * 获取rabbitmq 连接
+     *
      * @return
      */
     private CachingConnectionFactory getConnectionFactory() {

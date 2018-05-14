@@ -1,10 +1,10 @@
 package com.whl.mall.pojo.member;
 
-import com.whl.mall.core.base.pojo.MallBasePoJo;
+import com.whl.mall.core.base.pojo.AbstractMallBasePoJo;
 
 import java.util.Date;
 
-public class ResourceGroupRole implements MallBasePoJo {
+public class ResourceGroupRole extends AbstractMallBasePoJo {
     /**
      * 主键idx，分布式架构，全局唯一递增
      */

@@ -34,9 +34,14 @@ package com.whl.mall.core.base.service.ext;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.MallException;
 import com.whl.mall.core.base.pojo.MQMessage;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.base.service.MallBaseMQService;
+import com.whl.mall.core.base.service.MallBaseService;
+import com.whl.mall.core.common.constants.MallNumberConstants;
+import com.whl.mall.core.common.constants.MallStatus;
+import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.core.configura.rabbitmq.pojo.RabbitMQMessage;
 
 import java.util.List;
@@ -51,10 +56,20 @@ import java.util.List;
 public abstract class MallMQServiceExt<T extends MallBasePoJo> implements MallBaseMQService<T> {
     /**
      * 组装MQ信息
+     *
      * @return
      */
-    protected MQMessage assembleMQmessage(T po) {
-        po.getClass().getAnnotation()
-        return new RabbitMQMessage();
+    protected MQMessage assembleMQmessage(T po, MallBaseService targetService) throws MallException {
+        try {
+            MQMessage mqMessage = new RabbitMQMessage();
+            mqMessage.setContent(MallJsonUtils.objectToJson(po));
+            mqMessage.setMessageId("123");
+            mqMessage.setReceivedExchange("123");
+            mqMessage.setType(MallNumberConstants.ONE);
+            mqMessage.setTargetService(targetService);
+            return mqMessage;
+        } catch (Exception e) {
+            throw new MallException(MallStatus.HTTP_STATUS_500, "组装mq消息失败", e);
+        }
     }
 }

@@ -69,7 +69,6 @@ public class MallRabbitmqTemplateConfigura extends MallBeans{
         // 当Channel执行操作后，实现ChannelCallback，可以执行一些自定义操作，需要实现该ChannelCallback
         //rabbitTemplate.execute()
 
-
         return rabbitTemplate;
     }
 

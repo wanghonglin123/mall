@@ -41,4 +41,5 @@ import com.whl.mall.core.base.pojo.MQMessage;
  * @Date: 2018/5/14
  */
 public class RabbitMQMessage extends MQMessage{
+
 }
