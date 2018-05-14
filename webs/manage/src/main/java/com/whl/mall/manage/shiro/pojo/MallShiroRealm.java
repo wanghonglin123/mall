@@ -46,17 +46,21 @@ import com.whl.mall.ext.component.AuthorityComponent;
 import com.whl.mall.interfaces.member.MemberRoleService;
 import com.whl.mall.interfaces.member.MemberService;
 import com.whl.mall.interfaces.member.MenuService;
+import com.whl.mall.manage.shiro.listener.MallAuthencationListener;
 import com.whl.mall.pojo.member.Member;
 import com.whl.mall.pojo.member.MemberRole;
 import com.whl.mall.pojo.member.MenuTree;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.cache.Cache;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,7 +76,7 @@ import java.util.stream.Collectors;
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2017/11/21
  */
-public class MallShiroRealm extends AuthorizingRealm{
+public class MallShiroRealm extends AuthorizingRealm {
     /**
      * 权限组件
      */
@@ -81,11 +85,12 @@ public class MallShiroRealm extends AuthorizingRealm{
 
     /**
      * 授权
+     *
      * @param principals
      * @return
      */
     @Override
-    public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals){
+    public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Session session = authorityComponent.getSession(false);
 
         // 获取登录成员信息
@@ -133,13 +138,14 @@ public class MallShiroRealm extends AuthorizingRealm{
 
     /**
      * 信息认证
+     *
      * @param authcToken
      * @return
      * @throws AuthenticationException
      */
     @Override
-    public AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException{
-        UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken)authcToken;
+    public AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
+        UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) authcToken;
         String userName = usernamePasswordToken.getUsername();
         String password = String.valueOf(usernamePasswordToken.getPassword());
         Member member = new Member();
@@ -157,11 +163,20 @@ public class MallShiroRealm extends AuthorizingRealm{
         authorityComponent.getSession(true).setAttribute("session_member", member);
 
         String principal = member.getIdx() + MallSymbolConstants.COMMA + userName + MallSymbolConstants.COMMA + password;
+
+        // doGetAuthorizationInfo只会执行一次，将授权信息存在缓存，如果重新登陆的时候读取不会在执行doGetAuthorizationInfo授权操作，
+        // 那么读取的数据有问题，所以需要生成缓存key，清除缓存重新读取
+        Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
+        SimplePrincipalCollection simplePrincipalCollection = new SimplePrincipalCollection(principal, getName());
+        if (cache.get(simplePrincipalCollection) != null) {
+            cache.remove(simplePrincipalCollection);
+        }
         return new SimpleAuthenticationInfo(principal, password, getName());
     }
 
     /**
      * 获取所有urlMapping 集合 （bfs）
+     *
      * @param trees 拥有的菜单
      * @return urlMapping 集合
      */
@@ -189,4 +204,5 @@ public class MallShiroRealm extends AuthorizingRealm{
         }
         return urlList;
     }
+
 }

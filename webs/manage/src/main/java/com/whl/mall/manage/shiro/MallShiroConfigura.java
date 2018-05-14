@@ -36,9 +36,13 @@ package com.whl.mall.manage.shiro;
 
 import com.whl.mall.core.common.beans.MallBeans;
 import com.whl.mall.manage.shiro.filter.MallAnyRolesFilter;
+import com.whl.mall.manage.shiro.listener.MallAuthencationListener;
 import com.whl.mall.manage.shiro.pojo.MallSessionDao;
 import com.whl.mall.manage.shiro.pojo.MallShiroRealm;
 import com.whl.mall.manage.shiro.pojo.MallShiroSessionListener;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
+import org.apache.shiro.authz.Authorizer;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
@@ -60,10 +64,7 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 
 import javax.servlet.Filter;
 import javax.servlet.annotation.WebFilter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName: TimoShiroConfigura
@@ -109,6 +110,11 @@ public class MallShiroConfigura extends MallBeans {
         return timoSimpleCookie;
     }
 
+    /**
+     * Cookie记住我管理器
+     * @param rememberMeCookie
+     * @return
+     */
     @Bean
     public CookieRememberMeManager cookieRememberMeManager(SimpleCookie rememberMeCookie) {
         CookieRememberMeManager timoCookieRememberMeManager = new CookieRememberMeManager();
@@ -117,35 +123,75 @@ public class MallShiroConfigura extends MallBeans {
         return timoCookieRememberMeManager;
     }
 
+    /**
+     * Session监听器
+     * @return
+     */
     @Bean
     public SessionListener sessionListener() {
         return new MallShiroSessionListener();
     }
 
+    /**
+     * SessionDao 操作
+     * @return
+     */
     @Bean
     public MallSessionDao sessionDAO() {
         MallSessionDao sessionDao = new MallSessionDao();
         return sessionDao;
     }
 
+    /**
+     * Shiro 自带内存缓存管理
+     * @return
+     */
     @Bean
     public MemoryConstrainedCacheManager cacheManager() {
         return new MemoryConstrainedCacheManager();
     }
 
+    /**
+     * 默认Web 安全管理器
+     * @param mallShiroRealm
+     * @param cacheManager
+     * @param rememberMeManager
+     * @param shiroSessionManager
+     * @return
+     */
     @Bean
     public DefaultWebSecurityManager securityManager(MallShiroRealm mallShiroRealm,
                                                      MemoryConstrainedCacheManager cacheManager,
                                                      CookieRememberMeManager rememberMeManager,
-                                                     DefaultWebSessionManager shiroSessionManager) {
+                                                     DefaultWebSessionManager shiroSessionManager,
+                                                     AuthenticationListener authenticationListener) {
         DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
         defaultWebSecurityManager.setRealm(mallShiroRealm);
         defaultWebSecurityManager.setCacheManager(cacheManager);
         defaultWebSecurityManager.setRememberMeManager(rememberMeManager);
         defaultWebSecurityManager.setSessionManager(shiroSessionManager);
+        AbstractAuthenticator abstractAuthenticator = (AbstractAuthenticator) defaultWebSecurityManager.getAuthenticator();
+        Collection<AuthenticationListener> authenticationListeners = new ArrayList<>();
+        authenticationListeners.add(authenticationListener);
+        abstractAuthenticator.setAuthenticationListeners(authenticationListeners);
+        defaultWebSecurityManager.setAuthenticator(abstractAuthenticator);
         return defaultWebSecurityManager;
     }
 
+    /**
+     * 认证监听bean
+     * @return
+     */
+    @Bean
+    public AuthenticationListener authenticationListener() {
+        return new MallAuthencationListener();
+    }
+
+    /**
+     * Shiro 过滤器配置
+     * @param securityManager
+     * @return
+     */
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
@@ -160,11 +206,22 @@ public class MallShiroConfigura extends MallBeans {
         return shiroFilterFactoryBean;
     }
 
+    /**
+     * 数据域
+     * @return
+     */
     @Bean
     public MallShiroRealm shiroSecurityRealm() {
         return new MallShiroRealm();
     }
 
+    /**
+     * session 管理器
+     * @param sessionIdCookie
+     * @param sessionDao
+     * @param sessionListener
+     * @return
+     */
     @Bean
     public DefaultWebSessionManager sessionManager(SimpleCookie sessionIdCookie,
                                                    MallSessionDao sessionDao,

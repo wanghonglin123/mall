@@ -73,4 +73,11 @@
       and menu_idx_code = #{menuIdxCode}
     </if>
   </select>
+  
+  <select id="queryDataIn" parameterType="com.whl.mall.pojo.member.Button" resultMap="BaseResultMap">
+    select idx,idx_code, name,code FROM tb_button WHERE  idx IN 
+    <foreach collection="list" open="(" close=")" separator="," item="idx">
+      #{idx}
+    </foreach>
+  </select>
 </mapper>
