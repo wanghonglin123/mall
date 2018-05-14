@@ -48,8 +48,18 @@ RetentionPolicy.CLASS : 在类加载的时候丢弃。在字节码文件的处�
 RetentionPolicy.RUNTIME : 始终不会丢弃，运行期也保留该注解，因此可以使用反射机制读取该注解的信息。我们自定义的注解通常使用这种方式。*/
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+// 废弃，需要使用反射，提供接口实现替换
 @Deprecated
 public @interface MallMQ {
+    /**
+     * 模块
+     * @return
+     */
     String module();
-    boolean isAck
+
+    /**
+     * ack 确认，true 手动确认， false 自动确认
+     * @return
+     */
+    boolean autoAck() default true;
 }
