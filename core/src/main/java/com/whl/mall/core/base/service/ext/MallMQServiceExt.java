@@ -64,9 +64,18 @@ public abstract class MallMQServiceExt<T extends MallBasePoJo> implements MallBa
             MQMessage mqMessage = new RabbitMQMessage();
             mqMessage.setContent(MallJsonUtils.objectToJson(po));
             mqMessage.setMessageId("123");
-            mqMessage.setReceivedExchange("123");
             mqMessage.setType(MallNumberConstants.ONE);
             mqMessage.setTargetService(targetService);
+            mqMessage.setMessageCount(1);
+            mqMessage.setPriority(1);
+            mqMessage.getHeaders().put("key", "value");
+
+            // 设置重发参数
+            mqMessage.setReceivedRoutingVM("test");
+            mqMessage.setReceivedExchange("123");
+            mqMessage.setReceivedDelay(5000);
+            mqMessage.setReceivedUserId("123");
+            mqMessage.setReceivedRoutingKey("234");
             return mqMessage;
         } catch (Exception e) {
             throw new MallException(MallStatus.HTTP_STATUS_500, "组装mq消息失败", e);

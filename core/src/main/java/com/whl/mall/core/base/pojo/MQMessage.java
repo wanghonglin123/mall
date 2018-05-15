@@ -95,7 +95,7 @@ public abstract class MQMessage extends AbstractMallBasePoJo {
      */
     private String receivedUserId;
     /**
-     * 延迟重发时间
+     * 多久重发时间
      */
     private Integer receivedDelay;
 

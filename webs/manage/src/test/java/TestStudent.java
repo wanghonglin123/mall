@@ -19,37 +19,43 @@
  * 洋桃商城：http://www.yunyangtao.com
  */
 /**
- * @Title: Test
+ * @Title: TestStudent
  * @Package: PACKAGE_NAME
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/4/26
+ * @Date: 2018/5/15
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/4/26
+ * @Modify-date: 2018/5/15
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
 /**
- * @ClassName: Test
+ * @ClassName: TestStudent
  * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/4/26
+ * @Date: 2018/5/15
  */
-public class Test {
+public class TestStudent {
+    private volatile String name;
 
-    @org.junit.Test
-    public void test() {
-        TestStudent student = new TestStudent();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                student.setName("1111");
-            }
-        }).start();
-        student.print();
+    /**
+     * @return name
+     */
+    public String getName() {
+        return name;
     }
 
+    public void print(){
+        System.out.println(getName());
+    }
+
+    /**
+     * @param name name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 }
