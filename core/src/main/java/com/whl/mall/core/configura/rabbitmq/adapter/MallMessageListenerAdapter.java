@@ -13,7 +13,7 @@ import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 
 /**
  * @ClassName: MallMessageListenerAdapter
- * @Description:
+ * @Description: 自定义消息监听适配器，重写getListenerMethodName
  * @Author: WangHongLin
  * @Date: 2018-05-16 上午 12:14
  */
