@@ -69,7 +69,7 @@ public class SystemController extends MallBaseController{
      */
     @RequestMapping(MallUrlConstants.LOGIN_URL)
     public String toLogin(Model model) throws Exception{
-        // 获取访问主体Subject
+       /* // 获取访问主体Subject
         Subject subject = SecurityUtils.getSubject();
         // subject.getSession(false) 设置为true，会动态代码创建一个Session,但是这里不需要使用Session，所以设置为false
         Session session = subject.getSession(false);
@@ -77,7 +77,7 @@ public class SystemController extends MallBaseController{
         // name会话会清空成员属性，或者不能创建成员属性，只有登录成功才会存在成员属性
         if (session != null && session.getAttribute(MallSessionConstants.SESSION_MEMBER) == null) {
             return "redirect:/";
-        }
+        }*/
         return getLoginName();
     }
 

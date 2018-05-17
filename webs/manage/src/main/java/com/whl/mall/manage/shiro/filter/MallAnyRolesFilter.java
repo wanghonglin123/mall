@@ -104,8 +104,6 @@ public class MallAnyRolesFilter extends AccessControlFilter {
                 return true;
             }
 
-            // 初始化访问的菜单
-            List<MenuTree> menuTreeList = (List<MenuTree>) session.getAttribute("session_menuJson");
             // 获取可以访问菜单所有的Url
             List<String> urlMappingList = (List<String>) session.getAttribute("session_urlMapping");
             int size = urlMappingList.size();

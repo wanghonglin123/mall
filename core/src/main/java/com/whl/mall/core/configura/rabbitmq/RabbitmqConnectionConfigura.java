@@ -36,7 +36,7 @@ import java.util.concurrent.Executors;
  * @Author: WangHongLin
  * @Date: 2018-05-16 下午 11:21
  */
-@Configuration
+//@Configuration
 public class RabbitmqConnectionConfigura {
     @Autowired
     private MallRabbitMQProperties rabbitMQProperties;

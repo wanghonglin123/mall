@@ -18,6 +18,8 @@ import com.whl.mall.core.common.utils.MallMd5Utils;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.Member;
 import com.whl.mall.pojo.member.MemberRole;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,6 +65,9 @@ public class MemberController extends MallBaseController{
             Long roleIdx = null;
             MemberRole memberRole = null;
             for (String role : roles) {
+                if (StringUtils.isEmpty(role)) {
+                    return MallResult.build(MallStatus.HTTP_STATUS_400, "参数非法");
+                }
                 roleIdx = Long.valueOf(role);
                 memberRole = new MemberRole();
                 memberRole.setMemberIdxCode(memberIdx);
