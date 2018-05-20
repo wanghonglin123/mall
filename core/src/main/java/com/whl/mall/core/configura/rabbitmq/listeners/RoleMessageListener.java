@@ -19,7 +19,7 @@ import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
  * @Author: WangHongLin
  * @Date: 2018-05-16 上午 12:01
  */
-public class MallRoleMessageListener implements ChannelAwareMessageListener {
+public class RoleMessageListener implements ChannelAwareMessageListener {
     @Override
     public void onMessage(Message message, Channel channel) throws Exception {
 

@@ -23,7 +23,7 @@ import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
  * @Author: WangHongLin
  * @Date: 2018-05-15 下午 11:58
  */
-public class MallMemberMessageListener implements MessageListener {
+public class MemberMessageListener implements MessageListener {
     @Override
     public void onMessage(Message message) {
     }

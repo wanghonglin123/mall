@@ -11,6 +11,7 @@ package com.whl.mall.core.configura.rabbitmq;
 import com.rabbitmq.client.AMQP;
 import com.whl.mall.core.common.beans.MallBeans;
 import com.whl.mall.core.common.pojo.MallThreadFactory;
+import com.whl.mall.core.configura.rabbitmq.constants.RabbitConstants;
 import com.whl.mall.core.configura.rabbitmq.propeties.MallRabbitMQProperties;
 import com.whl.mall.core.configura.rabbitmq.listeners.RabbitMQChannelListenner;
 import com.whl.mall.core.configura.rabbitmq.listeners.RabbitMQCollectionListener;
@@ -46,27 +47,11 @@ public class RabbitmqAdminConfigura extends MallBeans {
      * @return
      */
     @Bean
-    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+    public RabbitAdmin rabbitAdmin(CachingConnectionFactory connectionFactory) {
         RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
-        Queue queue = new Queue("test");
-        TopicExchange topicExchange = new TopicExchange("test");
-        Binding binding = BindingBuilder.bind(queue).to(topicExchange).with("test");
-        rabbitAdmin.declareBinding(binding);
-
-        queue = new Queue("test1");
-        topicExchange = new TopicExchange("test1");
-        binding = BindingBuilder.bind(queue).to(topicExchange).with("test1");
-        rabbitAdmin.declareBinding(binding);
-
-        queue = new Queue("test2");
-        topicExchange = new TopicExchange("test2");
-        binding = BindingBuilder.bind(queue).to(topicExchange).with("test2");
-        rabbitAdmin.declareBinding(binding);
-
-        queue = new Queue("test3");
-        topicExchange = new TopicExchange("test3");
-        binding = BindingBuilder.bind(queue).to(topicExchange).with("test3");
-        rabbitAdmin.declareBinding(binding);
+        rabbitAdmin.declareBinding(memberBinding());
+        rabbitAdmin.declareBinding(roleBinding());
+        rabbitAdmin.declareBinding(resourcesBinding());
         return rabbitAdmin;
     }
     /*===========================================Queue Begin ==============================================================*/
@@ -88,17 +73,17 @@ public class RabbitmqAdminConfigura extends MallBeans {
     @Bean
     public Queue memberQueue() {
         Map<String, Object> arguments = new HashMap<>();
-        return QueueBuilder.durable("com.mall.member.queue").withArguments(arguments).build();
+        return QueueBuilder.durable(RabbitConstants.MEMBER_QUEUE_NAME).withArguments(arguments).build();
     }
 
     @Bean
     public Queue roleQueue() {
-        return QueueBuilder.durable("com.mall.role.queue").build();
+        return QueueBuilder.durable(RabbitConstants.ROLE_QUEUE_NAME).build();
     }
 
     @Bean
     public Queue resourcesQueue() {
-        return QueueBuilder.durable("com.mall.resources.queue").build();
+        return QueueBuilder.durable(RabbitConstants.RESOURCES_QUEUE_NAME).build();
     }
 
     /*===========================================Queue end ==============================================================*/
@@ -158,4 +143,21 @@ public class RabbitmqAdminConfigura extends MallBeans {
         return headersExchange;
     }
     /*===========================================Exchange Begin ==============================================================*/
+
+    /*===========================================Bingding Begin ==============================================================*/
+    @Bean
+    public Binding memberBinding() {
+        return BindingBuilder.bind(memberQueue()).to(topicExchange()).with("member.routingkey");
+    }
+
+    @Bean
+    public Binding roleBinding() {
+        return BindingBuilder.bind(roleQueue()).to(topicExchange()).with("role.routingkey");
+    }
+
+    @Bean
+    public Binding resourcesBinding() {
+        return BindingBuilder.bind(resourcesQueue()).to(topicExchange()).with("resources.routingkey");
+    }
+    /*===========================================Bingding end ==============================================================*/
 }

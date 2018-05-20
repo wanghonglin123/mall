@@ -13,6 +13,7 @@ import com.whl.mall.core.configura.rabbitmq.callback.RabbitRecoveryCallback;
 import com.whl.mall.core.configura.rabbitmq.callback.RabbitmqConfirmCallBack;
 import com.whl.mall.core.configura.rabbitmq.callback.RabbitmqReturnCallBack;
 import com.whl.mall.core.configura.rabbitmq.callback.RabbitmqRetryCallBack;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.PublisherCallbackChannelImpl;
@@ -31,10 +32,10 @@ import org.springframework.retry.support.RetryTemplate;
  */
 //@Configuration
 //@AutoConfigureBefore(MallRabbitmqTemplateConfigura.class)
-public class MallRabbitmqTemplateConfigura extends MallBeans{
+public class RabbitmqTemplateConfigura extends MallBeans{
 
     @Autowired
-    private ConnectionFactory connectionFactory;
+    private CachingConnectionFactory connectionFactory;
 
     @Bean
     public RabbitTemplate rabbitTemplate(RetryTemplate retryTemplate) {

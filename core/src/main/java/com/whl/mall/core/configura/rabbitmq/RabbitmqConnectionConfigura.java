@@ -49,7 +49,7 @@ public class RabbitmqConnectionConfigura {
      * @return
      */
     @Bean
-    public ConnectionFactory connectionFactory() {
+    public CachingConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = getConnectionFactory();
         // 缓存模式CONNECTION， 分布式模块多使用建议CONNECTION， 模块少使用CHANNEL 模式
         connectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CONNECTION);
