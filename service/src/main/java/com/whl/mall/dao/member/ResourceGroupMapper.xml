@@ -78,7 +78,7 @@
     SELECT COUNT(idx) FROM tb_resource_group where 1 = 1
   </select>
 
-  <select id="queryDataIn" parameterType="java.util.List" resultType="com.whl.mall.pojo.member.ResourceGroup">
+  <select id="queryDataIn" parameterType="java.util.List" resultMap="BaseResultMap">
     SELECT  <include refid="Base_Column_List" /> from tb_resource_group where idx IN
     <foreach collection="list" item="idx" open="(" close=")" separator=",">
       #{idx}

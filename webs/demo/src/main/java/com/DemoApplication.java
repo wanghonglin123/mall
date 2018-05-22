@@ -18,70 +18,32 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-/**
- * @Title: TestStudent
- * @Package: PACKAGE_NAME
+package com;/**
+ * @Title: DemoApplication
+ * @Package: com
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/5/15
+ * @Date: 2018/5/22
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/5/15
+ * @Modify-date: 2018/5/22
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 /**
- * @ClassName: TestStudent
+ * @ClassName: DemoApplication
  * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/5/15
+ * @Date: 2018/5/22
  */
-public class TestStudent {
-    private int idx;
-    private String name;
-    private int avg;
-
-    /**
-     * @return idx
-     */
-    public int getIdx() {
-        return idx;
-    }
-
-    /**
-     * @param idx idx
-     */
-    public void setIdx(int idx) {
-        this.idx = idx;
-    }
-
-    /**
-     * @return name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @return avg
-     */
-    public int getAvg() {
-        return avg;
-    }
-
-    /**
-     * @param avg avg
-     */
-    public void setAvg(int avg) {
-        this.avg = avg;
+@SpringBootApplication
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
     }
 }

@@ -98,6 +98,9 @@ public class MallShiroRealm extends AuthorizingRealm {
         Long userId = member.getIdx();
         String userName = member.getName();
         MallLoggerAdapter loggerAdapter = authorityComponent.getLog4jLog();
+        // 获取许可
+        Set<String> permissions = null;
+        List<MenuTree> menuTreeList = null;
         try {
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();;
             // 获取角色
@@ -105,9 +108,6 @@ public class MallShiroRealm extends AuthorizingRealm {
             loggerAdapter.info("当前用户：" + userName + ", roleList: " + roles);
             info.addRoles(roles);
 
-            // 获取许可
-            Set<String> permissions = null;
-            List<MenuTree> menuTreeList = null;
             MenuService menuService = authorityComponent.getMenuService();
             if (MallMessage.SUPPER_NAME.equals(userName)) {
                 permissions = authorityComponent.getPermissions(null);
@@ -116,8 +116,8 @@ public class MallShiroRealm extends AuthorizingRealm {
                 permissions = authorityComponent.getPermissions(userId);
                 menuTreeList = authorityComponent.getMemberMenuTree(userId);
             }
+            loggerAdapter.info("当前用户：" + userName + ", permissions: " + permissions);
             if (CollectionUtils.isNotEmpty(permissions)) {
-                loggerAdapter.info("当前用户：" + userName + ", permissions: " + permissions);
                 info.addStringPermissions(permissions);
             }
 
@@ -196,7 +196,7 @@ public class MallShiroRealm extends AuthorizingRealm {
         List<MenuTree> childrens = null;
         for (MenuTree menuTree : trees) {
             attributes = menuTree.getAttributes();
-            urlList.add(attributes.get("url").toString());
+            urlList.add(attributes.get("code").toString());
             childrens = menuTree.getChildren();
             getUrlMappingList(childrens, urlList);
         }

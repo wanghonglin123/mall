@@ -82,6 +82,7 @@ public class MenuServiceImpl extends MallServiceExt<Menu> implements MenuService
         MenuTree menuTree = new MenuTree();
         Map<String, Object> attributes = new HashMap<>();
         attributes.put(MallPojoFieldNameConstants.FIELD_URL, menuPo.getUrl());
+        attributes.put(MallPojoFieldNameConstants.FIELD_CODE, menuPo.getCode());
         menuTree.setId(menuPo.getIdx());
         menuTree.setText(menuPo.getName());
         menuTree.setAttributes(attributes);

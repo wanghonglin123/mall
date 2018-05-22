@@ -18,70 +18,33 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-/**
- * @Title: TestStudent
- * @Package: PACKAGE_NAME
+package com.po;/**
+ * @Title: SendMsg
+ * @Package: com.po
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/5/15
+ * @Date: 2018/5/22
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/5/15
+ * @Modify-date: 2018/5/22
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
 /**
- * @ClassName: TestStudent
+ * @ClassName: SendMsg
  * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/5/15
+ * @Date: 2018/5/22
  */
-public class TestStudent {
-    private int idx;
-    private String name;
-    private int avg;
-
-    /**
-     * @return idx
-     */
-    public int getIdx() {
-        return idx;
+public class SendMsg {
+    public static void sendMsg(Student student) {
+        student.setName("list");
     }
 
-    /**
-     * @param idx idx
-     */
-    public void setIdx(int idx) {
-        this.idx = idx;
-    }
-
-    /**
-     * @return name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @return avg
-     */
-    public int getAvg() {
-        return avg;
-    }
-
-    /**
-     * @param avg avg
-     */
-    public void setAvg(int avg) {
-        this.avg = avg;
+    public static void sendMsg1(Student student) {
+        System.out.println(student.getName());
+        student.setName("zhangsan");
     }
 }

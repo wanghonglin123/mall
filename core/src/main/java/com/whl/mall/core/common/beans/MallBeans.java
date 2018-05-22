@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * @ClassName: XunbaoWebBeans
  * @Description: web 顶级父类，存放所有的bean
+ * 注意：实际开发不要采用这种方法：1： 会导致继承的类过大 2：RPC调用一个服务，RPC 需要注入全部的接口信息，导致需要配置
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/3/20
  */

@@ -39,17 +39,10 @@
  * @Date: 2018/4/26
  */
 public class Test {
-
-    @org.junit.Test
-    public void test() {
-        TestStudent student = new TestStudent();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                student.setName("1111");
-            }
-        }).start();
-        student.print();
+    public static void main(String[] args) {
+        TestStudent testStudent = new TestStudent();
+        testStudent.setIdx(1);
+        testStudent.setName("zhangsan");
+        testStudent.setAvg(2);
     }
-
 }

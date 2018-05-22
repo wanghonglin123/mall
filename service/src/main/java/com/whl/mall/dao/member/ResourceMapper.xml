@@ -65,7 +65,7 @@
     </if>
   </select>
 
-  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Resource">
+  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.member.Resource" resultMap="BaseResultMap">
     SELECT  <include refid="Base_Column_List" /> from tb_resource where 1 = 1
     <if test="name != null">
       and name = #{name}

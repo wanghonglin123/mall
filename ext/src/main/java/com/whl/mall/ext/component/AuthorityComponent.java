@@ -43,6 +43,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -109,6 +110,9 @@ public class AuthorityComponent extends MallBeansExt {
             buttons = getButtonService().queryDataByCondition(null);
         } else {
             List<Long> idxs = getMemberMenuOrButtonIdxs(userIdx, MallNumberConstants.TWO);
+            if (CollectionUtils.isEmpty(idxs)) {
+                return null;
+            }
             buttons = getButtonService().queryDataIn(idxs);
         }
         Set<String> permissions = buttons.stream().collect(Collectors.mapping(Button :: getCode, Collectors.toSet()));
@@ -126,9 +130,15 @@ public class AuthorityComponent extends MallBeansExt {
         // 获取角色
         List<Role> roles = getMemberRoles(userIdx);
         List<Long> idxs = roles.stream().collect(Collectors.mapping(Role :: getIdx, Collectors.toList()));
-        // 获取资源组
+
+        // 获取角色资源组
         List<ResourceGroupRole> resourceGroupRoles = getResourceGroupRoleService().queryDataIn(idxs);
         idxs = resourceGroupRoles.stream().collect(Collectors.mapping(ResourceGroupRole :: getResourceGroupIdxCode, Collectors.toList()));
+
+        // 获取资源组
+        List<ResourceGroup> resourceGroups = getResourceGroupService().queryDataIn(idxs);
+        idxs = resourceGroups.stream().collect(Collectors.mapping(ResourceGroup :: getIdxCode, Collectors.toList()));
+
         // 获取资源
         Resource resource = new Resource();
         resource.setResourceType(resourceType);

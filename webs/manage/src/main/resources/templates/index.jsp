@@ -111,7 +111,7 @@
         },1000);
     }
 
-    var treeJson = ${menuJson!};
+    var treeJson = ${session_menuJson!};
     $(function() {
         //画面加载完成之后就调用layout()方法将body变成easy的layout
         $('#easyUILayoutBody').layout();

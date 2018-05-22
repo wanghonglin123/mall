@@ -18,43 +18,52 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-/**
- * @Title: TestStudent
- * @Package: PACKAGE_NAME
+package com.po;/**
+ * @Title: Student
+ * @Package: com.po
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/5/15
+ * @Date: 2018/5/22
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/5/15
+ * @Modify-date: 2018/5/22
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
 /**
- * @ClassName: TestStudent
+ * @ClassName: Student
  * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/5/15
+ * @Date: 2018/5/22
  */
-public class TestStudent {
-    private int idx;
+public class Student {
+    private int id;
     private String name;
-    private int avg;
+    private int age;
+    private boolean isOpen = true;
 
+    public void set() {
+        this.id = 1;
+        name = "zhangsan";
+    }
+
+    public void print() {
+        System.out.println(name.equals(""));
+    }
     /**
-     * @return idx
+     * @return id
      */
-    public int getIdx() {
-        return idx;
+    public int getId() {
+        return id;
     }
 
     /**
-     * @param idx idx
+     * @param id id
      */
-    public void setIdx(int idx) {
-        this.idx = idx;
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
@@ -72,16 +81,16 @@ public class TestStudent {
     }
 
     /**
-     * @return avg
+     * @return age
      */
-    public int getAvg() {
-        return avg;
+    public int getAge() {
+        return age;
     }
 
     /**
-     * @param avg avg
+     * @param age age
      */
-    public void setAvg(int avg) {
-        this.avg = avg;
+    public void setAge(int age) {
+        this.age = age;
     }
 }

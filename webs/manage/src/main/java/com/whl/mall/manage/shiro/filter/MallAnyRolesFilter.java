@@ -108,7 +108,8 @@ public class MallAnyRolesFilter extends AccessControlFilter {
             List<String> urlMappingList = (List<String>) session.getAttribute("session_urlMapping");
             int size = urlMappingList.size();
             for (int i = 0; i < size; i++) {
-                if (pathMatcher.matches(urlMappingList.get(i), requestURI)) {
+                String pattern = urlMappingList.get(i);
+                if (pathMatcher.matches(pattern, requestURI)) {
                     return true;
                 }
             }
