@@ -11,13 +11,20 @@ package com.whl.mall.core.configura.rabbitmq;
 import com.whl.mall.core.configura.rabbitmq.constants.RabbitConstants;
 import com.whl.mall.core.configura.rabbitmq.listeners.MemberMessageListener;
 import com.whl.mall.core.configura.rabbitmq.listeners.RoleMessageListener;
+import com.whl.mall.core.configura.rabbitmq.pojo.MallConsumerTagStrategy;
 import org.springframework.amqp.core.AcknowledgeMode;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.listener.DirectMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.support.ConsumerTagStrategy;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @ClassName: RabbitmqMessageListenerContainerConfigura
@@ -33,9 +40,17 @@ import org.springframework.context.annotation.Configuration;
  * @Date: 2018-05-18 下午 11:23
  */
 //@Configuration
+//启用对@RabbitListener注释的支持，请将其添加@EnableRabbit到您的某个@Configuration类中
+@EnableRabbit
 public class RabbitmqMessageListenerContainerConfigura {
     @Autowired
     private CachingConnectionFactory connectionFactory;
+
+    /**
+     * 消息转换器
+     */
+    @Autowired
+    private Jackson2JsonMessageConverter jackson2JsonMessageConverter;
 
     /**
      * 设置成员消息监听器，监听器类型为SimpleMessageListenerContainer
@@ -46,7 +61,16 @@ public class RabbitmqMessageListenerContainerConfigura {
         SimpleMessageListenerContainer smlc = new SimpleMessageListenerContainer(connectionFactory);
         smlc.setQueueNames(RabbitConstants.MEMBER_QUEUE_NAME);
         smlc.setMessageListener(new MemberMessageListener());
+        // 设置消费者标签策略
+        smlc.setConsumerTagStrategy(consumerTagStrategy());
+        // 设置消息转换器，Jackson2JsonMessageConverter 将消息转换成Json
+        smlc.setMessageConverter(jackson2JsonMessageConverter);
         return smlc;
+    }
+
+    @Bean
+    public ConsumerTagStrategy consumerTagStrategy() {
+        return new MallConsumerTagStrategy();
     }
 
     public DirectMessageListenerContainer directMessageListenerContainer() {
