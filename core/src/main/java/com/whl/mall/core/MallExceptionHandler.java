@@ -59,7 +59,7 @@ public class MallExceptionHandler extends MallBeans{
     /**
      * 异常页面路径
      */
-    private static final String ERROR_PATH = "/error/";
+    private static final String ERROR_PATH = "error/";
 
     /**
      * MallException 异常处理
@@ -128,16 +128,6 @@ public class MallExceptionHandler extends MallBeans{
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return HttpStatus.valueOf(statusCode);
-    }
-
-    /**
-     * 是否是Ajax请求
-     *
-     * @param request 请求对象
-     * @return 结果
-     */
-    public static boolean isAjax(ServletRequest request) {
-        return isAjax((HttpServletRequest)request);
     }
 
     /**

@@ -41,6 +41,7 @@ import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorContro
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -57,13 +58,13 @@ import java.util.Map;
  * @Date: 2018/3/8
  */
 
-// 自定义异常处理需要@Controller，需要定义这个类为bean,否则找到的BasicErrorController
+// 自定义异常处理需要@Controller，可以自定义页面错误路径等
 //@Controller
-// 不推荐使用
+// 暂时废弃掉，使用自定义错误页面替换此方式
 @Deprecated
 public class MallErrorController extends BasicErrorController {
     // error 路径
-    private static final String ERROR_PATH = "error";
+    private static final String ERROR_PATH = "error/error/";
 
     public MallErrorController() {
         super(new DefaultErrorAttributes(), new ErrorProperties());
@@ -78,7 +79,7 @@ public class MallErrorController extends BasicErrorController {
      */
     // 自定义返回类型, 默认是text/html, 现在自定义为json
     @RequestMapping(
-            produces = {MediaType.APPLICATION_JSON_VALUE}
+            produces = {MediaType.TEXT_HTML_VALUE}
     )
     public ModelAndView errorHtml(HttpServletRequest request, HttpServletResponse response) {
         HttpStatus status = this.getStatus(request);
@@ -87,7 +88,7 @@ public class MallErrorController extends BasicErrorController {
         response.setStatus(status.value());
         // 自定义异常页面路径，重写resolveErrorView 这个方法，具体实现看BasicErrorController源码
         ModelAndView modelAndView = this.resolveErrorView(request, response, status, model);
-        return modelAndView == null ? new ModelAndView(ERROR_PATH, model) : modelAndView;
+        return modelAndView == null ? new ModelAndView(ERROR_PATH + status) : modelAndView;
     }
 }
 
