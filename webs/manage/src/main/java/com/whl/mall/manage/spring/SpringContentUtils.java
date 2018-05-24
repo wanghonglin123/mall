@@ -56,4 +56,5 @@ public final class SpringContentUtils implements ApplicationContextAware{
     public static <T> T getBean(Class<T> classez) {
         return applicationContext.getBean(classez);
     }
+
 }

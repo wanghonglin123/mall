@@ -4,6 +4,7 @@
     <title>unauthorized</title>
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="/css/common/common.css" />
+    <link rel="stylesheet" href="/style/common.css" />
 <body>
 <div class="container-loss">
     <div class="loss"><img src="/images/qxsb.png" /> </div>

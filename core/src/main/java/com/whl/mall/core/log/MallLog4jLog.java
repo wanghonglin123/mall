@@ -70,4 +70,9 @@ public class MallLog4jLog extends MallLoggerExt {
     public void debug(Throwable ex) {
         LOGGER.debug(ex);
     }
+
+    @Override
+    public void error(Throwable ex, String msg) {
+        LOGGER.error(msg, ex);
+    }
 }

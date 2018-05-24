@@ -40,30 +40,20 @@ import com.whl.mall.manage.shiro.listener.MallAuthencationListener;
 import com.whl.mall.manage.shiro.pojo.MallSessionDao;
 import com.whl.mall.manage.shiro.pojo.MallShiroRealm;
 import com.whl.mall.manage.shiro.pojo.MallShiroSessionListener;
-import org.apache.shiro.authc.*;
-import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
-import org.apache.shiro.authz.Authorizer;
+import org.apache.shiro.authc.AbstractAuthenticator;
+import org.apache.shiro.authc.AuthenticationListener;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.session.SessionListener;
-import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.filter.authc.PassThruAuthenticationFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.web.filter.DelegatingFilterProxy;
 
 import javax.servlet.Filter;
-import javax.servlet.annotation.WebFilter;
 import java.util.*;
 
 /**

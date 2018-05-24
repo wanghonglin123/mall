@@ -18,60 +18,72 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.log;
-
-/**
- * @Title: XunbaoLogbackService
- * @Package: com.xunbao.commons.log
+package com.whl.mall.manage.spring;/**
+ * @Title: ServletContextUtils
+ * @Package: com.whl.mall.manage.spring
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/3/20
- * @Version: V2.0.10
+ * @Date: 2018/5/24
+ * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/3/20
- * @Modify-version: 2.1.5
+ * @Modify-date: 2018/5/24
+ * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.log.ext.MallLoggerExt;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * @ClassName: XunbaoLogbackService
- * @Description: lockback 日志组件
- * @Company: 广州市两棵树网络科技有限公司
+ * @ClassName: ServletContextUtils
+ * @Description: Servlet Content 工具类
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/3/20
+ * @Date: 2018/5/24
  */
-@Component("logbackLog")
-public class MallLogbackLog extends MallLoggerExt {
-    private static final Logger LOGGER = LogManager.getLogger(MallLogbackLog.class);
+public final class ServletContextUtils {
+    private ServletContextUtils() {
 
-    @Override
-    public void info(String msg) {
-        LOGGER.info(msg);
     }
 
-    @Override
-    public void error(Throwable ex) {
-        LOGGER.error(ex);
+    /**
+     * get HttpServletRequest
+     * @return
+     */
+    public static HttpServletRequest getRequest() {
+        RequestAttributes requestAttributes = getRequestAttributes();
+        return ((ServletRequestAttributes) requestAttributes).getRequest();
     }
 
-    @Override
-    public void warn(Throwable ex) {
-        LOGGER.warn(ex);
+    /**
+     * 获取 HttpServletResponse
+     * @return
+     */
+    public static HttpServletResponse getResponse() {
+        RequestAttributes requestAttributes = getRequestAttributes();
+        return ((ServletRequestAttributes) requestAttributes).getResponse();
     }
 
-    @Override
-    public void debug(Throwable ex) {
-        LOGGER.debug(ex);
+    /**
+     * 获取ServletContent属性值
+     * @param scope 作用域
+     * @return
+     */
+    public static String getAttribute(int scope) {
+        RequestAttributes requestAttributes = getRequestAttributes();
+        // 从session里面获取对应的值
+        return (String) requestAttributes.getAttribute("name", scope);
     }
 
-    @Override
-    public void error(Throwable ex, String msg) {
-
+    /**
+     * 获取requert请求属性值
+     * @return
+     */
+    public static RequestAttributes getRequestAttributes() {
+        return RequestContextHolder.getRequestAttributes();
     }
 }

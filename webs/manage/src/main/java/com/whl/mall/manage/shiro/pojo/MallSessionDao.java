@@ -27,15 +27,16 @@ import java.io.Serializable;
 
 /**
  * @ClassName: TimoSessionDao
- * @Description:    Shiro SessionDao操作
+ * @Description: Shiro SessionDao操作
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2017/11/21
  */
-public class MallSessionDao extends CachingSessionDAO{
+public class MallSessionDao extends CachingSessionDAO {
 
     /**
      * Session 创建，只有在Session == null 或者失效的时候才会创建session
+     *
      * @param session
      * @return
      */
@@ -48,6 +49,7 @@ public class MallSessionDao extends CachingSessionDAO{
 
     /**
      * 当服务器重启后，如果发现Cookie存在SessionId,就会执行该方法读取该方法，任何操作多执行该方法，比如刷新浏览器，点击按钮等
+     *
      * @param serializable
      * @return
      */
@@ -58,6 +60,7 @@ public class MallSessionDao extends CachingSessionDAO{
 
     /**
      * Session 更新，当Session存在的情况下，任何操作多会更新当前Session
+     *
      * @param session
      */
     @Override
@@ -66,6 +69,7 @@ public class MallSessionDao extends CachingSessionDAO{
 
     /**
      * Session 删除，退出或者Session失效的时候会被执行
+     *
      * @param session
      */
     @Override

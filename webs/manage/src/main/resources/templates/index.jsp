@@ -158,6 +158,8 @@
                 }
             }
         });
+
+
         /* 页面窗口大小改变，修改iframe的高度 */
         $('.index-img-info').height($(this).height()-130);
         $(window).resize(function () {

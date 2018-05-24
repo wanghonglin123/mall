@@ -23,6 +23,7 @@ package com.whl.mall.manage.shiro.filter;
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallResult;
 import com.whl.mall.core.common.constants.MallMessage;
+import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallUrlConstants;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.core.common.utils.MallWebUtils;
@@ -67,7 +68,7 @@ import java.util.stream.Collectors;
  * @Date: 2017/11/22
  */
 public class MallAnyRolesFilter extends AccessControlFilter {
-    private Short status = null;
+    private Short status;
 
     @Autowired
     private MallLog4jLog log4jLog;
@@ -85,16 +86,17 @@ public class MallAnyRolesFilter extends AccessControlFilter {
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
+        status = null;
         Subject subject = null; Session session = null;
         try {
             subject = getSubject(servletRequest, servletResponse);
             if (subject.getPrincipal() == null) {
-                return failHandle();
+                return failHandle(MallNumberConstants.ONE);
             }
             session = subject.getSession(false);
             Member member = (Member) session.getAttribute("session_member");
             if (member == null) {
-                return failHandle();
+                return failHandle(MallNumberConstants.ONE);
             }
             // 调用MallShiroRealm.doGetAuthorizationInfo() 进行授权和存放一些信息
             subject.hasRole(MallMessage.SUPPER_NAME);
@@ -104,6 +106,7 @@ public class MallAnyRolesFilter extends AccessControlFilter {
                 return true;
             }
 
+            System.out.println(1/0);
             // 获取可以访问菜单所有的Url
             List<String> urlMappingList = (List<String>) session.getAttribute("session_urlMapping");
             int size = urlMappingList.size();
@@ -114,13 +117,12 @@ public class MallAnyRolesFilter extends AccessControlFilter {
                 }
             }
         } catch (Exception e) { // 直接退出
-            if (subject != null) {
-                subject.logout();
-            }
-            status = 3;
+            subject.logout();
             e.printStackTrace();
+            return failHandle(MallNumberConstants.THREE);
+
         }
-        return false;
+        return failHandle(MallNumberConstants.TWO);
     }
 
     /**
@@ -133,13 +135,13 @@ public class MallAnyRolesFilter extends AccessControlFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         boolean isAjax = MallWebUtils.isAjax(servletRequest);
-        if (status == 1) {
+        if (status == MallNumberConstants.ONE) {
             if (isAjax) {
                 MallWebUtils.out(servletResponse, log4jLog, 1, "当前用户已失效，请重新登录");
             } else {
                 WebUtils.issueRedirect(servletRequest, servletResponse, MallUrlConstants.LOGIN_URL);
             }
-        } else if(status == null) {
+        } else if(status == MallNumberConstants.TWO) {
             //
             if (StringUtils.hasText(MallUrlConstants.UNAUTHORIZED_URL)) {
                 if (isAjax) {
@@ -152,15 +154,15 @@ public class MallAnyRolesFilter extends AccessControlFilter {
                 // 否则返回401未授权状态码
                 WebUtils.toHttp(servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED);
             }
-        } else if(status == 3) {
-            // 如果有未授权页面跳转过去
+        } else {
+            // 程序出错，跳转到error页面
             WebUtils.issueRedirect(servletRequest, servletResponse, MallUrlConstants.ERROR_URL);
         }
         return false;
     }
 
-    private boolean failHandle() {
-        status = 1;
+    private boolean failHandle(short status) {
+        this.status = status;
         return false;
     }
 }

@@ -51,6 +51,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @ClassName: SystemController
@@ -69,7 +71,7 @@ public class SystemController extends MallBaseController{
      */
     @RequestMapping(MallUrlConstants.LOGIN_URL)
     public String toLogin(Model model) throws Exception{
-       /* // 获取访问主体Subject
+        // 获取访问主体Subject
         Subject subject = SecurityUtils.getSubject();
         // subject.getSession(false) 设置为true，会动态代码创建一个Session,但是这里不需要使用Session，所以设置为false
         Session session = subject.getSession(false);
@@ -77,7 +79,7 @@ public class SystemController extends MallBaseController{
         // name会话会清空成员属性，或者不能创建成员属性，只有登录成功才会存在成员属性
         if (session != null && session.getAttribute(MallSessionConstants.SESSION_MEMBER) == null) {
             return "redirect:/";
-        }*/
+        }
         return getLoginName();
     }
 
@@ -109,6 +111,13 @@ public class SystemController extends MallBaseController{
         return MallResult.ok();
     }
 
+    @RequestMapping("/sys/logout")
+    public void logout(HttpServletResponse response) throws Exception{
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        response.sendRedirect(MallUrlConstants.LOGIN_URL);
+    }
+
     /**
      * 跳转到未授权页面
      * @return
@@ -136,8 +145,6 @@ public class SystemController extends MallBaseController{
      */
     @RequestMapping(MallUrlConstants.INDEX_URL)
     public String index(HttpServletRequest request, Menu po) throws Exception{
-        /*String json = MallJsonUtils.objectToJson(super.getMenuService().getTreeData());
-        request.setAttribute("menuJson", json);*/
         return "index";
     }
 }

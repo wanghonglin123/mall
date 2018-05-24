@@ -33,11 +33,20 @@ package com.whl.mall.manage.shiro.listener;/**
  */
 
 import com.whl.mall.core.common.beans.MallBeans;
+import com.whl.mall.core.common.constants.MallUrlConstants;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationListener;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.web.servlet.ServletContextSupport;
+import org.apache.shiro.web.util.WebUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @ClassName: MallAuthencationListener
@@ -45,33 +54,45 @@ import org.apache.shiro.subject.PrincipalCollection;
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/5/10
  */
-public class MallAuthencationListener extends MallBeans implements AuthenticationListener{
+public class MallAuthencationListener extends MallBeans implements AuthenticationListener {
     /**
      * 验证成功
+     *
      * @param token
      * @param info
      */
     @Override
     public void onSuccess(AuthenticationToken token, AuthenticationInfo info) {
-        getLog4jLog().info("认证成功");
+        getLog4jLog().info(String.format("认证成功，token = %s", token));
     }
 
     /**
      * 验证失败
+     *
      * @param token
      * @param ae
      */
     @Override
     public void onFailure(AuthenticationToken token, AuthenticationException ae) {
-        getLog4jLog().info("认证失败");
     }
 
     /**
      * 退出
+     *
      * @param principals
      */
     @Override
     public void onLogout(PrincipalCollection principals) {
-        getLog4jLog().info("用户退出");
+        getLog4jLog().info(String.format("退出成功，principals = %s", principals));
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        // 从session里面获取对应的值
+        String str = (String) requestAttributes.getAttribute("name", RequestAttributes.SCOPE_SESSION);
+        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+        HttpServletResponse response = ((ServletRequestAttributes) requestAttributes).getResponse();
+        try {
+            WebUtils.issueRedirect(request, response, MallUrlConstants.LOGIN_URL);
+        } catch (Exception e) {
+            getLog4jLog().error(e, String.format("退出失败，principals = %s", principals));
+        }
     }
 }

@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  * @Author: WangHongLin
  * @Date: 2018-05-22 下午 8:50
  */
-@Component
+//@Component
 public class ResourceMessageListener {
 
     /**

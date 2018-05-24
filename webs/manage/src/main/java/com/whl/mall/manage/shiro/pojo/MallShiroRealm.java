@@ -34,26 +34,17 @@ package com.whl.mall.manage.shiro.pojo;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.MallException;
 import com.whl.mall.core.common.constants.MallMessage;
-import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallSymbolConstants;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.core.common.utils.MallMd5Utils;
-import com.whl.mall.core.log.MallLog4jLog;
 import com.whl.mall.core.log.adapter.MallLoggerAdapter;
 import com.whl.mall.ext.component.AuthorityComponent;
-import com.whl.mall.interfaces.member.MemberRoleService;
-import com.whl.mall.interfaces.member.MemberService;
 import com.whl.mall.interfaces.member.MenuService;
-import com.whl.mall.manage.shiro.listener.MallAuthencationListener;
 import com.whl.mall.pojo.member.Member;
-import com.whl.mall.pojo.member.MemberRole;
 import com.whl.mall.pojo.member.MenuTree;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
@@ -61,12 +52,12 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**

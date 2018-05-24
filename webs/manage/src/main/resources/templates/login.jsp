@@ -5,7 +5,7 @@
 	<#include "../../common/memberCommon.jsp"/>
 	<link rel="stylesheet" href="/style/login.css?_v=" />
 </head>
-<body>
+<body onload="loadTopWindow()">
 <div class="wrapper wrapper-login-bg">
     <div class="login-com">
         <div class="login-bg">
@@ -67,6 +67,13 @@
             $("#verification").val("");
             $('#login-btn').html("登录").removeClass("login-btn").addClass("login-btn-active");
         });
+    }
+
+    //判断当前窗口是否有顶级窗口，如果有就让当前的窗口的地址栏发生变化，
+    function loadTopWindow(){
+        if (window.top!=null && window.top.document.URL!=document.URL){
+            window.top.location= document.URL; //这样就可以让登陆窗口显示在整个窗口了
+        }
     }
 </script>
 </body>
