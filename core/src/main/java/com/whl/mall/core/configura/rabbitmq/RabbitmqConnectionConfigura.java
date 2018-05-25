@@ -13,15 +13,9 @@ import com.whl.mall.core.configura.rabbitmq.listeners.RabbitMQChannelListenner;
 import com.whl.mall.core.configura.rabbitmq.listeners.RabbitMQCollectionListener;
 import com.whl.mall.core.configura.rabbitmq.listeners.RabbitRecoveryListener;
 import com.whl.mall.core.configura.rabbitmq.propeties.MallRabbitMQProperties;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ChannelListener;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionListener;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +30,7 @@ import java.util.concurrent.Executors;
  * @Author: WangHongLin
  * @Date: 2018-05-16 下午 11:21
  */
-//@Configuration
+@Configuration
 public class RabbitmqConnectionConfigura {
     @Autowired
     private MallRabbitMQProperties rabbitMQProperties;
@@ -52,8 +46,10 @@ public class RabbitmqConnectionConfigura {
     public CachingConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = getConnectionFactory();
         // 缓存模式CONNECTION， 分布式模块多使用建议CONNECTION， 模块少使用CHANNEL 模式
-        connectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CONNECTION);
-        connectionFactory.setConnectionCacheSize(rabbitMQProperties.getConnectionCacheSize());
+        // CONNECTION 模式不支持自动声明交换，队列等
+        connectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CHANNEL);
+        // CHANNEL 模式不能使用setConnectionCache();
+        //connectionFactory.setConnectionCacheSize(rabbitMQProperties.getConnectionCacheSize());
         return connectionFactory;
     }
 
@@ -72,13 +68,14 @@ public class RabbitmqConnectionConfigura {
     }
 
     private void setBasicInfo(CachingConnectionFactory connectionFactory) {
-        connectionFactory.setAddresses(rabbitMQProperties.getAddresses());
+        // 集群地址
+        //connectionFactory.setAddresses(rabbitMQProperties.getAddresses());
         connectionFactory.setChannelCacheSize(rabbitMQProperties.getChannelCacheSize());
         connectionFactory.setChannelCheckoutTimeout(rabbitMQProperties.getChannelCheckoutTimeout());
-        connectionFactory.setConnectionCacheSize(rabbitMQProperties.getConnectionCacheSize());
         connectionFactory.setConnectionLimit(rabbitMQProperties.getConnectionLimit());
         connectionFactory.setPassword(rabbitMQProperties.getPassword());
         connectionFactory.setPort(rabbitMQProperties.getPort());
+        connectionFactory.setHost(rabbitMQProperties.getHost());
         connectionFactory.setUsername(rabbitMQProperties.getUsername());
         connectionFactory.setConnectionTimeout(rabbitMQProperties.getConnectionTimeout());
         connectionFactory.setVirtualHost(rabbitMQProperties.getVirtualHost());
@@ -102,20 +99,39 @@ public class RabbitmqConnectionConfigura {
         connectionFactory.setChannelListeners(getChanneListeners());
         connectionFactory.setCloseExceptionLogger(new RabbitmqCloseExceptionLogger());
         connectionFactory.setRecoveryListener(new RabbitRecoveryListener());
+        // 设置连接名称，方便管理页面区分有哪些连接成功的
         connectionFactory.setConnectionNameStrategy(connectionFactory1 -> {
-            return "mallConnection";
+            return "publishConnection";
         });
     }
 
     private List<ConnectionListener> getConnectionListeners() {
         List<ConnectionListener> connectionListenerList = new ArrayList<>();
-        connectionListenerList.add(new RabbitMQCollectionListener());
+        connectionListenerList.add(collectionListener());
         return connectionListenerList;
+    }
+
+    /**
+     * 连接监听器
+     * @return
+     */
+    @Bean
+    public RabbitMQCollectionListener collectionListener() {
+        return new RabbitMQCollectionListener();
     }
 
     private List<ChannelListener> getChanneListeners() {
         List<ChannelListener> connectionListenerList = new ArrayList<>();
-        connectionListenerList.add(new RabbitMQChannelListenner());
+        connectionListenerList.add(channelListenner());
         return connectionListenerList;
+    }
+
+    /**
+     * Channel 监听器
+     * @return
+     */
+    @Bean
+    public RabbitMQChannelListenner channelListenner() {
+        return new RabbitMQChannelListenner();
     }
 }

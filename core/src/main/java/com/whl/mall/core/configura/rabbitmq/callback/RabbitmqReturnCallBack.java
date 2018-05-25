@@ -21,6 +21,6 @@ public class RabbitmqReturnCallBack implements RabbitTemplate.ReturnCallback{
     @Override
     public void returnedMessage(Message message, int replyCode, String replyText,
                                 String exchange, String routingKey) {
-
+        System.out.println("返回的消息");
     }
 }

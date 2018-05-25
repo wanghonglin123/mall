@@ -18,79 +18,51 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.po;/**
- * @Title: Student
- * @Package: com.po
+package com.whl.mall;/**
+ * @Title: MQApplication
+ * @Package: com.whl.mall.mq
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/5/22
+ * @Date: 2018/5/25
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/5/22
+ * @Modify-date: 2018/5/25
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+
 /**
- * @ClassName: Student
+ * @ClassName: MQApplication
  * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/5/22
+ * @Date: 2018/5/25
  */
-public class Student {
-    private int id;
-    private String name;
-    private int age;
-    private boolean isOpen = true;
+@SpringBootApplication
+// 排除不需要扫描的注解类型
+@ComponentScan(excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {/*Configuration.class*/})})
+// 排除默认配置类，有些自动配置类会报错
+@EnableAutoConfiguration(exclude = {MybatisAutoConfiguration.class})
+public class MQApplication implements ApplicationRunner {
+    private static final Logger logger = LogManager.getLogger(MQApplication.class);
 
-    public void set() {
-        this.id = 1;
-        name = "zhangsan";
+    public static void main(String[] args) {
+        SpringApplication.run(MQApplication.class, args);
     }
-
-    public void print() {
-        System.out.println(name.equals(""));
-    }
-    /**
-     * @return id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @param id id
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    /**
-     * @return name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @return age
-     */
-    public int getAge() {
-        return age;
-    }
-
-    /**
-     * @param age age
-     */
-    public void setAge(int age) {
-        this.age = age;
+    
+    @Override
+    public void run(ApplicationArguments applicationArguments) throws Exception {
+        logger.warn("[{}]", "app 启动成功，正在初始化一些参数");
     }
 }

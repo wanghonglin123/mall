@@ -187,7 +187,9 @@ public class MallShiroConfigura extends MallBeans {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         Map<String, Filter> filterMap = new HashMap<>();
+        // authc 登陆后多可以访问的权限
         filterMap.put("authc", new PassThruAuthenticationFilter());
+        // 角色拦截器，必须匹配
         filterMap.put("anyRoles", new MallAnyRolesFilter());
         shiroFilterFactoryBean.setFilters(filterMap);
 
@@ -244,6 +246,7 @@ public class MallShiroConfigura extends MallBeans {
         //filterChainDefinitions.append("/rebuild/item/index = anon \n");
         // <!-- anon表示此地址不需要任何权限即可访问 -->
         filterChainDefinitions.append("/sys/**=anon \n");
+        filterChainDefinitions.append("/login.jsp=anon \n");
         filterChainDefinitions.append("/css/**=anon \n");
         filterChainDefinitions.append("/images/**=anon \n");
         filterChainDefinitions.append("/img/**=anon \n");
@@ -251,6 +254,7 @@ public class MallShiroConfigura extends MallBeans {
         filterChainDefinitions.append("/plugins/**=anon \n");
         filterChainDefinitions.append("/script/**=anon \n");
         filterChainDefinitions.append("/style/**=anon \n");
+        filterChainDefinitions.append("/role/toChooseRolelist/**=authc\n");
         filterChainDefinitions.append("/**=anyRoles\n");
         // <!-- authc需要认证(登录)，登陆后所有用户多具备这个权限 -->
         //filterChainDefinitions.append("/collect/item/downExcel = authc \n");

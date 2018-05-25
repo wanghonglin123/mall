@@ -251,4 +251,14 @@ public class Member extends AbstractMallBasePoJo {
     public void setId(String id) {
         this.id = id;
     }
+
+    @Override
+    public String getModule() {
+        return "member_module";
+    }
+
+    @Override
+    public String moduleAlias() {
+        return "member";
+    }
 }

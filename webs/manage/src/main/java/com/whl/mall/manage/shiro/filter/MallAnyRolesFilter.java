@@ -106,7 +106,6 @@ public class MallAnyRolesFilter extends AccessControlFilter {
                 return true;
             }
 
-            System.out.println(1/0);
             // 获取可以访问菜单所有的Url
             List<String> urlMappingList = (List<String>) session.getAttribute("session_urlMapping");
             int size = urlMappingList.size();
@@ -117,7 +116,7 @@ public class MallAnyRolesFilter extends AccessControlFilter {
                 }
             }
         } catch (Exception e) { // 直接退出
-            subject.logout();
+            //subject.logout();
             e.printStackTrace();
             return failHandle(MallNumberConstants.THREE);
 

@@ -39,6 +39,7 @@ import com.whl.mall.core.base.pojo.MQMessage;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.base.service.MallBaseService;
 import com.whl.mall.core.base.service.ext.MallMQServiceExt;
+import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.core.configura.rabbitmq.pojo.RabbitMQMessage;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
@@ -66,7 +67,7 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
     @Override
     public void sendMsg(T po, MallBaseService targetService) throws MallException {
         // 组装 mq message
-        MQMessage message = assembleMQmessage(po, targetService);
+        Message message = new Message(MallJsonUtils.objectToJson(po).getBytes(), null);
         rabbitTemplate.convertAndSend(message);
     }
 }

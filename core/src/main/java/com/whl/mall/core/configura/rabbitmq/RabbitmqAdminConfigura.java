@@ -25,6 +25,7 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +39,7 @@ import java.util.concurrent.Executors;
  * @Author: WangHongLin
  * @Date: 2018-05-05 下午 10:35
  */
-//@Configuration
+@Configuration
 public class RabbitmqAdminConfigura extends MallBeans {
 
     /**
@@ -49,11 +50,43 @@ public class RabbitmqAdminConfigura extends MallBeans {
     @Bean
     public RabbitAdmin rabbitAdmin(CachingConnectionFactory connectionFactory) {
         RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+        declareExchanges(rabbitAdmin);
+        declareQueues(rabbitAdmin);
+        declareBindings(rabbitAdmin);
+        return rabbitAdmin;
+    }
+
+    /**
+     * 声明队列
+     * @param rabbitAdmin
+     */
+    private void declareQueues(RabbitAdmin rabbitAdmin){
+        rabbitAdmin.declareQueue(memberQueue());
+        rabbitAdmin.declareQueue(roleQueue());
+        rabbitAdmin.declareQueue(resourcesQueue());
+    }
+
+    /**
+     * 声明交换
+     * @param rabbitAdmin
+     */
+    private void declareExchanges(RabbitAdmin rabbitAdmin){
+        rabbitAdmin.declareExchange(topicExchange());
+        rabbitAdmin.declareExchange(directExchange());
+        rabbitAdmin.declareExchange(fanoutExchange());
+        rabbitAdmin.declareExchange(headersExchange());
+    }
+
+    /**
+     * 声明绑定
+     * @param rabbitAdmin
+     */
+    private void declareBindings(RabbitAdmin rabbitAdmin){
         rabbitAdmin.declareBinding(memberBinding());
         rabbitAdmin.declareBinding(roleBinding());
         rabbitAdmin.declareBinding(resourcesBinding());
-        return rabbitAdmin;
     }
+
     /*===========================================Queue Begin ==============================================================*/
     /**
      * 队列名称最多可以有255个字节的UTF-8字符
@@ -63,7 +96,7 @@ public class RabbitmqAdminConfigura extends MallBeans {
      * 并显示回复代码403（ACCESS_REFUSED）
      *
      * 队列属性
-     * 1：name 队列名称 必填 2：durable true 持久队列，重启之后队列还存在，消息不会丢失
+     * 1：name 队列名称 必填 2：durable true 持久队列，重启之后队列还存在
      * 3：exclusive 默认false, true 排他性队列（临时队列），只有一个连接使用，当连接关闭时队列将被删除，断开连接后会自动删除，重启后需要重新创建，以前的队列消息会丢失。
      * 4: autoDelete 默认false, true 自动删除 当没有消费者时，是否自动删除队列，可能会造成内存或者磁盘增加，自动删除消息会丢失
      * 5: arguments 可选参数

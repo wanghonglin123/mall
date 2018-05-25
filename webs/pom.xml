@@ -14,7 +14,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>manage</module>
-        <module>demo</module>
+        <module>mq</module>
+        <module>es</module>
     </modules>
 
 

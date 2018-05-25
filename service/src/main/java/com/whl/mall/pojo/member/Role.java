@@ -342,4 +342,19 @@ public class Role extends AbstractMallBasePoJo {
         sb.append("]");
         return sb.toString();
     }
+
+    @Override
+    public String getModule() {
+        return "role_module";
+    }
+
+    @Override
+    public boolean autoAck() {
+        return super.autoAck();
+    }
+
+    @Override
+    public String moduleAlias() {
+        return "role";
+    }
 }

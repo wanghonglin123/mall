@@ -20,6 +20,7 @@ import org.springframework.retry.RetryContext;
 public class RabbitmqRetryCallBack implements RetryCallback{
     @Override
     public Object doWithRetry(RetryContext retryContext) throws Throwable {
+        System.out.println("执行重试");
         return null;
     }
 }

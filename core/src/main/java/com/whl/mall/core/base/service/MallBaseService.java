@@ -38,6 +38,7 @@ import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -47,7 +48,7 @@ import java.util.List;
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/3/26
  */
-public interface MallBaseService<T extends MallBasePoJo> {
+public interface MallBaseService<T extends MallBasePoJo> extends Serializable{
     /**
      * 保存
      * @param po
