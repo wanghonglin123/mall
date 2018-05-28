@@ -8,6 +8,7 @@ package com.whl.mall.core.rabbitmq.adapter;
  * @Version: V2.0.0
  */
 
+import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 
@@ -18,7 +19,8 @@ import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
  * @Date: 2018-05-16 上午 12:14
  */
 public class MallMessageListenerAdapter extends MessageListenerAdapter {
-    private static final String DEFAULT_METHOD_NAME = "messageHandle";
+    private static final String DEFAULT_METHOD_NAME = "handleMessage";
+
     public MallMessageListenerAdapter(Object delegate) {
         super(delegate);
     }
