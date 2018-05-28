@@ -35,19 +35,17 @@ package com.whl.mall.core.base.service.ext.impl;
  */
 
 import com.whl.mall.core.MallException;
-import com.whl.mall.core.base.pojo.MQMessage;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.base.service.MallBaseService;
 import com.whl.mall.core.base.service.ext.MallMQServiceExt;
+import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallJsonUtils;
-import com.whl.mall.core.configura.rabbitmq.pojo.RabbitMQMessage;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @ClassName: ShopRabbitmqServiceImpl
@@ -66,8 +64,15 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
 
     @Override
     public void sendMsg(T po, MallBaseService targetService) throws MallException {
-        // 组装 mq message
-        Message message = new Message(MallJsonUtils.objectToJson(po).getBytes(), null);
-        rabbitTemplate.convertAndSend(message);
+        String exchangeName = po.exchange(),
+                routingkey = po.routingKey();
+        if (StringUtils.isEmpty(exchangeName) || StringUtils.isEmpty(routingkey)) {
+            throw new MallException(MallStatus.HTTP_STATUS_400,
+                    String.format("发送MQ参数非法, exchangeName=%s, routingkey=%s", exchangeName, routingkey));
+        }
+        byte[] bytes = MallJsonUtils.objectToJson(po).getBytes();
+        MessageProperties messageProperties = new MessageProperties();
+        Message message = new Message(bytes, messageProperties);
+        rabbitTemplate.convertAndSend(exchangeName, routingkey, message);
     }
 }

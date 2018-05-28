@@ -1,6 +1,7 @@
 package com.whl.mall.pojo.member;
 
 import com.whl.mall.core.base.pojo.AbstractMallBasePoJo;
+import com.whl.mall.core.rabbitmq.constants.RabbitConstants;
 
 import java.util.Date;
 
@@ -356,5 +357,15 @@ public class Role extends AbstractMallBasePoJo {
     @Override
     public String moduleAlias() {
         return "role";
+    }
+
+    @Override
+    public String routingKey() {
+        return RabbitConstants.ROLE_ROUTINGKEY;
+    }
+
+    @Override
+    public String exchange() {
+        return RabbitConstants.TOP_EXCHANGE_NAME;
     }
 }

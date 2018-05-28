@@ -8,7 +8,7 @@ package com.whl.mall.core.base.pojo;
  * @Version: V2.0.0
  */
 
-import java.util.Date;
+import com.whl.mall.core.rabbitmq.constants.RabbitConstants;
 
 /**
  * @ClassName: AbstractMallBasePoJo
@@ -29,6 +29,16 @@ public abstract class AbstractMallBasePoJo implements MallBasePoJo {
 
     @Override
     public String moduleAlias() {
+        return null;
+    }
+
+    @Override
+    public String exchange() {
+        return null;
+    }
+
+    @Override
+    public String routingKey() {
         return null;
     }
 }

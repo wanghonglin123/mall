@@ -42,9 +42,7 @@ import com.whl.mall.core.base.service.MallBaseService;
 import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallJsonUtils;
-import com.whl.mall.core.configura.rabbitmq.pojo.RabbitMQMessage;
-
-import java.util.List;
+import com.whl.mall.core.rabbitmq.pojo.RabbitMQMessage;
 
 /**
  * @ClassName: ShopMQServiceExt

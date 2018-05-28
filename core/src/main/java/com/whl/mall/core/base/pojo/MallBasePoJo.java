@@ -64,4 +64,8 @@ public interface MallBasePoJo extends Serializable {
      * @return
      */
     String moduleAlias();
+
+    String exchange();
+
+    String routingKey();
 }

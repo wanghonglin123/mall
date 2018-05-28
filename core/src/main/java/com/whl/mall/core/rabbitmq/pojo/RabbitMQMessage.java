@@ -18,51 +18,28 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall;/**
- * @Title: MQApplication
- * @Package: com.whl.mall.mq
+package com.whl.mall.core.rabbitmq.pojo;/**
+ * @Title: RabbitMQMessage
+ * @Package: com.whl.mall.core.rabbitmq.pojo
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/5/25
+ * @Date: 2018/5/14
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/5/25
+ * @Modify-date: 2018/5/14
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
+import com.whl.mall.core.base.pojo.MQMessage;
 
 /**
- * @ClassName: MQApplication
+ * @ClassName: RabbitMQMessage
  * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/5/25
+ * @Date: 2018/5/14
  */
-@SpringBootApplication
-// 排除不需要扫描的注解类型
-@ComponentScan(excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {/*Configuration.class*/})})
-// 排除默认配置类，有些自动配置类会报错
-@EnableAutoConfiguration(exclude = {MybatisAutoConfiguration.class})
-public class MQApplication implements ApplicationRunner {
-    private static final Logger logger = LogManager.getLogger(MQApplication.class);
+public class RabbitMQMessage extends MQMessage{
 
-    public static void main(String[] args) {
-        SpringApplication.run(MQApplication.class, args);
-    }
-
-    @Override
-    public void run(ApplicationArguments applicationArguments) throws Exception {
-        logger.warn("[{}]", "app 启动成功，正在初始化一些参数");
-    }
 }

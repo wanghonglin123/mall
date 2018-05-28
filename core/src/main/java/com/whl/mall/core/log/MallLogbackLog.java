@@ -74,4 +74,14 @@ public class MallLogbackLog extends MallLoggerExt {
     public void error(Throwable ex, String msg) {
 
     }
+
+    @Override
+    public void error(String msg) {
+
+    }
+
+    @Override
+    public void warn(String msg) {
+
+    }
 }

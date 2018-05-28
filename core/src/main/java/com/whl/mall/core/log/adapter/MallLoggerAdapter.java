@@ -56,6 +56,11 @@ public interface MallLoggerAdapter {
 
     /**
      * error 日志
+     */
+    void error(String msg);
+
+    /**
+     * error 日志
      * @param ex
      */
     void error(Throwable ex, String msg);
@@ -65,6 +70,12 @@ public interface MallLoggerAdapter {
      * @param ex
      */
     void warn(Throwable ex);
+
+    /**
+     * warn 日志
+     * @param ex
+     */
+    void warn(String msg);
 
     /**
      * debug 日志
