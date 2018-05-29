@@ -78,14 +78,15 @@ public class RabbitmqContainerConfigura {
         smlc.setQueueNames(RabbitConstants.ROLE_QUEUE_NAME);
         smlc.setMessageListener(this.roleMessageListenner());
         smlc.setConsumerTagStrategy(consumerTagStrategy());
+        // 设置手动确认模式
+        smlc.setAcknowledgeMode(AcknowledgeMode.MANUAL);
         return smlc;
     }
-
 
     @Bean
     public DirectMessageListenerContainer directMessageListenerContainer() {
         DirectMessageListenerContainer dmlc = new DirectMessageListenerContainer(connectionFactory);
-        dmlc.setQueueNames(RabbitConstants.ROLE_QUEUE_NAME);
+        dmlc.setQueueNames(RabbitConstants.RESOURCES_QUEUE_NAME);
         dmlc.setMessageListener(new MallMessageListenerAdapter(new MessageHandle()));
         // 为每个创建的队列设置消费者数量，可以通过设置这个值调整消费者数量
         dmlc.setConsumersPerQueue(1);

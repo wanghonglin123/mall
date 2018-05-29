@@ -17,6 +17,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.retry.backoff.ExponentialBackOffPolicy;
 import org.springframework.retry.support.RetryTemplate;
 
@@ -33,12 +34,16 @@ public class RabbitmqTemplateConfigura extends MallBeans{
     private CachingConnectionFactory connectionFactory;
 
     @Bean
+    @Scope("prototype")
     public RabbitTemplate rabbitTemplate(RetryTemplate retryTemplate) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         // 设置重试模板
         rabbitTemplate.setRetryTemplate(retryTemplate);
         // 设置确认回调执行，可以重复发送消息，但是要注意消息重复消费问题
         rabbitTemplate.setConfirmCallback(confirmCallBack());
+        // 当mandatory标志位设置为true时，如果exchange根据自身类型和消息routeKey无法找到一个符合条件的queue，
+        // 那么会调用basic.return方法将消息返回给生产者（Basic.Return + Content-Header + Content-Body）；
+        // 当mandatory设置为false时，出现上述情形broker会直接将消息扔掉
         // 对于需要返回的消息，必须设置为true, 才会执行ReturnCallback才会返回，ConnectionFactory publisherReturns属性也要设置为true
         rabbitTemplate.setMandatory(true);
         // 设置返回回调，比如Exchange不存在，会执行回调，可以执行一些自定义操作

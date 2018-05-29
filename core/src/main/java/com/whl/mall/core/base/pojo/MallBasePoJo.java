@@ -47,25 +47,4 @@ import java.util.Date;
  * @Date: 2018/3/23
  */
 public interface MallBasePoJo extends Serializable {
-    /**
-     * 获取模块，默认为Null, 需要发送MQ的, 需要设置别名,es等获取其它用处
-     * @return
-     */
-    String getModule();
-
-    /**
-     * true 手动确认 false 自动确认
-     * @return
-     */
-    boolean autoAck();
-
-    /**
-     * 模块别名， 默认为null
-     * @return
-     */
-    String moduleAlias();
-
-    String exchange();
-
-    String routingKey();
 }

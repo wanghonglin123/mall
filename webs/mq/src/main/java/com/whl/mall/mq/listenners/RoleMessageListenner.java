@@ -11,6 +11,7 @@ package com.whl.mall.mq.listenners;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.rabbitmq.listeners.MessageListennersExt;
 import com.whl.mall.pojo.member.Member;
+import com.whl.mall.pojo.member.Role;
 
 /**
  * @ClassName: MemberMessageListenner
@@ -27,6 +28,6 @@ public class RoleMessageListenner extends MessageListennersExt{
 
     @Override
     protected Class<? extends MallBasePoJo> getJavaType() {
-        return Member.class;
+        return Role.class;
     }
 }

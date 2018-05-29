@@ -34,6 +34,7 @@ package com.whl.mall.core.base.service.ext;/**
 
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallGridResult;
+import com.whl.mall.core.annotations.MallMQ;
 import com.whl.mall.core.base.dao.MallBaseMapper;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.base.service.MallBaseMQService;
@@ -72,20 +73,9 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
         initPojoFieldValue(po);
         // save DB
         baseMapper.save(po);
-        // send MQ
-        if (po.getModule() != null) {
-            sendMQMsg(po);
-        }
+        // send mq
+        mqService.sendMsg(po);
         return po;
-    }
-
-    /**
-     * save and send MQ
-     * @param po
-     * @throws MallException
-     */
-    private void sendMQMsg(T po) throws MallException{
-        mqService.sendMsg(po, this);
     }
 
     @Override

@@ -20,6 +20,6 @@ package com.whl.mall.mq.handle;
  */
 public class MessageHandle {
     public void handleMessage(byte[] body){
-
+        System.out.println(body);
     }
 }

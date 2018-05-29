@@ -50,5 +50,5 @@ public interface MallBaseMQService<T extends MallBasePoJo> {
      *
      * @return
      */
-    void sendMsg(T po, MallBaseService targetService) throws MallException;
+    void sendMsg(T po) throws MallException;
 }

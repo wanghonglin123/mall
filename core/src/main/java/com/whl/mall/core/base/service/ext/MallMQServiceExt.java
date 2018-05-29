@@ -34,15 +34,9 @@ package com.whl.mall.core.base.service.ext;
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.MallException;
-import com.whl.mall.core.base.pojo.MQMessage;
+import com.whl.mall.core.annotations.MallMQ;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.base.service.MallBaseMQService;
-import com.whl.mall.core.base.service.MallBaseService;
-import com.whl.mall.core.common.constants.MallNumberConstants;
-import com.whl.mall.core.common.constants.MallStatus;
-import com.whl.mall.core.common.utils.MallJsonUtils;
-import com.whl.mall.core.rabbitmq.pojo.RabbitMQMessage;
 
 /**
  * @ClassName: ShopMQServiceExt
@@ -51,32 +45,5 @@ import com.whl.mall.core.rabbitmq.pojo.RabbitMQMessage;
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/3/26
  */
-public abstract class MallMQServiceExt<T extends MallBasePoJo> implements MallBaseMQService<T> {
-    /**
-     * 组装MQ信息
-     *
-     * @return
-     */
-    protected MQMessage assembleMQmessage(T po, MallBaseService targetService) throws MallException {
-        try {
-            MQMessage mqMessage = new RabbitMQMessage();
-            mqMessage.setContent(MallJsonUtils.objectToJson(po));
-            mqMessage.setMessageId("123");
-            mqMessage.setType(MallNumberConstants.ONE);
-            mqMessage.setTargetService(targetService);
-            mqMessage.setMessageCount(1);
-            mqMessage.setPriority(1);
-            mqMessage.getHeaders().put("key", "value");
-
-            // 设置重发参数
-            mqMessage.setReceivedRoutingVM("test");
-            mqMessage.setReceivedExchange("123");
-            mqMessage.setReceivedDelay(5000);
-            mqMessage.setReceivedUserId("123");
-            mqMessage.setReceivedRoutingKey("234");
-            return mqMessage;
-        } catch (Exception e) {
-            throw new MallException(MallStatus.HTTP_STATUS_500, "组装mq消息失败", e);
-        }
-    }
+public abstract class MallMQServiceExt<T extends MallBasePoJo> extends MallServiceExt implements MallBaseMQService<T> {
 }

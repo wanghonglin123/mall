@@ -35,13 +35,15 @@ package com.whl.mall.core.base.service.ext.impl;
  */
 
 import com.whl.mall.core.MallException;
+import com.whl.mall.core.annotations.MallMQ;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
-import com.whl.mall.core.base.service.MallBaseService;
 import com.whl.mall.core.base.service.ext.MallMQServiceExt;
+import com.whl.mall.core.common.constants.MallConstants;
 import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,22 +59,41 @@ import org.springframework.stereotype.Service;
 @Service
 public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServiceExt<T> {
     /**
-     * rabbitTemplate
+     * rabbitTemplate 必须多例，否则会导致发送A队列变成发送到B队列了
      */
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Override
-    public void sendMsg(T po, MallBaseService targetService) throws MallException {
-        String exchangeName = po.exchange(),
-                routingkey = po.routingKey();
-        if (StringUtils.isEmpty(exchangeName) || StringUtils.isEmpty(routingkey)) {
-            throw new MallException(MallStatus.HTTP_STATUS_400,
-                    String.format("发送MQ参数非法, exchangeName=%s, routingkey=%s", exchangeName, routingkey));
+    public void sendMsg(T po) throws MallException {
+        MallMQ mq = po.getClass().getAnnotation(MallMQ.class);
+        String module = mq.module();
+        String exchangeName = mq.exchangeName();
+        String routingkey = mq.routingKey();
+        if (isSendMQ(module, exchangeName, routingkey)) {
+            String moduleAlias = mq.moduleAlias();
+            boolean autoAck = mq.autoAck();
+            byte[] bytes = MallJsonUtils.objectToJson(po).getBytes();
+            MessageProperties messageProperties = new MessageProperties();
+            messageProperties.setContentEncoding(MallConstants.DEFAULT_ENCODING);
+            // 默认消息持久，瞬时消息在内存压力下会慢慢被清除
+            //messageProperties.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+            Message message = new Message(bytes, messageProperties);
+            rabbitTemplate.convertAndSend(exchangeName, routingkey, message);
         }
-        byte[] bytes = MallJsonUtils.objectToJson(po).getBytes();
-        MessageProperties messageProperties = new MessageProperties();
-        Message message = new Message(bytes, messageProperties);
-        rabbitTemplate.convertAndSend(exchangeName, routingkey, message);
+
+    }
+
+    /**
+     * 判断是否需要发送MQ
+     * @param module
+     * @param exchangeName
+     * @param routingkey
+     * @return
+     */
+    private boolean isSendMQ(String module, String exchangeName, String routingkey) throws MallException{
+        if (StringUtils.isEmpty(module) || StringUtils.isEmpty(exchangeName) || StringUtils.isEmpty(routingkey)) {
+            throw new MallException(MallStatus.HTTP_STATUS_400, String.format("MQ module= %s, exchangeName=%s, routingkey=%s", module, exchangeName, routingkey));
+        }
     }
 }

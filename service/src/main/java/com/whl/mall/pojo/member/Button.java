@@ -11,12 +11,6 @@ public class Button extends AbstractMallBasePoJo {
     private Long idx;
 
     /**
-     主键idx生成的code，
-     MyBatis逆向工程，动态生成字符串类型
-     */
-    private String idxCodeS;
-
-    /**
      * 主键idx生成的code
      */
     private Long idxCode;
@@ -37,8 +31,8 @@ public class Button extends AbstractMallBasePoJo {
     private Long version;
 
     /**
-     被哪位成员（member_idx）创建的，不可以为null创建成员idx，不可以为，
-     MyBatis逆向工程，动态生成字符串类型
+     * 被哪位成员（member_idx）创建的，不可以为null创建成员idx，不可以为，
+     * MyBatis逆向工程，动态生成字符串类型
      */
     private String createByMemberIdxDynamicS;
 
@@ -48,8 +42,8 @@ public class Button extends AbstractMallBasePoJo {
     private Long createByMemberIdx;
 
     /**
-     被哪位成员（member_idx）修改的，不可以为null创建成员idx，不可以为，
-     MyBatis逆向工程，动态生成字符串类型
+     * 被哪位成员（member_idx）修改的，不可以为null创建成员idx，不可以为，
+     * MyBatis逆向工程，动态生成字符串类型
      */
     private String updateByMemberIdxDynamicS;
 
@@ -59,8 +53,8 @@ public class Button extends AbstractMallBasePoJo {
     private Long updateByMemberIdx;
 
     /**
-    创建时间，后续不可以再更新时间，
-    日期格式：yyyy-MM-dd HH:mm:ss，例如：2017-05-02 22:12:28
+     * 创建时间，后续不可以再更新时间，
+     * 日期格式：yyyy-MM-dd HH:mm:ss，例如：2017-05-02 22:12:28
      */
     private String createTimeEnYyyyMMddHHmmss;
 
@@ -70,8 +64,8 @@ public class Button extends AbstractMallBasePoJo {
     private Date createTime;
 
     /**
-    更新时间，每一次都要更新，
-    日期格式：yyyy-MM-dd HH:mm:ss，例如：2017-05-02 22:12:28
+     * 更新时间，每一次都要更新，
+     * 日期格式：yyyy-MM-dd HH:mm:ss，例如：2017-05-02 22:12:28
      */
     private String updateTimeEnYyyyMMddHHmmss;
 
@@ -125,8 +119,8 @@ public class Button extends AbstractMallBasePoJo {
     }
 
     /**
-     主键idx生成的code，
-     MyBatis逆向工程，动态生成字符串类型
+     * 主键idx生成的code，
+     * MyBatis逆向工程，动态生成字符串类型
      */
     public String getIdxCodeS() {
         return String.valueOf(this.idxCode);
@@ -189,19 +183,19 @@ public class Button extends AbstractMallBasePoJo {
     }
 
     /**
-     被哪位成员（member_idx）创建的，不可以为null创建成员idx，不可以为，
-     MyBatis逆向工程，动态生成字符串类型
+     * 被哪位成员（member_idx）创建的，不可以为null创建成员idx，不可以为，
+     * MyBatis逆向工程，动态生成字符串类型
      */
     public String getCreateByMemberIdxDynamicS() {
         return this.createByMemberIdxDynamicS;
     }
 
     /**
-     被哪位成员（member_idx）创建的，不可以为null创建成员idx，不可以为，
-     MyBatis逆向工程，动态生成字符串类型
+     * 被哪位成员（member_idx）创建的，不可以为null创建成员idx，不可以为，
+     * MyBatis逆向工程，动态生成字符串类型
      */
     public void setCreateByMemberIdxDynamicS(String createByMemberIdxDynamicS) {
-         this.createByMemberIdxDynamicS = createByMemberIdxDynamicS;
+        this.createByMemberIdxDynamicS = createByMemberIdxDynamicS;
     }
 
     /**
@@ -219,19 +213,19 @@ public class Button extends AbstractMallBasePoJo {
     }
 
     /**
-     被哪位成员（member_idx）修改的，不可以为null创建成员idx，不可以为，
-     MyBatis逆向工程，动态生成字符串类型
+     * 被哪位成员（member_idx）修改的，不可以为null创建成员idx，不可以为，
+     * MyBatis逆向工程，动态生成字符串类型
      */
     public String getUpdateByMemberIdxDynamicS() {
         return this.updateByMemberIdxDynamicS;
     }
 
     /**
-     被哪位成员（member_idx）修改的，不可以为null创建成员idx，不可以为，
-     MyBatis逆向工程，动态生成字符串类型
+     * 被哪位成员（member_idx）修改的，不可以为null创建成员idx，不可以为，
+     * MyBatis逆向工程，动态生成字符串类型
      */
     public void setUpdateByMemberIdxDynamicS(String updateByMemberIdxDynamicS) {
-         this.updateByMemberIdxDynamicS = updateByMemberIdxDynamicS;
+        this.updateByMemberIdxDynamicS = updateByMemberIdxDynamicS;
     }
 
     /**
@@ -340,7 +334,6 @@ public class Button extends AbstractMallBasePoJo {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", idx=").append(idx);
-        sb.append(", idxCodeS=").append(idxCodeS);
         sb.append(", idxCode=").append(idxCode);
         sb.append(", remark=").append(remark);
         sb.append(", status=").append(status);

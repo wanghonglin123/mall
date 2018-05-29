@@ -18,28 +18,30 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.rabbitmq.pojo;/**
- * @Title: RabbitMQMessage
- * @Package: com.whl.mall.core.rabbitmq.pojo
+package com.whl.mall.core.common.constants;/**
+ * @Title: MallConstants
+ * @Package: com.whl.mall.core.common.constants
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/5/14
+ * @Date: 2018/5/29
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/5/14
+ * @Modify-date: 2018/5/29
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.base.pojo.MQMessage;
-
 /**
- * @ClassName: RabbitMQMessage
+ * @ClassName: MallConstants
  * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/5/14
+ * @Date: 2018/5/29
  */
-public class RabbitMQMessage extends MQMessage{
+public final class MallConstants {
+    private MallConstants() {
 
+    }
+
+    public static final String DEFAULT_ENCODING = "UTF-8";
 }

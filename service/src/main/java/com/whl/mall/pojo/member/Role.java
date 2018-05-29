@@ -12,12 +12,6 @@ public class Role extends AbstractMallBasePoJo {
     private Long idx;
 
     /**
-     主键idx生成的code，
-     MyBatis逆向工程，动态生成字符串类型
-     */
-    private String idxCodeS;
-
-    /**
      * 主键idx生成的code
      */
     private Long idxCode;
@@ -322,7 +316,6 @@ public class Role extends AbstractMallBasePoJo {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", idx=").append(idx);
-        sb.append(", idxCodeS=").append(idxCodeS);
         sb.append(", idxCode=").append(idxCode);
         sb.append(", remark=").append(remark);
         sb.append(", status=").append(status);
@@ -342,30 +335,5 @@ public class Role extends AbstractMallBasePoJo {
         sb.append(", id=").append(id);
         sb.append("]");
         return sb.toString();
-    }
-
-    @Override
-    public String getModule() {
-        return "role_module";
-    }
-
-    @Override
-    public boolean autoAck() {
-        return super.autoAck();
-    }
-
-    @Override
-    public String moduleAlias() {
-        return "role";
-    }
-
-    @Override
-    public String routingKey() {
-        return RabbitConstants.ROLE_ROUTINGKEY;
-    }
-
-    @Override
-    public String exchange() {
-        return RabbitConstants.TOP_EXCHANGE_NAME;
     }
 }

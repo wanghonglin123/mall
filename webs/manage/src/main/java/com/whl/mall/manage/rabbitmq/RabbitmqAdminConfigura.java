@@ -53,6 +53,7 @@ public class RabbitmqAdminConfigura extends MallBeans {
         rabbitAdmin.declareQueue(memberQueue());
         rabbitAdmin.declareQueue(roleQueue());
         rabbitAdmin.declareQueue(resourcesQueue());
+        //rabbitAdmin.declareQueue(testQueue());
     }
 
     /**
@@ -74,6 +75,7 @@ public class RabbitmqAdminConfigura extends MallBeans {
         rabbitAdmin.declareBinding(memberBinding());
         rabbitAdmin.declareBinding(roleBinding());
         rabbitAdmin.declareBinding(resourcesBinding());
+        //rabbitAdmin.declareBinding(resourcesBinding());
     }
 
     /*===========================================Queue Begin ==============================================================*/
@@ -85,9 +87,9 @@ public class RabbitmqAdminConfigura extends MallBeans {
      * 并显示回复代码403（ACCESS_REFUSED）
      *
      * 队列属性
-     * 1：name 队列名称 必填 2：durable true 持久队列，重启之后队列还存在
+     * 1：name 队列名称 必填 2：durable true 持久队列，broker重启之后队列还存在, false 服务器重启队列将不存在
      * 3：exclusive 默认false, true 排他性队列（临时队列），只有一个连接使用，当连接关闭时队列将被删除，断开连接后会自动删除，重启后需要重新创建，以前的队列消息会丢失。
-     * 4: autoDelete 默认false, true 自动删除 当没有消费者时，是否自动删除队列，可能会造成内存或者磁盘增加，自动删除消息会丢失
+     * 4: autoDelete 默认false, true 自动删除 当没有消费者时，是否自动删除队列，自动删除队列消息会丢失或者不被处理
      * 5: arguments 可选参数
      * @return
      */
@@ -107,6 +109,11 @@ public class RabbitmqAdminConfigura extends MallBeans {
     public Queue resourcesQueue() {
         return QueueBuilder.durable(RabbitConstants.RESOURCES_QUEUE_NAME).build();
     }
+
+    /*@Bean
+    public Queue testQueue() {
+        return new Queue("test", false, true, false);
+    }*/
 
     /*===========================================Queue end ==============================================================*/
 
@@ -181,5 +188,10 @@ public class RabbitmqAdminConfigura extends MallBeans {
     public Binding resourcesBinding() {
         return BindingBuilder.bind(resourcesQueue()).to(topicExchange()).with(RabbitConstants.RESOURCE_ROUTINGKEY);
     }
+
+    /*@Bean
+    public Binding testBinding() {
+        return BindingBuilder.bind(testQueue()).to(topicExchange()).with("test");
+    }*/
     /*===========================================Bingding end ==============================================================*/
 }
