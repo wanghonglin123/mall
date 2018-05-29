@@ -32,6 +32,8 @@ package com.whl.mall.core.annotations;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import org.springframework.amqp.core.MessageDeliveryMode;
+
 import java.lang.annotation.*;
 
 /**
@@ -78,4 +80,10 @@ public @interface MallMQ {
      * @return
      */
     String routingKey();
+
+    /**
+     * 消息是否持久
+     * @return
+     */
+    MessageDeliveryMode persistent() default MessageDeliveryMode.PERSISTENT;
 }

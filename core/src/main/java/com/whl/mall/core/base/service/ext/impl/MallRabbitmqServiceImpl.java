@@ -49,6 +49,10 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @ClassName: ShopRabbitmqServiceImpl
  * @Description: Rabbitmq 服务
@@ -66,18 +70,18 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
 
     @Override
     public void sendMsg(T po) throws MallException {
-        MallMQ mq = po.getClass().getAnnotation(MallMQ.class);
-        String module = mq.module();
-        String exchangeName = mq.exchangeName();
-        String routingkey = mq.routingKey();
+        Class classes = po.getClass();
+        String className = classes.getName();
+        MallMQ cacheMq = po.getClass().getAnnotation(MallMQ.class);
+        String module = cacheMq.module();
+        String exchangeName = cacheMq.exchangeName();
+        String routingkey = cacheMq.routingKey();
         if (isSendMQ(module, exchangeName, routingkey)) {
-            String moduleAlias = mq.moduleAlias();
-            boolean autoAck = mq.autoAck();
             byte[] bytes = MallJsonUtils.objectToJson(po).getBytes();
             MessageProperties messageProperties = new MessageProperties();
             messageProperties.setContentEncoding(MallConstants.DEFAULT_ENCODING);
-            // 默认消息持久，瞬时消息在内存压力下会慢慢被清除
-            //messageProperties.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+            // 设置消息持久，在MallMQ 注解里配置，默认是持久化
+            messageProperties.setDeliveryMode(cacheMq.persistent());
             Message message = new Message(bytes, messageProperties);
             rabbitTemplate.convertAndSend(exchangeName, routingkey, message);
         }
@@ -95,5 +99,6 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
         if (StringUtils.isEmpty(module) || StringUtils.isEmpty(exchangeName) || StringUtils.isEmpty(routingkey)) {
             throw new MallException(MallStatus.HTTP_STATUS_400, String.format("MQ module= %s, exchangeName=%s, routingkey=%s", module, exchangeName, routingkey));
         }
+        return true;
     }
 }
