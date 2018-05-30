@@ -18,31 +18,28 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.base.service.ext;
-
-/**
- * @Title: ShopMQServiceExt
- * @Package: com.shop.common.base.service.ext
+package com.whl.mall.core.rabbitmq.pojo;/**
+ * @Title: MessageExt
+ * @Package: com.whl.mall.core.rabbitmq.pojo
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/3/26
- * @Version: V2.0.10
+ * @Date: 2018/5/30
+ * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/3/26
- * @Modify-version: 2.1.5
+ * @Modify-date: 2018/5/30
+ * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
 import com.whl.mall.core.base.pojo.MallBasePoJo;
-import com.whl.mall.core.base.service.MallBaseMQService;
 
 /**
- * @ClassName: ShopMQServiceExt
- * @Description: 顶级MQ接口扩展
- * @Company: 广州市两棵树网络科技有限公司
+ * @ClassName: MessageExt
+ * @Description: 消息扩展
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/3/26
+ * @Date: 2018/5/30
  */
-public abstract class MallMQServiceExt<T extends MallBasePoJo> /*extends MallServiceExt<T> */implements MallBaseMQService<T> {
+public class MessageExt<T extends MallBasePoJo> {
+
 }

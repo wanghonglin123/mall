@@ -1,10 +1,13 @@
 package com.whl.mall.pojo.member;
 
+import com.whl.mall.core.annotations.MallMQ;
 import com.whl.mall.core.base.pojo.AbstractMallBasePoJo;
 import com.whl.mall.core.rabbitmq.constants.RabbitConstants;
 
 import java.util.Date;
 
+@MallMQ(module = "role_module", moduleAlias = "role",
+exchangeName = RabbitConstants.TOP_EXCHANGE_NAME, routingKey = RabbitConstants.ROLE_ROUTINGKEY)
 public class Role extends AbstractMallBasePoJo {
     /**
      * 主键idx，分布式架构，全局唯一递增
@@ -112,14 +115,6 @@ public class Role extends AbstractMallBasePoJo {
      */
     public void setIdx(Long idx) {
         this.idx = idx;
-    }
-
-    /**
-     主键idx生成的code，
-     MyBatis逆向工程，动态生成字符串类型
-     */
-    public String getIdxCodeS() {
-        return String.valueOf(this.idxCode);
     }
 
     /**

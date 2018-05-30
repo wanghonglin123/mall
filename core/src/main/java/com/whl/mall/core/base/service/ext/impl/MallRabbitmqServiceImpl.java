@@ -41,17 +41,13 @@ import com.whl.mall.core.base.service.ext.MallMQServiceExt;
 import com.whl.mall.core.common.constants.MallConstants;
 import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallJsonUtils;
+import com.whl.mall.core.log.MallLog4jLog;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @ClassName: ShopRabbitmqServiceImpl
@@ -60,7 +56,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/3/28
  */
-@Service
+@Service("mqService")
 public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServiceExt<T> {
     /**
      * rabbitTemplate 必须多例，否则会导致发送A队列变成发送到B队列了
@@ -68,15 +64,19 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private MallLog4jLog log4jLog;
+
     @Override
     public void sendMsg(T po) throws MallException {
-        Class classes = po.getClass();
-        String className = classes.getName();
         MallMQ cacheMq = po.getClass().getAnnotation(MallMQ.class);
+        if (cacheMq == null) {
+            return;
+        }
         String module = cacheMq.module();
         String exchangeName = cacheMq.exchangeName();
         String routingkey = cacheMq.routingKey();
-        if (isSendMQ(module, exchangeName, routingkey)) {
+        if (isSendMQ(cacheMq, module, exchangeName, routingkey)) {
             byte[] bytes = MallJsonUtils.objectToJson(po).getBytes();
             MessageProperties messageProperties = new MessageProperties();
             messageProperties.setContentEncoding(MallConstants.DEFAULT_ENCODING);
@@ -90,14 +90,15 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
 
     /**
      * 判断是否需要发送MQ
+     *
      * @param module
      * @param exchangeName
      * @param routingkey
      * @return
      */
-    private boolean isSendMQ(String module, String exchangeName, String routingkey) throws MallException{
-        if (StringUtils.isEmpty(module) || StringUtils.isEmpty(exchangeName) || StringUtils.isEmpty(routingkey)) {
-            throw new MallException(MallStatus.HTTP_STATUS_400, String.format("MQ module= %s, exchangeName=%s, routingkey=%s", module, exchangeName, routingkey));
+    private boolean isSendMQ(MallMQ mq, String module, String exchangeName, String routingkey) throws MallException {
+        if (mq == null || StringUtils.isEmpty(module) || StringUtils.isEmpty(exchangeName) || StringUtils.isEmpty(routingkey)) {
+            return false;
         }
         return true;
     }

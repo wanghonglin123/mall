@@ -34,7 +34,6 @@ package com.whl.mall.core.base.service.ext;/**
 
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.MallGridResult;
-import com.whl.mall.core.annotations.MallMQ;
 import com.whl.mall.core.base.dao.MallBaseMapper;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.base.service.MallBaseMQService;
@@ -43,12 +42,9 @@ import com.whl.mall.core.common.constants.MallJavaTypeConstants;
 import com.whl.mall.core.common.constants.MallPojoFieldNameConstants;
 import com.whl.mall.core.common.utils.MallPagingUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ReflectionUtils;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
@@ -68,7 +64,7 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
     private MallBaseMQService mqService;
 
     @Override
-    public T save(T po) throws MallException{
+    public T save(T po) throws MallException {
         // init PoJo Field value
         initPojoFieldValue(po);
         // save DB
@@ -95,6 +91,7 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
 
     /**
      * 查询单个数据所有信息
+     *
      * @param po
      * @return
      */
@@ -104,6 +101,7 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
 
     /**
      * 查询单个数据部分信息，性能比所有信息更快
+     *
      * @param po
      * @return
      */
@@ -118,6 +116,7 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
 
     /**
      * 根据主键更新
+     *
      * @param idx
      * @return
      */
@@ -127,14 +126,15 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
 
     /**
      * 分页查询结果
-     * @param po po
+     *
+     * @param po      po
      * @param pageNum 页码
-     * @param rows 行数
+     * @param rows    行数
      * @param orderBy 排序
      * @return
      * @throws MallException 运行时异常
      */
-    public MallGridResult queryPageDataByCondition(T po, Integer pageNum, Integer rows, String orderBy) throws MallException{
+    public MallGridResult queryPageDataByCondition(T po, Integer pageNum, Integer rows, String orderBy) throws MallException {
         int[] beginAndEndRows = MallPagingUtils.getBeginAndEndRows(pageNum, rows);
         int total = baseMapper.queryTotal(po);
         List<T> data = baseMapper.queryPageDataByCondition(po, beginAndEndRows[0], beginAndEndRows[1], orderBy);
@@ -148,10 +148,11 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
 
     /**
      * 使用Srping 反射工具类，设置pojo字段值
+     *
      * @param pojo 实体类
      * @throws MallException
      */
-    protected void initPojoFieldValue(T pojo) throws MallException{
+    protected void initPojoFieldValue(T pojo) throws MallException {
         // 获取类注解，到时候开发
 
         // 执行所有字段，设置新值

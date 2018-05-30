@@ -14,6 +14,7 @@ import com.whl.mall.core.common.constants.MallConstants;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.core.log.MallLog4jLog;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import java.util.Optional;
  * @Author: WangHongLin
  * @Date: 2018-05-28 下午 10:37
  */
-public abstract class MessageListennersExt implements ChannelAwareMessageListener {
+public abstract class MessageListennersExt implements ChannelAwareMessageListener, MessageListener {
     @Autowired
     private MallLog4jLog log4jLog;
 
@@ -45,17 +46,24 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
         MessageProperties properties = message.getMessageProperties();
         String contentEncoding = properties.getContentEncoding();
         String content = null;
+        long deliveryTag = properties.getDeliveryTag();
         try {
             contentEncoding = Optional.ofNullable(contentEncoding).orElse(MallConstants.DEFAULT_ENCODING);
             content = new String(body, contentEncoding);
             Object msg = MallJsonUtils.jsonToObject(content, getJavaType());
+            System.out.println(1 / 0);
             handleMessage(msg);
-            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-        } catch (Exception e) {
+            channel.basicAck(deliveryTag, false);
+        } catch (Throwable e) {
             log4jLog.error(e, "消息确认失败，消息：%s" + content);
-            // basicReject 拒绝消息， 消息会重新发布到队列头部，这样会造成其它消息可能无法消费
-            channel.basicReject(message.getMessageProperties().getDeliveryTag(), false);
+
+            errorHandle(channel, properties, deliveryTag);
         }
+    }
+
+    @Override
+    public void onMessage(Message message) {
+        log4jLog.error("暂不开发");
     }
 
     /**
@@ -70,6 +78,21 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
      * @return
      */
     protected abstract Class<? extends MallBasePoJo> getJavaType();
+
+    /**
+     * 监听器异常处理
+     * @param channel
+     * @param deliveryTag
+     */
+    private void errorHandle(Channel channel, MessageProperties messageProperties, long deliveryTag) {
+        try {
+            System.out.println(1 / 0);
+            // 拒绝消息， false 消息将丢弃或者为死信 true 重复发送
+            channel.basicReject(deliveryTag, false);
+        } catch (Exception e) {
+
+        }
+    }
 
     public MallLog4jLog getLog4jLog() {
         return log4jLog;

@@ -22,7 +22,7 @@ import com.whl.mall.pojo.member.Role;
 public class RoleMessageListenner extends MessageListennersExt{
     @Override
     protected void handleMessage(Object content) throws Exception {
-        Member member = (Member) content;
+        Role role = (Role) content;
         getLog4jLog().info("处理成员消息业务");
     }
 
