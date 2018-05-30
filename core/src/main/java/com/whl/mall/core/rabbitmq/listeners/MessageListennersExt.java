@@ -55,7 +55,7 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
             handleMessage(msg);
             channel.basicAck(deliveryTag, false);
         } catch (Throwable e) {
-            log4jLog.error(e, "消息确认失败，消息：%s" + content);
+            log4jLog.error(e, String.format("消息确认失败，消息：%s", content));
 
             errorHandle(channel, properties, deliveryTag);
         }
@@ -86,11 +86,12 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
      */
     private void errorHandle(Channel channel, MessageProperties messageProperties, long deliveryTag) {
         try {
-            System.out.println(1 / 0);
+            Boolean redelivered = messageProperties.getRedelivered();
+            
             // 拒绝消息， false 消息将丢弃或者为死信 true 重复发送
             channel.basicReject(deliveryTag, false);
-        } catch (Exception e) {
-
+        } catch (Throwable e) {
+            log4jLog.error(e, "拒绝消息失败");
         }
     }
 
