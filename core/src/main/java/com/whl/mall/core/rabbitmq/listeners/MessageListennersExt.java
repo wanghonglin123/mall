@@ -11,6 +11,7 @@ package com.whl.mall.core.rabbitmq.listeners;
 import com.rabbitmq.client.Channel;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
 import com.whl.mall.core.common.constants.MallConstants;
+import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.core.log.MallLog4jLog;
 import org.springframework.amqp.core.Message;
@@ -30,6 +31,11 @@ import java.util.Optional;
 public abstract class MessageListennersExt implements ChannelAwareMessageListener, MessageListener {
     @Autowired
     private MallLog4jLog log4jLog;
+
+    /**
+     * 消息次数
+     */
+    private static final int MESSAGE_COUNT = 3;
 
     /**
      * 消息确认处理：容器设置了setAcknowledgeMode（AcknowledgeMode.MANUAL）手动确认，必须执行channel.basicAck进行手动确认，否则消息将循环重复消费
@@ -56,7 +62,6 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
             channel.basicAck(deliveryTag, false);
         } catch (Throwable e) {
             log4jLog.error(e, String.format("消息确认失败，消息：%s", content));
-
             errorHandle(channel, properties, deliveryTag);
         }
     }
@@ -85,13 +90,32 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
      * @param deliveryTag
      */
     private void errorHandle(Channel channel, MessageProperties messageProperties, long deliveryTag) {
+        boolean reject = false;
         try {
-            Boolean redelivered = messageProperties.getRedelivered();
-            
-            // 拒绝消息， false 消息将丢弃或者为死信 true 重复发送
-            channel.basicReject(deliveryTag, false);
+            // 消息次数
+            Integer messageCount = messageProperties.getMessageCount();
+            if (this.MESSAGE_COUNT == messageCount) {
+                reject = true;
+            } else {
+                if (messageCount == null) {
+                    messageCount = (int) MallNumberConstants.ONE;
+                } else {
+                    messageCount ++;
+                }
+                messageProperties.setMessageCount(messageCount);
+            }
+
+            // do you need to reject message
+            if (reject) {
+                // discard message, the message will not recovery in zhe future
+                channel.basicReject(deliveryTag, false);
+            } else {
+                // 重发到队列，并且会在队列头部，name可能会导致有些消息无法消费
+                channel.basicReject(deliveryTag, true);
+            }
+
         } catch (Throwable e) {
-            log4jLog.error(e, "拒绝消息失败");
+            log4jLog.error(e, String.format("message ack fail, the reason is that zhe message refuses to fail"));
         }
     }
 
