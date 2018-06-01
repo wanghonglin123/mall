@@ -43,9 +43,12 @@ import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.core.log.MallLog4jLog;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,28 +67,39 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @Autowired
-    private MallLog4jLog log4jLog;
-
     @Override
-    public void sendMsg(T po) throws MallException {
-        MallMQ cacheMq = po.getClass().getAnnotation(MallMQ.class);
-        if (cacheMq == null) {
+    public void sendMsg(T po) throws MallException{
+        MallMQ mq = po.getClass().getAnnotation(MallMQ.class);
+        if (mq == null) {
             return;
         }
-        String module = cacheMq.module();
-        String exchangeName = cacheMq.exchangeName();
-        String routingkey = cacheMq.routingKey();
-        if (isSendMQ(cacheMq, module, exchangeName, routingkey)) {
-            byte[] bytes = MallJsonUtils.objectToJson(po).getBytes();
-            MessageProperties messageProperties = new MessageProperties();
-            messageProperties.setContentEncoding(MallConstants.DEFAULT_ENCODING);
-            // 设置消息持久，在MallMQ 注解里配置，默认是持久化
-            messageProperties.setDeliveryMode(cacheMq.persistent());
-            Message message = new Message(bytes, messageProperties);
-            rabbitTemplate.convertAndSend(exchangeName, routingkey, message);
+        String module = mq.module();
+        String exchangeName = mq.exchangeName();
+        String routingkey = mq.routingKey();
+        String tag = mq.tag();
+        if (!isSendMQ(module, exchangeName, routingkey)) {
+            return;
         }
+        try {
+            // 消息体
+            byte[] body = MallJsonUtils.objectToJson(po).getBytes();
+            // 消息特性
+            MessageProperties messageProperties = new MessageProperties();
+            messageProperties.setDeliveryMode(mq.persistent());
+            messageProperties.setContentEncoding(MallConstants.DEFAULT_ENCODING);
+            Message message = new Message(body, messageProperties);
 
+            // 消息唯一标识
+            CorrelationData correlationData = new CorrelationData();
+            correlationData.setId(tag);
+
+            rabbitTemplate.setExchange(exchangeName);
+            rabbitTemplate.convertAndSend(routingkey, message, correlationData);
+        } catch (AmqpException e) {
+            throw new MallException(MallStatus.HTTP_STATUS_500, String.format("DB save success, %s=", "消息发送阶段失败"));
+        } catch (Exception e) {
+            throw new MallException(MallStatus.HTTP_STATUS_500, String.format("DB save success, %s=", "消息初始化阶段失败"));
+        }
     }
 
     /**
@@ -96,8 +110,8 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
      * @param routingkey
      * @return
      */
-    private boolean isSendMQ(MallMQ mq, String module, String exchangeName, String routingkey) throws MallException {
-        if (mq == null || StringUtils.isEmpty(module) || StringUtils.isEmpty(exchangeName) || StringUtils.isEmpty(routingkey)) {
+    private boolean isSendMQ(String module, String exchangeName, String routingkey) throws MallException {
+        if (StringUtils.isEmpty(module) || StringUtils.isEmpty(exchangeName) || StringUtils.isEmpty(routingkey)) {
             return false;
         }
         return true;

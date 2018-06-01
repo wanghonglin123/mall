@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whl.mall.dao.transcation.TranscationMapper">
+  <resultMap id="BaseResultMap" type="com.whl.mall.pojo.transcation.Transcation">
+    <id column="result_msg" jdbcType="VARCHAR" property="resultMsg" />
+    <result column="idx" jdbcType="BIGINT" property="idx" />
+    <result column="idx_code" jdbcType="BIGINT" property="idxCode" />
+    <result column="member_name" jdbcType="VARCHAR" property="memberName" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="transcation_body" jdbcType="VARCHAR" property="transcationBody" />
+    <result column="cause" jdbcType="VARCHAR" property="cause" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+    <result column="result_statu" jdbcType="SMALLINT" property="resultStatu" />
+    <result column="mq_send_status" jdbcType="SMALLINT" property="mqSendStatus" />
+    <result column="mq_consume_status" jdbcType="SMALLINT" property="mqConsumeStatus" />
+    <result column="transcation_status" jdbcType="SMALLINT" property="transcationStatust" />
+    <result column="version" jdbcType="BIGINT" property="version" />
+    <result column="ext" jdbcType="VARCHAR" property="ext" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_member_idx_code" jdbcType="BIGINT" property="createMemberIdxCode" />
+    <result column="update_member_idx_code" jdbcType="BIGINT" property="updateMemberIdxCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    result_msg, idx, idx_code, transcation_body, cause, tag,
+    result_statu, mq_send_status, mq_consume_status, transcation_status, version, ext,
+    create_time, update_time, create_member_idx_code, update_member_idx_code
+  </sql>
+  <insert id="save" parameterType="com.whl.mall.pojo.transcation.Transcation">
+    insert into tb_transcation (result_msg, idx, idx_code, transcation_body,
+      cause, tag, result_statu,
+      mq_send_status, mq_consume_status, transcation_status,
+      version, ext, create_time,
+      update_time, create_member_idx_code, update_member_idx_code
+      )
+    values (#{resultMsg,jdbcType=VARCHAR}, #{idx,jdbcType=BIGINT}, #{idxCode,jdbcType=BIGINT},
+      #{transcationBody,jdbcType=VARCHAR},
+      #{cause,jdbcType=VARCHAR}, #{tag,jdbcType=VARCHAR}, #{resultStatu,jdbcType=SMALLINT},
+      #{mqSendStatus,jdbcType=SMALLINT}, #{mqConsumeStatus,jdbcType=SMALLINT}, #{transcationStatus,jdbcType=SMALLINT},
+      #{version,jdbcType=BIGINT}, #{ext,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP}, #{createMemberIdxCode,jdbcType=BIGINT}, #{updateMemberIdxCode,jdbcType=BIGINT}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.whl.mall.pojo.transcation.Transcation">
+    update tb_transcation
+    set idx_code = #{idxCode,jdbcType=BIGINT},
+    name = #{name,jdbcType=VARCHAR},
+    telphone = #{telphone,jdbcType=VARCHAR},
+    email = #{email,jdbcType=VARCHAR},
+    pwd = #{pwd,jdbcType=VARCHAR},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    update_time = #{updateTime,jdbcType=TIMESTAMP},
+    create_by_member_idx_code = #{createByMemberIdxCode,jdbcType=BIGINT},
+    update_by_member_idx_code = #{updateByMemberIdxCode,jdbcType=BIGINT},
+    version = #{version,jdbcType=BIGINT},
+    status = #{status,jdbcType=SMALLINT},
+    ext = #{ext,jdbcType=VARCHAR}
+    where idx = #{idx,jdbcType=BIGINT}
+  </update>
+
+  <select id="queryOneAllInfoByCondition" parameterType="com.whl.mall.pojo.transcation.Transcation">
+    SELECT
+    <include refid="Base_Column_List" />
+    from tb_out_store_stock_detail from tb_transcation where 1 = 1
+    <if test="name != null">
+      and name = #{name}
+    </if>
+    <if test="pwd != null">
+      and pwd = #{pwd}
+    </if>
+  </select>
+
+  <select id="queryOneSomeInfoByCondition" parameterType="com.whl.mall.pojo.transcation.Transcation" resultType="com.whl.mall.pojo.transcation.Transcation">
+    SELECT  idx, idx_code, name, telphone, email from tb_transcation where name = #{name} and pwd = #{pwd}
+  </select>
+
+  <select id="queryPageDataByCondition" parameterType="com.whl.mall.pojo.transcation.Transcation" resultMap="BaseResultMap">
+    SELECT  <include refid="Base_Column_List" /> from tb_transcation where 1 = 1
+    <if test="orderBy != null">
+      ORDER by ${orderBy}
+    </if>
+    limit #{begin}, #{end}
+  </select>
+
+  <select id="queryTotal" parameterType="com.whl.mall.pojo.transcation.Transcation" resultType="java.lang.Integer">
+    SELECT COUNT(idx) FROM tb_transcation where 1 = 1
+  </select>
+
+  <select id="queryDataByCondition" parameterType="com.whl.mall.pojo.transcation.Transcation">
+    SELECT  <include refid="Base_Column_List" /> from tb_transcation where 1 != 0
+    <if test="name != null">
+      and name = #{name}
+    </if>
+    <if test="pwd != null">
+      and pwd = #{pwd}
+    </if>
+  </select>
+</mapper>

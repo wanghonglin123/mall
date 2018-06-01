@@ -16,6 +16,7 @@ import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.ResourceGroupRole;
 import com.whl.mall.pojo.member.Role;
+import com.whl.mall.pojo.transcation.Transcation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: RoleController
@@ -69,7 +74,7 @@ public class RoleController extends MallBaseController {
     }
 
     /**
-     * 操作 1：新增 2：编辑 3：查看 4：删除
+     * 操作 1：新增
      *
      * @param po po
      * @return
@@ -77,37 +82,36 @@ public class RoleController extends MallBaseController {
     @RequestMapping("/role/operation/{type}")
     @ResponseBody
     public MallResult operation(@PathVariable Short type, Role po, HttpServletRequest request) throws Exception{
-        if (type == MallNumberConstants.ONE) { // 新增
-            po = super.getRoleService().save(po);
-            Long roleIdx = po.getIdx();
-            String resourceGroupIdxStr = request.getParameter("resourceGroupIdxs");
-            String[] resourceGroupIdxs = null;
-            if (StringUtils.isNoneEmpty(resourceGroupIdxStr)) {
-                resourceGroupIdxs = resourceGroupIdxStr.split(",");
-                Long idx = null;
-                ResourceGroupRole resourceGroupRole = null;
-                for (String resourceGroupIdx : resourceGroupIdxs) {
-                    resourceGroupRole = new ResourceGroupRole();
-                    idx = Long.valueOf(resourceGroupIdx);
-                    resourceGroupRole.setRoleIdxCode(roleIdx);
-                    resourceGroupRole.setResourceGroupIdxCode(idx);
-                    super.getResourceGroupRoleService().save(resourceGroupRole);
-                }
-            }
-            return MallResult.ok();
-        }
+        Map<String, Object> roleBody = new HashMap<>();
+        // 注释掉，在MQ 消费端保存
+        // po = super.getRoleService().save(po);
 
-        Long idxCode = po.getIdxCode();
-        if (idxCode == null) {
-            return MallResult.build(MallStatus.HTTP_STATUS_400, MallMessage.CONTROLLER_INVALID_PARAMETER);
+        Long roleIdx = po.getIdx();
+        String resourceGroupIdxStr = request.getParameter("resourceGroupIdxs");
+        String[] resourceGroupIdxs = null;
+        List<ResourceGroupRole> resourceGroupRoleList = null;
+        if (StringUtils.isNoneEmpty(resourceGroupIdxStr)) {
+            resourceGroupIdxs = resourceGroupIdxStr.split(",");
+            resourceGroupRoleList = new ArrayList<>();
+            for (String resourceGroupIdx : resourceGroupIdxs) {
+                ResourceGroupRole resourceGroupRole = new ResourceGroupRole();
+                Long idx = Long.valueOf(resourceGroupIdx);
+                resourceGroupRole.setRoleIdxCode(roleIdx);
+                resourceGroupRole.setResourceGroupIdxCode(idx);
+                // 注释掉，在MQ 消费端保存
+                // super.getResourceGroupRoleService().save(resourceGroupRole);
+                resourceGroupRoleList.add(resourceGroupRole);
+            }
+            roleBody.put("resourceGroup", resourceGroupRoleList);
         }
-        if (type == MallNumberConstants.TWO) {
-            super.getRoleService().update(po);
-        } else if (type == MallNumberConstants.THREE) {
-            return MallResult.ok(super.getRoleService().queryOneSomeInfoByCondition(po));
-        } else {
-            return MallResult.ok(super.getRoleService().delete(po));
-        }
+        roleBody.put("role", po);
+
+        Transcation transcation = new Transcation();
+        transcation.setTag("add_role_transcation");
+        String body = MallJsonUtils.objectToJson(roleBody);
+        transcation.setTranscationBody(MallJsonUtils.objectToJson(body));
+
+        getMemberTranscationService().save(transcation);
         return MallResult.ok();
     }
 
@@ -136,6 +140,7 @@ public class RoleController extends MallBaseController {
     @RequestMapping("/role/paging")
     @ResponseBody
     public MallGridResult paging(Role po, Integer page, Integer rows, String order) throws Exception {
-        return getRoleService().queryPageDataByCondition(po, page, rows, order);
+        MallGridResult gridResult = getRoleService().queryPageDataByCondition(po, page, rows, order);
+        return gridResult;
     }
 }

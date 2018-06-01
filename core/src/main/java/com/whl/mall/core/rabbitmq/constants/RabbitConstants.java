@@ -22,6 +22,7 @@ public final class RabbitConstants {
     public static final String MEMBER_QUEUE_NAME = "member.queue";
     public static final String ROLE_QUEUE_NAME = "role.queue";
     public static final String RESOURCES_QUEUE_NAME = "resources.queue";
+    public static final String TRANSCATION_QUEUE_NAME = "transcation.queue";
 
     public static final String TOP_EXCHANGE_NAME = "com.mall.topExchange";
     public static final String HEADERS_EXCHANGE_NAME = "com.mall.headersExchange";
@@ -31,4 +32,5 @@ public final class RabbitConstants {
     public static final String MEMBER_ROUTINGKEY = "member.routingkey";
     public static final String ROLE_ROUTINGKEY = "role.routingkey";
     public static final String RESOURCE_ROUTINGKEY = "resource.routingkey";
+    public static final String TRANSCATION_ROUTINGKEY = "transcation.routingkey";
 }

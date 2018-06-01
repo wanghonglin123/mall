@@ -59,7 +59,8 @@ public class MallBeansExt extends MallBeans {
     private ResourceGroupService resourceGroupService;
     @Autowired
     private ResourceGroupRoleService resourceGroupRoleService;
-
+    @Autowired
+    private MemberTranscationService memberTranscationService;
 
     public MemberService getMemberService() {
         return memberService;
@@ -91,5 +92,18 @@ public class MallBeansExt extends MallBeans {
 
     public ResourceGroupRoleService getResourceGroupRoleService() {
         return resourceGroupRoleService;
+    }
+    /**
+     * @return memberTranscationService
+     */
+    public MemberTranscationService getMemberTranscationService() {
+        return memberTranscationService;
+    }
+
+    /**
+     * @param memberTranscationService memberTranscationService
+     */
+    public void setMemberTranscationService(MemberTranscationService memberTranscationService) {
+        this.memberTranscationService = memberTranscationService;
     }
 }

@@ -40,9 +40,11 @@ import com.whl.mall.core.base.service.MallBaseMQService;
 import com.whl.mall.core.base.service.MallBaseService;
 import com.whl.mall.core.common.constants.MallJavaTypeConstants;
 import com.whl.mall.core.common.constants.MallPojoFieldNameConstants;
+import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallPagingUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
@@ -63,6 +65,27 @@ public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBase
     @Autowired
     private MallBaseMQService mqService;
 
+    /**
+     * 保存流程：
+     * 1：（单表操作强力推荐）不需要发送MQ, 直接存入数据库
+     *   思考：（表少的情况使用，表多会耗时久，可以使用线程池优化，
+     *   开多个线程执行多个表的保存操作，多线程操作的话如果其中一个表出现异常的话，
+     *   那么回滚的时候可能会出现线程数据问题和安全问题，
+     *   如果这个服务挂了的话，那么很多数据会丢失，比如A表执行成功，突然服务挂了，那么数据就不完整了，多表推荐使用流程2）
+     * 2：发送MQ，存入数据库（
+     *      流程一多表存在的问题（性能差，操作复杂（需要回滚），数据可能丢失，数据不完整）
+     *      解决流程1问题：对于多表操作，比如有两个表 A:item_info(idx, name, itemNo) B item_brand(idx, item_info_idx, brandName)，
+     *      后台用户进行保存的时候，将数据打包到通用事务表tb_transcation 的body字段里面，详情表参考tb_transcaiton
+     *      假设商品列表有查询条件name, brandName, mq + es 会存在延时，需要实时查询结果的，单独创建表，加入搜索条件，直接查询数据库,
+     *      不要实时的查es.
+     *      发送MQ，只需要发送tb_transcation idx 传过去，然后在消费端进行各个表的操作，可以使用线程池多多表操作，就算出现问题，也可以通过人工或者程序处理
+     * ）
+     * 3：发送MQ, 存入数据库和 es 存入数据(操作通流程2， 在添加es操作)
+     *
+     * @param po
+     * @return
+     * @throws MallException
+     */
     @Override
     public T save(T po) throws MallException {
         // init PoJo Field value

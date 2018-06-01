@@ -29,6 +29,9 @@ import java.util.Optional;
  * @Date: 2018-05-28 下午 10:37
  */
 public abstract class MessageListennersExt implements ChannelAwareMessageListener, MessageListener {
+    /**
+     * 日志
+     */
     @Autowired
     private MallLog4jLog log4jLog;
 
@@ -42,6 +45,7 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
      * 确认（可以多条一次ack）channel.basicAck(deliveryTag, multiple) multiple = false 单条ack true 批量ack 将一次性ack所有小于deliveryTag的消息
      * 不确认(可以多条一次nack) channel.basicNack（int deliveryTag，boolean multiple, boolean queue）未确认，queue=true 将未确认的消息重新发送到队列， false 丢弃
      * 拒绝消息 basicReject（p, p1），p1 = true 重发队列,消息在队列头部 p1 = false, 丢弃
+     *
      * @param message
      * @param channel
      * @throws Exception
@@ -54,11 +58,11 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
         String content = null;
         long deliveryTag = properties.getDeliveryTag();
         try {
-            contentEncoding = Optional.ofNullable(contentEncoding).orElse(MallConstants.DEFAULT_ENCODING);
-            content = new String(body, contentEncoding);
-            Object msg = MallJsonUtils.jsonToObject(content, getJavaType());
-            System.out.println(1 / 0);
+            // 消息转换
+            Object msg = conventMessage(contentEncoding, body, content);
+            // 消息业务处理
             handleMessage(msg);
+            // 消息手动确认
             channel.basicAck(deliveryTag, false);
         } catch (Throwable e) {
             log4jLog.error(e, String.format("消息确认失败，消息：%s", content));
@@ -72,7 +76,24 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
     }
 
     /**
+     * 转换消息
+     *
+     * @param contentEncoding
+     * @param body
+     * @param content
+     * @return
+     * @throws Exception
+     */
+    private Object conventMessage(String contentEncoding, byte[] body, String content) throws Exception {
+        contentEncoding = Optional.ofNullable(contentEncoding).orElse(MallConstants.DEFAULT_ENCODING);
+        content = new String(body, contentEncoding);
+        Object msg = MallJsonUtils.jsonToObject(content, getJavaType());
+        return msg;
+    }
+
+    /**
      * 消息业务处理
+     *
      * @param content 消息内容
      * @throws Exception
      */
@@ -80,31 +101,32 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
 
     /**
      * 获取java类型
+     *
      * @return
      */
     protected abstract Class<? extends MallBasePoJo> getJavaType();
 
     /**
      * 监听器异常处理
+     *
      * @param channel
      * @param deliveryTag
      */
     private void errorHandle(Channel channel, MessageProperties messageProperties, long deliveryTag) {
         boolean reject = false;
         try {
+            System.out.println(messageProperties.getCorrelationId());
             // 消息次数
             Integer messageCount = messageProperties.getMessageCount();
-            if (this.MESSAGE_COUNT == messageCount) {
+            if (messageCount == null) {
+                messageCount = (int) MallNumberConstants.ONE;
+            } else if (this.MESSAGE_COUNT == messageCount) {
                 reject = true;
-            } else {
-                if (messageCount == null) {
-                    messageCount = (int) MallNumberConstants.ONE;
-                } else {
-                    messageCount ++;
-                }
+            }
+            if (!reject) {
+                messageCount++;
                 messageProperties.setMessageCount(messageCount);
             }
-
             // do you need to reject message
             if (reject) {
                 // discard message, the message will not recovery in zhe future

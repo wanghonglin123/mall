@@ -6,7 +6,7 @@ import com.whl.mall.core.rabbitmq.constants.RabbitConstants;
 
 import java.util.Date;
 
-@MallMQ(module = "role_module", moduleAlias = "role",
+@MallMQ(module = "role_module", tag = "role",
 exchangeName = RabbitConstants.TOP_EXCHANGE_NAME, routingKey = RabbitConstants.ROLE_ROUTINGKEY)
 public class Role extends AbstractMallBasePoJo {
     /**

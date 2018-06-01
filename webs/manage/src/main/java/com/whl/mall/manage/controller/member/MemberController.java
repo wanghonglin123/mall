@@ -26,6 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: member
@@ -54,6 +58,7 @@ public class MemberController extends MallBaseController{
     @RequestMapping("/member/operation/{type}")
     @ResponseBody
     public MallResult operation(@PathVariable Short type, Member po, String roleIdxStr) throws Exception{
+        Map<String, Object> transcationBody = new HashMap<>();
         if (type == MallNumberConstants.ONE) { // 新增
             po.setName(MallBase64Utils.decode(po.getName()));
             po.setPwd(MallMd5Utils.md5ForData(MallBase64Utils.decode(po.getPwd())));
@@ -64,6 +69,7 @@ public class MemberController extends MallBaseController{
             String[] roles = MallBase64Utils.decode(roleIdxStr).split(",");
             Long roleIdx = null;
             MemberRole memberRole = null;
+            List<MemberRole> memberRoles = new ArrayList<>();
             for (String role : roles) {
                 if (StringUtils.isEmpty(role)) {
                     return MallResult.build(MallStatus.HTTP_STATUS_400, "参数非法");
@@ -73,6 +79,7 @@ public class MemberController extends MallBaseController{
                 memberRole.setMemberIdxCode(memberIdx);
                 memberRole.setRoleIdxCode(roleIdx);
                 super.getMemberRoleService().save(memberRole);
+
             }
             return MallResult.ok();
         }

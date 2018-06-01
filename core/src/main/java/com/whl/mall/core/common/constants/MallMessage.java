@@ -47,5 +47,5 @@ public final class MallMessage {
     public static final String INVALID_PARAMETER = "参数非法";
     public static final String LOGIN_MESSAGE = "用户名或者密码错误";
     public static final String SYSTEM_FAIL = "系统忙，请稍后重试";
-    public static final String SUPPER_NAME = "supper";
+    public static final String SUPPER_NAME = "super";
 }

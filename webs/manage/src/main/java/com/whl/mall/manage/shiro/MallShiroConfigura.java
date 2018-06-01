@@ -255,6 +255,7 @@ public class MallShiroConfigura extends MallBeans {
         filterChainDefinitions.append("/script/**=anon \n");
         filterChainDefinitions.append("/style/**=anon \n");
         filterChainDefinitions.append("/role/toChooseRolelist/**=authc\n");
+        filterChainDefinitions.append("/role/paging=authc \n");
         filterChainDefinitions.append("/**=anyRoles\n");
         // <!-- authc需要认证(登录)，登陆后所有用户多具备这个权限 -->
         //filterChainDefinitions.append("/collect/item/downExcel = authc \n");

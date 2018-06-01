@@ -18,72 +18,51 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.annotations;/**
- * @Title: MallMQ
- * @Package: com.whl.mall.core.annotations
+package com.whl.mall.manage.controller.member;/**
+ * @Title: MemberTranscationController
+ * @Package: com.whl.mall.manage.controller.member
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/5/14
+ * @Date: 2018/6/1
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/5/14
+ * @Modify-date: 2018/6/1
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import org.springframework.amqp.core.MessageDeliveryMode;
-
-import java.lang.annotation.*;
+import com.whl.mall.core.MallGridResult;
+import com.whl.mall.ext.controller.MallBaseController;
+import com.whl.mall.pojo.member.Member;
+import com.whl.mall.pojo.member.MemberTranscation;
+import com.whl.mall.pojo.transcation.Transcation;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * @ClassName: MallMQ
- * @Description: 自定义MQ 注解，用于判断是否需要发送MQ
+ * @ClassName: MemberTranscationController
+ * @Description: 事务Controller
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/5/14
+ * @Date: 2018/6/1
  */
-// @Target 表示该注解用于什么地方。默认值为任何元素，表示该注解用于什么地方
-@Target(ElementType.TYPE)
-/*@Retention– 定义该注解的生命周期
-RetentionPolicy.SOURCE : 在编译阶段丢弃。这些注解在编译结束之后就不再有任何意义，所以它们不会写入字节码。@Override, @SuppressWarnings都属于这类注解。
-RetentionPolicy.CLASS : 在类加载的时候丢弃。在字节码文件的处理中有用。注解默认使用这种方式
-RetentionPolicy.RUNTIME : 始终不会丢弃，运行期也保留该注解，因此可以使用反射机制读取该注解的信息。我们自定义的注解通常使用这种方式。*/
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface MallMQ {
-    /**
-     * 模块
-     * @return
-     */
-    String module();
+@Controller
+public class MemberTranscationController extends MallBaseController{
+
+    @RequestMapping("/transcation/list/toList")
+    public String toList() {
+        return "transcation/list";
+    }
 
     /**
-     * ack 确认，true 手动确认， false 自动确认
+     * 分页查询
      * @return
      */
-    boolean autoAck() default true;
-
-    /**
-     * 交换机名称
-     * @return
-     */
-    String exchangeName();
-
-    /**
-     * RoutKey
-     * @return
-     */
-    String routingKey();
-
-    /**
-     * 消息是否持久：PERSISTENT 持久，NON_PERSISTENT 非持久，默认持久
-     * @return
-     */
-    MessageDeliveryMode persistent() default MessageDeliveryMode.PERSISTENT;
-
-    /**
-     * 标签，必须唯一
-     * @return
-     */
-    String tag() default "";
+    @RequestMapping("/transcation/list/paging")
+    @ResponseBody
+    public MallGridResult paging(Transcation po, Integer page, Integer rows, String order) throws Exception {
+        MallGridResult mallGridResult = getMemberTranscationService().queryPageDataByCondition(po, page, rows, order);
+        return mallGridResult;
+    }
 }

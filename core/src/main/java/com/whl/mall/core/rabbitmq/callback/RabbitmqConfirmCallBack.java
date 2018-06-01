@@ -25,18 +25,19 @@ public class RabbitmqConfirmCallBack implements RabbitTemplate.ConfirmCallback{
     @Autowired
     private MallLog4jLog log4jLog;
 
+    /**
+     * 发布消息确认回调，如果发送Broker成功，那么Broker会返回true, 发送失败会返回false 和原因
+     * @param correlationData
+     * @param ack
+     * @param cause
+     */
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
-        if (StringUtils.isNotEmpty(cause)) {
-            log4jLog.error(String.format("发布商发布消息异常, msg=%s", cause));
+        // 在发送消息前将消息存入数据库日志
+        if (!ack) {
+            log4jLog.error(String.format("发布消息失败，correlationData=%s, ack=%s, cause=%s", correlationData, ack, cause));
         } else {
-            if (ack && ObjectUtils.isEmpty(correlationData)) {
-                log4jLog.info(String.format("发布商发布消息成功, 自动确认模式 correlationData=%s", correlationData));
-            } else if(ack && !ObjectUtils.isEmpty(correlationData)){
-                log4jLog.info(String.format("发布商发布消息成功, 手动确认模式 correlationData=%s", correlationData));
-            } else {
-                log4jLog.warn(String.format("发布商发布消息失败, correlationData=%s", correlationData));
-            }
+            log4jLog.debug(String.format("发布消息成功，correlationData=%s", correlationData));
         }
     }
 }

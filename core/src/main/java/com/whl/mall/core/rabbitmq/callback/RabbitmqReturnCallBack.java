@@ -8,8 +8,10 @@ package com.whl.mall.core.rabbitmq.callback;
  * @Version: V2.0.0
  */
 
+import com.whl.mall.core.log.MallLog4jLog;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @ClassName: RabbitMQReturnCallBack
@@ -18,9 +20,15 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
  * @Date: 2018-05-06 下午 6:40
  */
 public class RabbitmqReturnCallBack implements RabbitTemplate.ReturnCallback{
+    @Autowired
+    private MallLog4jLog log4jLog;
+
     @Override
     public void returnedMessage(Message message, int replyCode, String replyText,
                                 String exchange, String routingKey) {
-        System.out.println("返回的消息");
+        log4jLog.warn(String.format("消息发送失败，消息被返回，Meseage=%s, replyCode=%s, replyText=%s, exchange=%s, routingKey=%s",
+                message, replyCode, replyText, exchange, routingKey));
+
+        // // 这里消息被返回的时候需要更新事务表状态
     }
 }
