@@ -43,4 +43,5 @@ public final class MallSymbolConstants {
     }
 
     public static final String COMMA = ",";
+    public static final String UNDERLINE = "_";
 }

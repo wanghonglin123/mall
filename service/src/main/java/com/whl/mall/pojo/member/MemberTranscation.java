@@ -1,7 +1,6 @@
 package com.whl.mall.pojo.member;
 
-import com.whl.mall.core.annotations.MallMQ;
-import com.whl.mall.core.base.pojo.AbstractMallBasePoJo;
+import com.whl.mall.core.base.pojo.MallAbstractBasePoJo;
 
 import java.util.Date;
 
@@ -9,7 +8,7 @@ import java.util.Date;
  * 特殊事务表
  */
 @Deprecated
-public class MemberTranscation extends AbstractMallBasePoJo {
+public class MemberTranscation extends MallAbstractBasePoJo {
     /**
      * 返回结果
      */

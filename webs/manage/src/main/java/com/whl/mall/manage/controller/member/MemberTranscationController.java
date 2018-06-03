@@ -33,10 +33,8 @@ package com.whl.mall.manage.controller.member;/**
  */
 
 import com.whl.mall.core.MallGridResult;
+import com.whl.mall.core.transcation.pojo.Transcation;
 import com.whl.mall.ext.controller.MallBaseController;
-import com.whl.mall.pojo.member.Member;
-import com.whl.mall.pojo.member.MemberTranscation;
-import com.whl.mall.pojo.transcation.Transcation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -62,7 +60,7 @@ public class MemberTranscationController extends MallBaseController{
     @RequestMapping("/transcation/list/paging")
     @ResponseBody
     public MallGridResult paging(Transcation po, Integer page, Integer rows, String order) throws Exception {
-        MallGridResult mallGridResult = getMemberTranscationService().queryPageDataByCondition(po, page, rows, order);
+        MallGridResult mallGridResult = getTranscationService().queryPageDataByCondition(po, page, rows, order);
         return mallGridResult;
     }
 }

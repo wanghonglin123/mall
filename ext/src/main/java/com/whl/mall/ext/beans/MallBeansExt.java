@@ -33,6 +33,7 @@ package com.whl.mall.ext.beans;/**
  */
 
 import com.whl.mall.core.common.beans.MallBeans;
+import com.whl.mall.core.transcation.service.TranscationService;
 import com.whl.mall.interfaces.member.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -60,7 +61,7 @@ public class MallBeansExt extends MallBeans {
     @Autowired
     private ResourceGroupRoleService resourceGroupRoleService;
     @Autowired
-    private MemberTranscationService memberTranscationService;
+    private TranscationService transcationService;
 
     public MemberService getMemberService() {
         return memberService;
@@ -93,17 +94,8 @@ public class MallBeansExt extends MallBeans {
     public ResourceGroupRoleService getResourceGroupRoleService() {
         return resourceGroupRoleService;
     }
-    /**
-     * @return memberTranscationService
-     */
-    public MemberTranscationService getMemberTranscationService() {
-        return memberTranscationService;
-    }
 
-    /**
-     * @param memberTranscationService memberTranscationService
-     */
-    public void setMemberTranscationService(MemberTranscationService memberTranscationService) {
-        this.memberTranscationService = memberTranscationService;
+    public TranscationService getTranscationService() {
+        return transcationService;
     }
 }

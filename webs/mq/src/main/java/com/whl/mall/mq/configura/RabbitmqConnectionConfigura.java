@@ -12,7 +12,6 @@ import com.whl.mall.core.common.pojo.MallThreadFactory;
 import com.whl.mall.core.rabbitmq.listeners.RabbitMQChannelListenner;
 import com.whl.mall.core.rabbitmq.listeners.RabbitMQCollectionListener;
 import com.whl.mall.core.rabbitmq.listeners.RabbitRecoveryListener;
-import com.whl.mall.core.rabbitmq.pojo.RabbitmqCloseExceptionLogger;
 import com.whl.mall.core.rabbitmq.propeties.MallRabbitMQProperties;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ChannelListener;
@@ -70,7 +69,7 @@ public class RabbitmqConnectionConfigura {
         connectionFactory.setConnectionThreadFactory(new MallThreadFactory(NAMEPREFIX));
         connectionFactory.setConnectionListeners(getConnectionListeners());
         connectionFactory.setChannelListeners(getChanneListeners());
-        connectionFactory.setCloseExceptionLogger(new RabbitmqCloseExceptionLogger());
+        // connectionFactory.setCloseExceptionLogger(new RabbitmqCloseExceptionLogger());
         connectionFactory.setRecoveryListener(new RabbitRecoveryListener());
         connectionFactory.setConnectionNameStrategy(connectionFactory1 -> {
             return "consumeConnection";

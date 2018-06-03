@@ -53,6 +53,7 @@ public class RabbitmqAdminConfigura extends MallBeans {
         rabbitAdmin.declareQueue(memberQueue());
         rabbitAdmin.declareQueue(roleQueue());
         rabbitAdmin.declareQueue(resourcesQueue());
+        rabbitAdmin.declareQueue(resourcesQueue());
         //rabbitAdmin.declareQueue(testQueue());
     }
 
@@ -75,7 +76,7 @@ public class RabbitmqAdminConfigura extends MallBeans {
         rabbitAdmin.declareBinding(memberBinding());
         rabbitAdmin.declareBinding(roleBinding());
         rabbitAdmin.declareBinding(resourcesBinding());
-        //rabbitAdmin.declareBinding(resourcesBinding());
+        rabbitAdmin.declareBinding(transcationBinding());
     }
 
     /*===========================================Queue Begin ==============================================================*/
@@ -108,6 +109,10 @@ public class RabbitmqAdminConfigura extends MallBeans {
     @Bean
     public Queue resourcesQueue() {
         return QueueBuilder.durable(RabbitConstants.RESOURCES_QUEUE_NAME).build();
+    }
+    @Bean
+    public Queue transcationQueue() {
+        return QueueBuilder.durable(RabbitConstants.TRANSCATION_QUEUE_NAME).build();
     }
 
     /*@Bean
@@ -187,6 +192,11 @@ public class RabbitmqAdminConfigura extends MallBeans {
     @Bean
     public Binding resourcesBinding() {
         return BindingBuilder.bind(resourcesQueue()).to(topicExchange()).with(RabbitConstants.RESOURCE_ROUTINGKEY);
+    }
+
+    @Bean
+    public Binding transcationBinding() {
+        return BindingBuilder.bind(transcationQueue()).to(topicExchange()).with(RabbitConstants.RESOURCE_ROUTINGKEY);
     }
 
     /*@Bean

@@ -47,4 +47,5 @@ import java.util.Date;
  * @Date: 2018/3/23
  */
 public interface MallBasePoJo extends Serializable {
+    Long getIdx();
 }

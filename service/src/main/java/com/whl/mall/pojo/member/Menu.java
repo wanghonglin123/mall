@@ -1,10 +1,10 @@
 package com.whl.mall.pojo.member;
 
-import com.whl.mall.core.base.pojo.AbstractMallBasePoJo;
+import com.whl.mall.core.base.pojo.MallAbstractBasePoJo;
 
 import java.util.Date;
 
-public class Menu extends AbstractMallBasePoJo {
+public class Menu extends MallAbstractBasePoJo {
     /**
      * 菜单idx
      */

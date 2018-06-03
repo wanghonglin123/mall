@@ -33,7 +33,9 @@ public class RabbitmqConfirmCallBack implements RabbitTemplate.ConfirmCallback{
      */
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
-        // 在发送消息前将消息存入数据库日志
+        // 因为在保存事物的时候，已经把数据全部包装了，这里不重试也不会丢失
+        // 在这里不做重试操作，可能重试N次也被拒绝，所以消息失败处理全靠程序处理或者人工处理
+        // 这里用于打印日志，排查原因
         if (!ack) {
             log4jLog.error(String.format("发布消息失败，correlationData=%s, ack=%s, cause=%s", correlationData, ack, cause));
         } else {

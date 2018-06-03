@@ -32,6 +32,7 @@ package com.whl.mall.core.annotations;/**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import com.whl.mall.core.rabbitmq.constants.RabbitConstants;
 import org.springframework.amqp.core.MessageDeliveryMode;
 
 import java.lang.annotation.*;
@@ -52,10 +53,10 @@ RetentionPolicy.RUNTIME : 始终不会丢弃，运行期也保留该注解，因
 @Documented
 public @interface MallMQ {
     /**
-     * 模块
+     * 所属模块
      * @return
      */
-    String module();
+    String module() default "";
 
     /**
      * ack 确认，true 手动确认， false 自动确认
@@ -67,13 +68,13 @@ public @interface MallMQ {
      * 交换机名称
      * @return
      */
-    String exchangeName();
+    String exchangeName() default RabbitConstants.TOP_EXCHANGE_NAME;
 
     /**
      * RoutKey
      * @return
      */
-    String routingKey();
+    String routingKey() default "";
 
     /**
      * 消息是否持久：PERSISTENT 持久，NON_PERSISTENT 非持久，默认持久
@@ -82,8 +83,9 @@ public @interface MallMQ {
     MessageDeliveryMode persistent() default MessageDeliveryMode.PERSISTENT;
 
     /**
-     * 标签，必须唯一
+     * 标签
      * @return
      */
     String tag() default "";
+
 }

@@ -12,7 +12,7 @@ import com.whl.mall.core.rabbitmq.adapter.MallMessageListenerAdapter;
 import com.whl.mall.core.rabbitmq.constants.RabbitConstants;
 import com.whl.mall.core.rabbitmq.pojo.MallConsumerTagStrategy;
 import com.whl.mall.mq.handle.MessageHandle;
-import com.whl.mall.mq.listenners.RoleMessageListenner;
+import com.whl.mall.mq.listenners.MemberMessageListenner;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -104,8 +104,8 @@ public class RabbitmqContainerConfigura {
     }
 
     @Bean
-    public RoleMessageListenner roleMessageListenner(){
-        return new RoleMessageListenner();
+    public MemberMessageListenner roleMessageListenner(){
+        return new MemberMessageListenner();
     }
 
     /**

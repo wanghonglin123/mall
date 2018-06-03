@@ -18,32 +18,72 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.service.member;/**
- * @Title: MemberTranscationServiceImpl
- * @Package: com.whl.mall.service.member
+package com.whl.mall.core.spring;/**
+ * @Title: ServletContextUtils
+ * @Package: com.whl.mall.manage.spring
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/6/1
+ * @Date: 2018/5/24
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/6/1
+ * @Modify-date: 2018/5/24
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.base.service.ext.MallServiceExt;
-import com.whl.mall.interfaces.member.MemberTranscationService;
-import com.whl.mall.pojo.transcation.Transcation;
-import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * @ClassName: MemberTranscationServiceImpl
- * @Description: 成员事务实现
+ * @ClassName: ServletContextUtils
+ * @Description: Servlet Content 工具类
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/6/1
+ * @Date: 2018/5/24
  */
-@Service
-public class MemberTranscationServiceImpl extends MallServiceExt<Transcation/*, MenuMapper*/> implements MemberTranscationService {
+public final class ServletContextUtils {
+    private ServletContextUtils() {
 
+    }
+
+    /**
+     * get HttpServletRequest
+     * @return
+     */
+    public static HttpServletRequest getRequest() {
+        RequestAttributes requestAttributes = getRequestAttributes();
+        return ((ServletRequestAttributes) requestAttributes).getRequest();
+    }
+
+    /**
+     * 获取 HttpServletResponse
+     * @return
+     */
+    public static HttpServletResponse getResponse() {
+        RequestAttributes requestAttributes = getRequestAttributes();
+        return ((ServletRequestAttributes) requestAttributes).getResponse();
+    }
+
+    /**
+     * 获取ServletContent属性值
+     * @param scope 作用域
+     * @return
+     */
+    public static String getAttribute(int scope) {
+        RequestAttributes requestAttributes = getRequestAttributes();
+        // 从session里面获取对应的值
+        return (String) requestAttributes.getAttribute("name", scope);
+    }
+
+    /**
+     * 获取requert请求属性值
+     * @return
+     */
+    public static RequestAttributes getRequestAttributes() {
+        return RequestContextHolder.getRequestAttributes();
+    }
 }

@@ -16,6 +16,6 @@ import com.whl.mall.core.rabbitmq.constants.RabbitConstants;
  * @Author: WangHongLin
  * @Date: 2018-04-17 下午 8:46
  */
-public abstract class AbstractMallBasePoJo implements MallBasePoJo {
+public abstract class MallAbstractBasePoJo implements MallBasePoJo {
 
 }

@@ -37,20 +37,21 @@ package com.whl.mall.core.base.service.ext.impl;
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.annotations.MallMQ;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
+import com.whl.mall.core.transcation.pojo.MallTranscationPoJo;
 import com.whl.mall.core.base.service.ext.MallMQServiceExt;
 import com.whl.mall.core.common.constants.MallConstants;
 import com.whl.mall.core.common.constants.MallStatus;
-import com.whl.mall.core.common.utils.MallJsonUtils;
-import com.whl.mall.core.log.MallLog4jLog;
+import com.whl.mall.core.common.constants.MallSymbolConstants;
+import com.whl.mall.core.transcation.common.constants.TranscationContants;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * @ClassName: ShopRabbitmqServiceImpl
@@ -68,7 +69,7 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
     private RabbitTemplate rabbitTemplate;
 
     @Override
-    public void sendMsg(T po) throws MallException{
+    public void sendMsg(T po) throws MallException {
         MallMQ mq = po.getClass().getAnnotation(MallMQ.class);
         if (mq == null) {
             return;
@@ -81,24 +82,29 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
             return;
         }
         try {
-            // 消息体
-            byte[] body = MallJsonUtils.objectToJson(po).getBytes();
+            // 消息体直接为事物表的idx 或者单表的idx, 如果消息体比较大会造成传输慢，耗空间
+            String idx = String.valueOf(po.getIdx());
+            byte[] body = idx.getBytes();
             // 消息特性
             MessageProperties messageProperties = new MessageProperties();
             messageProperties.setDeliveryMode(mq.persistent());
             messageProperties.setContentEncoding(MallConstants.DEFAULT_ENCODING);
+            messageProperties.setConsumerTag(tag);
+            if (po instanceof MallTranscationPoJo) {
+                MallTranscationPoJo mallTranscationPoJo = (MallTranscationPoJo) po;
+                Map<String, Object> transcationMap = messageProperties.getHeaders();
+                transcationMap.put(TranscationContants.TRANSCATION_ENUMS_KEY, mallTranscationPoJo.getEnum());
+            }
             Message message = new Message(body, messageProperties);
 
             // 消息唯一标识
             CorrelationData correlationData = new CorrelationData();
-            correlationData.setId(tag);
+            correlationData.setId(String.format("%s%s%s", System.nanoTime(), MallSymbolConstants.UNDERLINE, idx));
 
             rabbitTemplate.setExchange(exchangeName);
             rabbitTemplate.convertAndSend(routingkey, message, correlationData);
-        } catch (AmqpException e) {
-            throw new MallException(MallStatus.HTTP_STATUS_500, String.format("DB save success, %s=", "消息发送阶段失败"));
         } catch (Exception e) {
-            throw new MallException(MallStatus.HTTP_STATUS_500, String.format("DB save success, %s=", "消息初始化阶段失败"));
+            throw new MallException(MallStatus.HTTP_STATUS_500, String.format("DB save success, %s=", "消息发送失败"));
         }
     }
 

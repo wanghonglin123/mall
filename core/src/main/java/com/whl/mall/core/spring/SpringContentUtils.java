@@ -18,28 +18,46 @@
  * <p>
  * 洋桃商城：http://www.yunyangtao.com
  */
-package com.whl.mall.core.rabbitmq.pojo;/**
- * @Title: MessageExt
- * @Package: com.whl.mall.core.rabbitmq.pojo
+package com.whl.mall.core.spring;/**
+ * @Title: SpringContentUtils
+ * @Package: com.whl.mall.manage.spring
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/5/30
+ * @Date: 2018/4/3
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/5/30
+ * @Modify-date: 2018/4/3
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import com.whl.mall.core.base.pojo.MallBasePoJo;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 /**
- * @ClassName: MessageExt
- * @Description: 消息扩展
+ * @ClassName: SpringContentUtils
+ * @Description: Spring Context 工具类
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/5/30
+ * @Date: 2018/4/3
  */
-public class MessageExt<T extends MallBasePoJo> {
+public final class SpringContentUtils implements ApplicationContextAware{
+    private SpringContentUtils() {
+    }
 
+    private static ApplicationContext applicationContext = null;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    public static <T> T getBean(Class<T> classez) {
+        return applicationContext.getBean(classez);
+    }
+
+    public static <T> T getBean(String beanName) {
+        return (T) applicationContext.getBean(beanName);
+    }
 }

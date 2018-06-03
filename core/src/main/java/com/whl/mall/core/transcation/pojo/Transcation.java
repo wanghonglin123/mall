@@ -1,7 +1,6 @@
-package com.whl.mall.pojo.transcation;
+package com.whl.mall.core.transcation.pojo;
 
 import com.whl.mall.core.annotations.MallMQ;
-import com.whl.mall.core.base.pojo.AbstractMallBasePoJo;
 import com.whl.mall.core.rabbitmq.constants.RabbitConstants;
 
 import java.util.Date;
@@ -9,8 +8,8 @@ import java.util.Date;
 /**
  * 通用事务PO, 特殊事务，需要实现查询结果的扩展此类
  */
-@MallMQ(module = "transcation", exchangeName = RabbitConstants.TOP_EXCHANGE_NAME, routingKey = RabbitConstants.TRANSCATION_ROUTINGKEY)
-public class Transcation extends AbstractMallBasePoJo {
+@MallMQ(module = "transcation", routingKey = RabbitConstants.TRANSCATION_ROUTINGKEY, tag="transcation")
+public class Transcation extends MallAbstractTranscatonDBPojo {
     /**
      * 返回结果
      */
@@ -46,12 +45,12 @@ public class Transcation extends AbstractMallBasePoJo {
     private Short mqSendStatus;
 
     /**
-     * mq 消费状态（1：成功 2：失败）
+     * mq 消费状态（1：成功 2：失败 3：待消费）
      */
     private Short mqConsumeStatus;
 
     /**
-     * 事务状态（1：成功 2：失败）
+     * 事务状态（0： 已删除 1：成功 2：失败 3: 待执行 ）
      */
     private Short transcationStatus;
 
@@ -252,7 +251,6 @@ public class Transcation extends AbstractMallBasePoJo {
     public void setUpdateMemberIdxCode(Long updateMemberIdxCode) {
         this.updateMemberIdxCode = updateMemberIdxCode;
     }
-
     /**
      * 这个id是字符串的，和数据库中的idx（Long)对应，是JQuery EasyUI组件使用了,
      * 其他地方不要随便使用，例如：不可以使用在DAO层进行业务处理或者插入数据到数据库，

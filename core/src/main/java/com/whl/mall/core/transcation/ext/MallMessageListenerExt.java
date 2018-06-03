@@ -1,17 +1,18 @@
-package com.whl.mall.core.rabbitmq.listeners;
+package com.whl.mall.core.transcation.ext;
 /**
- * @Title: MessageListennersExt
- * @Package: com.whl.mall.core.rabbitmq.listeners
+ * @Title: MallMessageListenerExt
+ * @Package: com.whl.mall.core.base.pojo
  * @Description:
  * @Author: WangHongLin
- * @Date: 2018-05-28 下午 10:37
+ * @Date: 2018-06-03 上午 12:18
  * @Version: V2.0.0
  */
 
 import com.rabbitmq.client.Channel;
-import com.whl.mall.core.base.pojo.MallBasePoJo;
+import com.whl.mall.core.MallTranscationException;
 import com.whl.mall.core.common.constants.MallConstants;
 import com.whl.mall.core.common.constants.MallNumberConstants;
+import com.whl.mall.core.common.constants.MallSymbolConstants;
 import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.core.log.MallLog4jLog;
 import org.springframework.amqp.core.Message;
@@ -23,22 +24,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 
 /**
- * @ClassName: MessageListennersExt
- * @Description:
+ * @ClassName: MallMessageListenerExt
+ * @Description: 消息监听扩展
  * @Author: WangHongLin
- * @Date: 2018-05-28 下午 10:37
+ * @Date: 2018-06-03 上午 12:18
  */
-public abstract class MessageListennersExt implements ChannelAwareMessageListener, MessageListener {
-    /**
-     * 日志
-     */
+public abstract class MallMessageListenerExt implements MallMessageListener, ChannelAwareMessageListener, MessageListener {
+    // 日志服务
     @Autowired
     private MallLog4jLog log4jLog;
-
-    /**
-     * 消息次数
-     */
-    private static final int MESSAGE_COUNT = 3;
 
     /**
      * 消息确认处理：容器设置了setAcknowledgeMode（AcknowledgeMode.MANUAL）手动确认，必须执行channel.basicAck进行手动确认，否则消息将循环重复消费
@@ -55,18 +49,16 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
         byte[] body = message.getBody();
         MessageProperties properties = message.getMessageProperties();
         String contentEncoding = properties.getContentEncoding();
-        String content = null;
+        Object content = null;
         long deliveryTag = properties.getDeliveryTag();
         try {
-            // 消息转换
-            Object msg = conventMessage(contentEncoding, body, content);
-            // 消息业务处理
-            handleMessage(msg);
-            // 消息手动确认
+            content = conventMessage(contentEncoding, body);
+            handleMessage(content, properties);
+            // 设置手动确认
             channel.basicAck(deliveryTag, false);
         } catch (Throwable e) {
             log4jLog.error(e, String.format("消息确认失败，消息：%s", content));
-            errorHandle(channel, properties, deliveryTag);
+            errorHandle(channel, properties, deliveryTag, e);
         }
     }
 
@@ -75,36 +67,16 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
         log4jLog.error("暂不开发");
     }
 
-    /**
-     * 转换消息
-     *
-     * @param contentEncoding
-     * @param body
-     * @param content
-     * @return
-     * @throws Exception
-     */
-    private Object conventMessage(String contentEncoding, byte[] body, String content) throws Exception {
+    @Override
+    public Object conventMessage(String contentEncoding, byte[] body) throws Exception {
         contentEncoding = Optional.ofNullable(contentEncoding).orElse(MallConstants.DEFAULT_ENCODING);
-        content = new String(body, contentEncoding);
-        Object msg = MallJsonUtils.jsonToObject(content, getJavaType());
-        return msg;
+        String content = new String(body, contentEncoding);
+        // MQ 消息体多为目标tag_时间戳_Idx
+        content = MallJsonUtils.jsonToObject(content, String.class);
+        String[] bodyContent = content.split(MallSymbolConstants.COMMA);
+        Integer transcationId = Integer.valueOf(bodyContent[MallNumberConstants.TWO]);
+        return transcationId;
     }
-
-    /**
-     * 消息业务处理
-     *
-     * @param content 消息内容
-     * @throws Exception
-     */
-    protected abstract void handleMessage(Object content) throws Exception;
-
-    /**
-     * 获取java类型
-     *
-     * @return
-     */
-    protected abstract Class<? extends MallBasePoJo> getJavaType();
 
     /**
      * 监听器异常处理
@@ -112,21 +84,15 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
      * @param channel
      * @param deliveryTag
      */
-    private void errorHandle(Channel channel, MessageProperties messageProperties, long deliveryTag) {
-        boolean reject = false;
+    protected void errorHandle(Channel channel, MessageProperties messageProperties, long deliveryTag, Throwable throwable) {
         try {
-            System.out.println(messageProperties.getCorrelationId());
-            // 消息次数
-            Integer messageCount = messageProperties.getMessageCount();
-            if (messageCount == null) {
-                messageCount = (int) MallNumberConstants.ONE;
-            } else if (this.MESSAGE_COUNT == messageCount) {
-                reject = true;
+            if (throwable instanceof MallTranscationException) {
+                // 清除本地线程池数据
+                //this.removeThreadLocalData();
+                transcationExceptionHand();
             }
-            if (!reject) {
-                messageCount++;
-                messageProperties.setMessageCount(messageCount);
-            }
+            // 是否支持消息重发
+            boolean reject = messageProperties.getRedelivered();
             // do you need to reject message
             if (reject) {
                 // discard message, the message will not recovery in zhe future
@@ -139,6 +105,10 @@ public abstract class MessageListennersExt implements ChannelAwareMessageListene
         } catch (Throwable e) {
             log4jLog.error(e, String.format("message ack fail, the reason is that zhe message refuses to fail"));
         }
+    }
+
+    protected void transcationExceptionHand() throws Exception {
+
     }
 
     public MallLog4jLog getLog4jLog() {

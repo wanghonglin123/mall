@@ -9,14 +9,11 @@ package com.whl.mall.manage.controller.member; /**
 
 import com.whl.mall.core.MallGridResult;
 import com.whl.mall.core.MallResult;
-import com.whl.mall.core.common.constants.MallMessage;
-import com.whl.mall.core.common.constants.MallNumberConstants;
-import com.whl.mall.core.common.constants.MallStatus;
 import com.whl.mall.core.common.utils.MallJsonUtils;
+import com.whl.mall.core.transcation.pojo.Transcation;
 import com.whl.mall.ext.controller.MallBaseController;
 import com.whl.mall.pojo.member.ResourceGroupRole;
 import com.whl.mall.pojo.member.Role;
-import com.whl.mall.pojo.transcation.Transcation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -111,7 +108,7 @@ public class RoleController extends MallBaseController {
         String body = MallJsonUtils.objectToJson(roleBody);
         transcation.setTranscationBody(MallJsonUtils.objectToJson(body));
 
-        getMemberTranscationService().save(transcation);
+        getTranscationService().save(transcation);
         return MallResult.ok();
     }
 
