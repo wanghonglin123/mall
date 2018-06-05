@@ -39,5 +39,4 @@ public interface MallMessageListener {
      * 处理消息
      */
     void handleMessage(Object messageBody, MessageProperties properties) throws Exception;
-
 }

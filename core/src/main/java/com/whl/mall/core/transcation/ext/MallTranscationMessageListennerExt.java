@@ -43,43 +43,42 @@ public abstract class MallTranscationMessageListennerExt extends MallMessageList
     private TranscationService transcationService;
 
     @Override
-    public void handleMessage(Object messageBody, MessageProperties properties) throws Exception {
+    public void handleMessage(Object messageBody, MessageProperties properties) throws MallTranscationException {
         Object value = validationParameters(properties);
-        Transcation transcation = getCurrentTranscation(messageBody);
+        try {
+            Transcation transcation = getCurrentTranscation(messageBody);
 
-        List<String> enumList = (List<String>) value;
-        int enumSize = enumList.size();
-        Class transcationClass = RoleTranscationPropertiesEnum.class;
-        final StringBuffer builder = new StringBuffer();
-        String transcatioEnumName = null;
-        final CountDownLatch countDownLatch = new CountDownLatch(enumSize);
-        for (int i = 0; i < enumSize; i++) {
-            transcatioEnumName = enumList.get(i);
-            final TranscationEnum targetEnum = (TranscationEnum) Enum.valueOf(transcationClass, transcatioEnumName);
-            CompletableFuture.runAsync(() -> {
+            List<String> enumList = (List<String>) value;
+            Class transcationClass = RoleTranscationPropertiesEnum.class;
+            StringBuilder transcationBulder = enumList.parallelStream().collect(StringBuilder::new, (stringBuilder, enumName) -> {
+                TranscationEnum targetEnum = (TranscationEnum) Enum.valueOf(transcationClass, enumName);
                 String beanName = null;
                 try {
-                    beanName = targetEnum.getTargetBeanName();
-                    String[] methodNames = targetEnum.getTargetMethods();
+                    beanName = targetEnum.getTranscationTargetBeanName();
+                    String methodName = targetEnum.getTranscationTargetMethodName();
                     Object bean = SpringContentUtils.getBean(beanName);
                     MethodInvoker methodInvoker = new MethodInvoker();
                     methodInvoker.setTargetClass(bean.getClass());
-                    Object[] args = new Object[]{messageBody};
-                    methodInvoker.setArguments(args);
-                    for (String methodName : methodNames) {
-                        methodInvoker.setTargetMethod(methodName);
-                    }
+                    methodInvoker.setArguments(messageBody);
+                    methodInvoker.setTargetMethod(methodName);
+
                 } catch (Exception e) {
                     getLog4jLog().error(e, String.format("子事物服务=%s, 执行失败", beanName));
-                    builder.append(e.getMessage());
+                    stringBuilder.append(e.getMessage());
                 }
-                countDownLatch.countDown();
-            }, MallThreadPollUtils.executorService);
-        }
-        countDownLatch.await();
+            }, StringBuilder::append);
 
-        transcation.setTranscationStatust(MallNumberConstants.ONE);
-        transcationService.update(transcation);
+            // 修改主事物表
+            if (transcationBulder.length() >= MallNumberConstants.ZERO) {
+                transcation.setTranscationStatust(MallNumberConstants.ONE);
+            } else { // 事物失败
+                transcation.setTranscationStatust(MallNumberConstants.TWO);
+            }
+            transcationService.update(transcation);
+        } catch (Exception e) {
+            getLog4jLog().error(e, String.format("主事物修改状态失败"));
+            throw new MallTranscationException(e);
+        }
     }
 
     /**

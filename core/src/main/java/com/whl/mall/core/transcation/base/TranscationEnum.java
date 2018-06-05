@@ -40,14 +40,14 @@ package com.whl.mall.core.transcation.base;/**
  */
 public interface TranscationEnum {
     /**
-     * 获取Spring Bean 名称
+     * 获取事物目标bean名称
      * @return
      */
-    String getTargetBeanName();
+    String getTranscationTargetBeanName();
 
     /**
-     * 获取bean 需要执行的方法，多个
+     * 获取事物目标方法
      * @return
      */
-    String[] getTargetMethods();
+    String getTranscationTargetMethodName();
 }

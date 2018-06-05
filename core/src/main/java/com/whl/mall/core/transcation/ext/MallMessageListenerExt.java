@@ -84,11 +84,6 @@ public abstract class MallMessageListenerExt implements MallMessageListener, Cha
      */
     protected void errorHandle(Channel channel, MessageProperties messageProperties, long deliveryTag, Throwable throwable) {
         try {
-            if (throwable instanceof MallTranscationException) {
-                // 清除本地线程池数据
-                //this.removeThreadLocalData();
-                transcationExceptionHand();
-            }
             // 是否支持消息重发
             boolean reject = messageProperties.getRedelivered();
             // do you need to reject message

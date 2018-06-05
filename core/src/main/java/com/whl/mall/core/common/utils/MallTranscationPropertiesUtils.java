@@ -22,9 +22,9 @@ import java.util.Map;
 public final class MallTranscationPropertiesUtils {
     private MallTranscationPropertiesUtils() {
     }
-    public static final String[] ROLE_SERVICE_METHODS = new String[] {RabbitConstants.ROLE_SERVICE_METHOD_SAVE};
+    public static final String ROLE_SERVICE_METHODS = RabbitConstants.ROLE_SERVICE_METHOD_SAVE;
 
-    public static final String[] RESOURCE_SERVICE_METHODS = new String[] {RabbitConstants.RESOURCE_SERVICE_METHOD_SAVE};
+    public static final String RESOURCE_SERVICE_METHODS = RabbitConstants.RESOURCE_SERVICE_METHOD_SAVE;
 
-    public static final String[] TRANSCATION_SERVICE_METHODS = new String[] {RabbitConstants.TRANSCATION_SERVICE_METHOD_SAVE};
+    public static final String TRANSCATION_SERVICE_METHODS = RabbitConstants.TRANSCATION_SERVICE_METHOD_SAVE;
 }

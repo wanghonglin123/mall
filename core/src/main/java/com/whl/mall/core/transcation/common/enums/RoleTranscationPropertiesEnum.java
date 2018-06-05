@@ -42,21 +42,21 @@ public enum RoleTranscationPropertiesEnum implements TranscationEnum{
     /**
      * 目标方法
      */
-    private String[] targetMethods;
+    private String targetMethods;
 
-    RoleTranscationPropertiesEnum(String beanName, String[] targetMethods) {
+    RoleTranscationPropertiesEnum(String beanName, String targetMethods) {
         this.targetBeanName = beanName;
         this.targetMethods = targetMethods;
     }
 
 
     @Override
-    public String getTargetBeanName() {
+    public String getTranscationTargetBeanName() {
         return targetBeanName;
     }
 
     @Override
-    public String[] getTargetMethods() {
+    public String getTranscationTargetMethodName() {
         return targetMethods;
     }
 }
