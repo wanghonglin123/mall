@@ -10,18 +10,15 @@ package com.whl.mall.core.transcation.ext;
 
 import com.rabbitmq.client.Channel;
 import com.whl.mall.core.MallTranscationException;
-import com.whl.mall.core.common.constants.MallConstants;
 import com.whl.mall.core.common.constants.MallNumberConstants;
 import com.whl.mall.core.common.constants.MallSymbolConstants;
-import com.whl.mall.core.common.utils.MallJsonUtils;
 import com.whl.mall.core.log.MallLog4jLog;
+import com.whl.mall.core.transcation.base.MallMessageListener;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Optional;
 
 /**
  * @ClassName: MallMessageListenerExt
@@ -46,18 +43,16 @@ public abstract class MallMessageListenerExt implements MallMessageListener, Cha
      */
     @Override
     public void onMessage(Message message, Channel channel) throws Exception {
-        byte[] body = message.getBody();
         MessageProperties properties = message.getMessageProperties();
-        String contentEncoding = properties.getContentEncoding();
-        Object content = null;
         long deliveryTag = properties.getDeliveryTag();
+        Object messageCntent = this.getMessageBody(message, properties);
         try {
-            content = conventMessage(contentEncoding, body);
-            handleMessage(content, properties);
+            messageCntent = conventMessage(messageCntent, properties);
+            handleMessage(messageCntent, properties);
             // 设置手动确认
             channel.basicAck(deliveryTag, false);
         } catch (Throwable e) {
-            log4jLog.error(e, String.format("消息确认失败，消息：%s", content));
+            log4jLog.error(e, String.format("消息确认失败，消息：%s", messageCntent));
             errorHandle(channel, properties, deliveryTag, e);
         }
     }
@@ -68,14 +63,17 @@ public abstract class MallMessageListenerExt implements MallMessageListener, Cha
     }
 
     @Override
-    public Object conventMessage(String contentEncoding, byte[] body) throws Exception {
-        contentEncoding = Optional.ofNullable(contentEncoding).orElse(MallConstants.DEFAULT_ENCODING);
-        String content = new String(body, contentEncoding);
-        // MQ 消息体多为目标tag_时间戳_Idx
-        content = MallJsonUtils.jsonToObject(content, String.class);
-        String[] bodyContent = content.split(MallSymbolConstants.COMMA);
-        Integer transcationId = Integer.valueOf(bodyContent[MallNumberConstants.TWO]);
+    public Object conventMessage(Object body, MessageProperties properties) throws Exception {
+        //contentEncoding = Optional.ofNullable(contentEncoding).orElse(MallConstants.DEFAULT_ENCODING);
+        String content = body.toString();
+        String[] bodyContent = content.split(MallSymbolConstants.UNDERLINE);
+        Long transcationId = Long.valueOf(bodyContent[MallNumberConstants.TWO]);
         return transcationId;
+    }
+
+    @Override
+    public Object getMessageBody(Message message, MessageProperties properties) {
+        return properties.getCorrelationId();
     }
 
     /**

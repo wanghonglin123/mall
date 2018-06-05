@@ -13,6 +13,7 @@ import com.whl.mall.core.rabbitmq.constants.RabbitConstants;
 import com.whl.mall.core.rabbitmq.pojo.MallConsumerTagStrategy;
 import com.whl.mall.mq.handle.MessageHandle;
 import com.whl.mall.mq.listenners.MemberMessageListenner;
+import com.whl.mall.mq.listenners.TranscationMessageListenner;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -34,12 +35,12 @@ import org.springframework.context.annotation.Configuration;
  * 3：SMLC 支持消费者自动缩放，DMLC 不支持，但是DMLC 运行已编程的方式，更改consumersPerQueue属性，并且消费者将相应地进行调整
  * 4：DMLC 在运行时添加和删除队列，效率更高。SMLC，整个消费者线程重新启动（所有消费者都被取消并重新创建）; 对于DMLC，未受影响的消费者不会被取消
  * 5：DMLC 避免了RabbitMQ客户端线程和消费者线程之间的上下文切换
- *
+ * <p>
  * 定义消息监听器的方法 1：implements MessageListener 2: implements ChannelAwareMessageListener
  * 3: MessageListenerAdapter listener = new MessageListenerAdapter（somePojo）;
-listener.setDefaultListenerMethod（“myMethod”）;
-4：使用@RabbitMQListener 注解，需要开启,
-具体实现参考官网spring-amqp
+ * listener.setDefaultListenerMethod（“myMethod”）;
+ * 4：使用@RabbitMQListener 注解，需要开启,
+ * 具体实现参考官网spring-amqp
  * @Author: WangHongLin
  * @Date: 2018-05-18 下午 11:23
  */
@@ -56,16 +57,19 @@ public class RabbitmqContainerConfigura {
      *  // 不推荐使用适配器方式，个人建议不要使用此方式
      * @return
      */
-    @Bean
-    public SimpleMessageListenerContainer memberMessageListenerContainer() {
+    /*@Bean
+    public SimpleMessageListenerContainer transcationMessageListenerContainer() {
         SimpleMessageListenerContainer smlc = new SimpleMessageListenerContainer(connectionFactory);
-        smlc.setQueueNames(RabbitConstants.MEMBER_QUEUE_NAME);
+        smlc.setQueueNames(RabbitConstants.TRANSCATION_QUEUE_NAME);
         MallMessageListenerAdapter adapter = new MallMessageListenerAdapter(new MessageHandle());
         smlc.setMessageListener(adapter);
         smlc.setConsumerTagStrategy(consumerTagStrategy());
-        smlc.setMessageConverter(this.jackson2JsonMessageConverter());
+        // 设置手动确认模式
+        smlc.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+        // smlc.setMessageConverter(this.jackson2JsonMessageConverter());
         return smlc;
-    }
+    }*/
+
     /**
      * 设置成员消息监听器，监听器类型为SimpleMessageListenerContainer
      * 配置参考apidDoc（）方法
@@ -76,7 +80,24 @@ public class RabbitmqContainerConfigura {
     public SimpleMessageListenerContainer roleMessageListenerContainer() {
         SimpleMessageListenerContainer smlc = new SimpleMessageListenerContainer(connectionFactory);
         smlc.setQueueNames(RabbitConstants.ROLE_QUEUE_NAME);
-        smlc.setMessageListener(this.roleMessageListenner());
+        smlc.setMessageListener(this.memberMessageListenner());
+        smlc.setConsumerTagStrategy(consumerTagStrategy());
+        // 设置手动确认模式
+        smlc.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+        return smlc;
+    }
+
+    /**
+     * 设置事务消息监听器，监听器类型为SimpleMessageListenerContainer
+     * 配置参考apidDoc（）方法
+     *
+     * @return
+     */
+    @Bean
+    public SimpleMessageListenerContainer transcationListenerContainer() {
+        SimpleMessageListenerContainer smlc = new SimpleMessageListenerContainer(connectionFactory);
+        smlc.setQueueNames(RabbitConstants.TRANSCATION_QUEUE_NAME);
+        smlc.setMessageListener(transcationMessageListenner());
         smlc.setConsumerTagStrategy(consumerTagStrategy());
         // 设置手动确认模式
         smlc.setAcknowledgeMode(AcknowledgeMode.MANUAL);
@@ -86,7 +107,7 @@ public class RabbitmqContainerConfigura {
     @Bean
     public DirectMessageListenerContainer directMessageListenerContainer() {
         DirectMessageListenerContainer dmlc = new DirectMessageListenerContainer(connectionFactory);
-        dmlc.setQueueNames(RabbitConstants.RESOURCES_QUEUE_NAME);
+        dmlc.setQueueNames(RabbitConstants.MEMBER_QUEUE_NAME);
         dmlc.setMessageListener(new MallMessageListenerAdapter(new MessageHandle()));
         // 为每个创建的队列设置消费者数量，可以通过设置这个值调整消费者数量
         dmlc.setConsumersPerQueue(1);
@@ -104,8 +125,13 @@ public class RabbitmqContainerConfigura {
     }
 
     @Bean
-    public MemberMessageListenner roleMessageListenner(){
+    public MemberMessageListenner memberMessageListenner() {
         return new MemberMessageListenner();
+    }
+
+    @Bean
+    public TranscationMessageListenner transcationMessageListenner() {
+        return new TranscationMessageListenner();
     }
 
     /**
@@ -189,6 +215,7 @@ public class RabbitmqContainerConfigura {
 
     /**
      * 消息转换器，
+     *
      * @return
      */
     @Bean

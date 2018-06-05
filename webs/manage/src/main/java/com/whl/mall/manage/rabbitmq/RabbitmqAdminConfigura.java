@@ -53,7 +53,7 @@ public class RabbitmqAdminConfigura extends MallBeans {
         rabbitAdmin.declareQueue(memberQueue());
         rabbitAdmin.declareQueue(roleQueue());
         rabbitAdmin.declareQueue(resourcesQueue());
-        rabbitAdmin.declareQueue(resourcesQueue());
+        rabbitAdmin.declareQueue(transcationQueue());
         //rabbitAdmin.declareQueue(testQueue());
     }
 
@@ -196,7 +196,7 @@ public class RabbitmqAdminConfigura extends MallBeans {
 
     @Bean
     public Binding transcationBinding() {
-        return BindingBuilder.bind(transcationQueue()).to(topicExchange()).with(RabbitConstants.RESOURCE_ROUTINGKEY);
+        return BindingBuilder.bind(transcationQueue()).to(topicExchange()).with(RabbitConstants.TRANSCATION_ROUTINGKEY);
     }
 
     /*@Bean

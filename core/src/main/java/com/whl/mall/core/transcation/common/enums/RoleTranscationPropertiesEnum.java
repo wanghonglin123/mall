@@ -10,6 +10,7 @@ package com.whl.mall.core.transcation.common.enums;
 
 import com.whl.mall.core.common.utils.MallTranscationPropertiesUtils;
 import com.whl.mall.core.rabbitmq.constants.RabbitConstants;
+import com.whl.mall.core.transcation.base.TranscationEnum;
 
 /**
  * @ClassName: TranscationPropertiesEnum
@@ -17,7 +18,7 @@ import com.whl.mall.core.rabbitmq.constants.RabbitConstants;
  * @Author: WangHongLin
  * @Date: 2018-06-02 下午 11:17
  */
-public enum RoleTranscationPropertiesEnum {
+public enum RoleTranscationPropertiesEnum implements TranscationEnum{
     /**
      * 角色服务配置
      */
@@ -48,10 +49,13 @@ public enum RoleTranscationPropertiesEnum {
         this.targetMethods = targetMethods;
     }
 
+
+    @Override
     public String getTargetBeanName() {
         return targetBeanName;
     }
 
+    @Override
     public String[] getTargetMethods() {
         return targetMethods;
     }

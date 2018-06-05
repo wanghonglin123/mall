@@ -1,4 +1,4 @@
-package com.whl.mall.core.transcation.pojo;
+package com.whl.mall.core.transcation.base;
 /**
  * @Title: MallTranscationPoJo
  * @Package: com.whl.mall.core.base.pojo
@@ -19,5 +19,5 @@ import java.util.Map;
  * @Date: 2018-06-02 上午 10:53
  */
 public interface MallTranscationPoJo extends MallBasePoJo {
-    Enum[] getEnum();
+    TranscationEnum[] getEnum();
 }

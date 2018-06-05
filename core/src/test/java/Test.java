@@ -81,4 +81,12 @@ public class Test {
 
 
     }
+
+    @org.junit.Test
+    public void test() {
+        List<Integer> pages = Arrays.asList(1, 2,3,4);
+        pages.parallelStream().forEach(integer -> {
+            System.out.println(integer);
+        });
+    }
 }

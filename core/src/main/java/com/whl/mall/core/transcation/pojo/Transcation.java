@@ -2,6 +2,7 @@ package com.whl.mall.core.transcation.pojo;
 
 import com.whl.mall.core.annotations.MallMQ;
 import com.whl.mall.core.rabbitmq.constants.RabbitConstants;
+import com.whl.mall.core.transcation.base.MallAbstractTranscatonPojo;
 
 import java.util.Date;
 
@@ -9,7 +10,7 @@ import java.util.Date;
  * 通用事务PO, 特殊事务，需要实现查询结果的扩展此类
  */
 @MallMQ(module = "transcation", routingKey = RabbitConstants.TRANSCATION_ROUTINGKEY, tag="transcation")
-public class Transcation extends MallAbstractTranscatonDBPojo {
+public class Transcation extends MallAbstractTranscatonPojo {
     /**
      * 返回结果
      */

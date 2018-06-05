@@ -37,7 +37,7 @@ package com.whl.mall.core.base.service.ext.impl;
 import com.whl.mall.core.MallException;
 import com.whl.mall.core.annotations.MallMQ;
 import com.whl.mall.core.base.pojo.MallBasePoJo;
-import com.whl.mall.core.transcation.pojo.MallTranscationPoJo;
+import com.whl.mall.core.transcation.base.MallTranscationPoJo;
 import com.whl.mall.core.base.service.ext.MallMQServiceExt;
 import com.whl.mall.core.common.constants.MallConstants;
 import com.whl.mall.core.common.constants.MallStatus;
@@ -84,22 +84,27 @@ public class MallRabbitmqServiceImpl<T extends MallBasePoJo> extends MallMQServi
         try {
             // 消息体直接为事物表的idx 或者单表的idx, 如果消息体比较大会造成传输慢，耗空间
             String idx = String.valueOf(po.getIdx());
-            byte[] body = idx.getBytes();
+            //byte[] body = idx.getBytes();
             // 消息特性
             MessageProperties messageProperties = new MessageProperties();
             messageProperties.setDeliveryMode(mq.persistent());
             messageProperties.setContentEncoding(MallConstants.DEFAULT_ENCODING);
             messageProperties.setConsumerTag(tag);
+
+            // 配置事务配置
             if (po instanceof MallTranscationPoJo) {
                 MallTranscationPoJo mallTranscationPoJo = (MallTranscationPoJo) po;
                 Map<String, Object> transcationMap = messageProperties.getHeaders();
                 transcationMap.put(TranscationContants.TRANSCATION_ENUMS_KEY, mallTranscationPoJo.getEnum());
             }
-            Message message = new Message(body, messageProperties);
 
-            // 消息唯一标识
+            // 消息唯一标识， 用于CallBackListenner 返回CorrelationData，做一些处理
             CorrelationData correlationData = new CorrelationData();
-            correlationData.setId(String.format("%s%s%s", System.nanoTime(), MallSymbolConstants.UNDERLINE, idx));
+            String correlationId = String.format("%s%s%s%s%s", tag, MallSymbolConstants.UNDERLINE, System.nanoTime(), MallSymbolConstants.UNDERLINE, idx);
+            correlationData.setId(correlationId);
+            messageProperties.setCorrelationId(correlationId);
+
+            Message message = new Message(null, messageProperties);
 
             rabbitTemplate.setExchange(exchangeName);
             rabbitTemplate.convertAndSend(routingkey, message, correlationData);

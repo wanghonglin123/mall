@@ -20,6 +20,6 @@ import org.springframework.amqp.core.MessageProperties;
 public class MemberMessageListenner extends MallMessageListenerExt {
     @Override
     public void handleMessage(Object messageBody, MessageProperties properties) throws Exception {
-
+        System.out.println(1);
     }
 }

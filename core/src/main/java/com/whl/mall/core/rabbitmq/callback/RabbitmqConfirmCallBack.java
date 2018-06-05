@@ -27,9 +27,9 @@ public class RabbitmqConfirmCallBack implements RabbitTemplate.ConfirmCallback{
 
     /**
      * 发布消息确认回调，如果发送Broker成功，那么Broker会返回true, 发送失败会返回false 和原因
-     * @param correlationData
-     * @param ack
-     * @param cause
+     * @param correlationData 消息唯一标识
+     * @param ack true 发送broker成功， false 发送broker失败
+     * @param cause 异常
      */
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
@@ -39,7 +39,7 @@ public class RabbitmqConfirmCallBack implements RabbitTemplate.ConfirmCallback{
         if (!ack) {
             log4jLog.error(String.format("发布消息失败，correlationData=%s, ack=%s, cause=%s", correlationData, ack, cause));
         } else {
-            log4jLog.debug(String.format("发布消息成功，correlationData=%s", correlationData));
+            log4jLog.info(String.format("发布消息成功，correlationData=%s", correlationData));
         }
     }
 }

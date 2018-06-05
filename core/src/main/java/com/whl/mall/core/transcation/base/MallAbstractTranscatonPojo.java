@@ -1,4 +1,4 @@
-package com.whl.mall.core.transcation.pojo;
+package com.whl.mall.core.transcation.base;
 /**
  * @Title: AbstractTranscatonDBPojo
  * @Package: com.whl.mall.core.base.pojo
@@ -17,9 +17,9 @@ import com.whl.mall.core.transcation.common.enums.RoleTranscationPropertiesEnum;
  * @Author: WangHongLin
  * @Date: 2018-06-02 上午 10:56
  */
-public abstract class MallAbstractTranscatonDBPojo extends MallAbstractBasePoJo implements MallTranscationPoJo{
+public abstract class MallAbstractTranscatonPojo extends MallAbstractBasePoJo implements MallTranscationPoJo {
     @Override
-    public Enum[] getEnum() {
+    public TranscationEnum[] getEnum() {
         return RoleTranscationPropertiesEnum.values();
     }
 }
