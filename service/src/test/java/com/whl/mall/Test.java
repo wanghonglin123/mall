@@ -10,6 +10,7 @@ package com.whl.mall;
 
 import com.whl.mall.core.transcation.base.TranscationEnum;
 import com.whl.mall.core.transcation.common.enums.RoleTranscationPropertiesEnum;
+import com.whl.mall.core.transcation.pojo.Transcation;
 import org.springframework.util.MethodInvoker;
 
 import java.lang.reflect.Method;
@@ -88,5 +89,13 @@ public class Test {
         IntStream.range(1, 6).parallel().forEach(value -> {
             System.out.println(value);
         });
+    }
+
+    @org.junit.Test
+    public void test5() {
+        Class s = Transcation.class;
+        Class b = Transcation.class;
+        System.out.println(s);
+        System.out.println(b);
     }
 }
