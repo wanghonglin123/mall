@@ -32,7 +32,7 @@ public class Test {
         Class tanscationClass = RoleTranscationPropertiesEnum.class;
         RoleTranscationPropertiesEnum[] transcationEnums = RoleTranscationPropertiesEnum.values();
         TranscationEnum transcationEnum = (TranscationEnum) Enum.valueOf(tanscationClass, "ROLE");
-        System.out.println(transcationEnum.getTargetBeanName());
+        //System.out.println(transcationEnum.getTargetBeanName());
         /*for (TranscationEnum transcationEnum : transcationEnums) {
             if (transcationEnum instanceof TranscationEnum) {
                 System.out.println(transcationEnum.getTargetBeanName());
@@ -97,5 +97,64 @@ public class Test {
         Class b = Transcation.class;
         System.out.println(s);
         System.out.println(b);
+    }
+
+    /**
+     * 用于流和线程池性能对比, test 6 vs test7
+     * @throws Exception
+     */
+    @org.junit.Test
+    public void test6() throws Exception{
+        final List<Integer> integers = IntStream.range(1, 100000).collect(ArrayList<Integer>::new, (integers1, value) -> {
+            integers1.add(value);
+        }, List :: addAll);
+        long beginTime = System.nanoTime();
+        final List list = new ArrayList();
+        for (Integer integer : integers) {
+            String test = "zhangsan" + integer;
+            String value = "wangwu";
+            String b = test + value;
+            b = b.substring(1);
+            list.add(b);
+        }
+        /*integers.forEach(integer -> {
+            String test = "zhangsan";
+            String value = "wangwu";
+            String b = test + value;
+            b = b.substring(1);
+            list.add(b);
+        });*/
+        System.out.println(System.nanoTime() - beginTime);
+        System.out.println(list.size());
+    }
+
+    /**
+     * 用于流和线程池性能对比, test 6 vs test7
+     * @throws Exception
+     */
+    @org.junit.Test
+    public void test7() {
+        final List<Integer> integers = IntStream.range(1, 100000).collect(ArrayList<Integer>::new, (integers1, value) -> {
+            integers1.add(value);
+        }, List :: addAll);
+        long beginTime = System.nanoTime();
+        final List list = Collections.synchronizedList(new ArrayList());
+        IntStream.range(1,8).forEach(value -> {
+            integers.forEach(integer -> {
+                String test = "zhangsan" + integer;
+                String value1 = "wangwu";
+                String b = test + value1;
+                b = b.substring(1);
+                list.add(b);
+            });
+        });
+        System.out.println(System.nanoTime() - beginTime);
+        System.out.println(list.size());
+    }
+
+    public void test8() {
+        Arrays.stream(IntStream.range(1, 10).toArray()).forEach(value -> {
+
+        });
     }
 }
