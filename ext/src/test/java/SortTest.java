@@ -19,49 +19,34 @@
  * 洋桃商城：http://www.yunyangtao.com
  */
 /**
- * @Title: Test
+ * @Title: SortTest
  * @Package: PACKAGE_NAME
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
  * @Author: WangHongLin timo-wang@msyc.cc
- * @Date: 2018/5/31
+ * @Date: 2018/6/8
  * @Version: V2.1.5
  * @Modify-by: WangHongLin timo-wang@msyc.cc
- * @Modify-date: 2018/5/31
+ * @Modify-date: 2018/6/8
  * @Modify-version: 2.0.10
  * @Modify-description: 新增：增，删，改，查方法
  */
 
-import java.text.DecimalFormat;
+import org.junit.Test;
+
 import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
- * @ClassName: Test
- * @Description:
+ * @ClassName: SortTest
+ * @Description: 排序测试，排序优化
  * @Author: WangHonglin timo-wang@msyc.cc
- * @Date: 2018/5/31
+ * @Date: 2018/6/8
  */
-public class Test {
-    @org.junit.Test
-    public void test() {
-        Map map = new TreeMap<>();
-        map.put("7", 1);
-        map.put("2", 2);
-        map.put("3",3);
-    }
-
-    /**
-     * 使用java 自带jdk 排序
-     */
-    @org.junit.Test
-    public void test1(){
-        int[] data = {10,3,2,9,7,5,21,16};
+public class SortTest {
+    @Test
+    public void jdkShort() {
+        int[] data = {1,10,3,2,9,7,5,21,16,8,8};
         Arrays.sort(data);
-        for(int i = 0; i < data.length; i++) {
-            System.out.println(data[i]);
-        }
     }
 
     /**
@@ -75,7 +60,7 @@ public class Test {
         // 比较次数， 默认size - 1
         int compareCount = size - 1;
         int count = 0;
-        for(int i = 0; i < size; i++) {
+        for(int i = 0; i < compareCount -1; i++) {
             count++;
             // 每循环一次比较将确定最大值或者最小值，所以比较次数可以减i，这样性能可以快一半，比较次数compareCount >>2 <<2
             for (int j = 0; j < compareCount - i; j++) {
