@@ -32,7 +32,9 @@ package com.whl.mall; /**
  * @Modify-description: 新增：增，删，改，查方法
  */
 
+import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
@@ -42,6 +44,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Date: 2018/6/21
  */
 @SpringBootApplication
+@EnableAutoConfiguration(exclude = {MybatisAutoConfiguration.class})
 public class MallServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(MallServiceApplication.class, args);
