@@ -1,0 +1,56 @@
+<html>
+<head>
+<title>StringJoinerTest.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+StringJoinerTest.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">import </span><span class="s1">java.util.Arrays; 
+</span><span class="s0">import </span><span class="s1">java.util.List; 
+</span><span class="s0">import </span><span class="s1">java.util.StringJoiner; 
+</span><span class="s0">import </span><span class="s1">java.util.stream.Collectors; 
+ 
+</span><span class="s2">/** 
+ * StringJoiner使用示例 
+ * Created by wang.honglin on 2018/8/8. 
+ */</span><span class="s1"> 
+</span><span class="s0">public class </span><span class="s1">StringJoinerTest { 
+    </span><span class="s0">public static void </span><span class="s1">main(String[] args) { 
+        </span><span class="s2">// 创建一个带有,分隔符字符串连接器，结果1,2,3</span><span class="s1"> 
+        StringJoiner sj = </span><span class="s0">new </span><span class="s1">StringJoiner(</span><span class="s3">&quot;,&quot;</span><span class="s1">).setEmptyValue(</span><span class="s3">&quot;123&quot;</span><span class="s1">); 
+        System.out.println(sj.toString()); 
+        sj.add(</span><span class="s3">&quot;1&quot;</span><span class="s1">).add(</span><span class="s3">&quot;2&quot;</span><span class="s1">).add(</span><span class="s3">&quot;3&quot;</span><span class="s1">); 
+        System.out.println(sj.toString()); 
+ 
+        </span><span class="s2">// 创建一个带有,分隔符,s前缀，d后缀的字符串连接器，结果s1,,2,,3d</span><span class="s1"> 
+        StringJoiner sj1 = </span><span class="s0">new </span><span class="s1">StringJoiner(</span><span class="s3">&quot;,&quot;</span><span class="s1">, </span><span class="s3">&quot;s&quot;</span><span class="s1">, </span><span class="s3">&quot;d&quot;</span><span class="s1">); 
+        sj.add(</span><span class="s3">&quot;1&quot;</span><span class="s1">).add(</span><span class="s3">&quot;2&quot;</span><span class="s1">).add(</span><span class="s3">&quot;3&quot;</span><span class="s1">); 
+        sj1.add(</span><span class="s3">&quot;he&quot;</span><span class="s1">); 
+        System.out.println(sj1.toString()); 
+ 
+        System.out.println(sj.merge(sj1)); 
+ 
+        System.out.println(sj.setEmptyValue(</span><span class="s3">&quot;&quot;</span><span class="s1">)); 
+        List&lt;Integer&gt; numbers = Arrays.asList(</span><span class="s4">1</span><span class="s1">, </span><span class="s4">2</span><span class="s1">, </span><span class="s4">3</span><span class="s1">, </span><span class="s4">4</span><span class="s1">); 
+        String commaSeparatedNumbers = numbers.stream() 
+                .map(i -&gt; i.toString()) 
+                .collect(Collectors.joining(</span><span class="s3">&quot;, &quot;</span><span class="s1">)); 
+        System.out.println(commaSeparatedNumbers); 
+    } 
+} 
+</span></pre>
+</body>
+</html>

@@ -1,6 +1,6 @@
 package com.whl.mall;
 /**
- * @Title: Test
+ * @Title: EnumTest
  * @Package: com.whl.mall
  * @Description:
  * @Author: WangHongLin
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * @ClassName: Test
+ * @ClassName: EnumTest
  * @Description:
  * @Author: WangHongLin
  * @Date: 2018-04-17 下午 9:42

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @SpringBootApplication
 // 排除不需要扫描的注解类型
-@ComponentScan(excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {/*Configuration.class*/}) })
+@ComponentScan(excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = {/*Configuration.class*/}) }, basePackages = {"com.whl.mall.core", "com.whl.mall.manage","com.whl.mall.ext", "com.whl.mall.service"})
 // 排除默认配置类，有些自动配置类会报错
 @EnableAutoConfiguration(exclude = {MybatisAutoConfiguration.class})
 public class ManageApplication implements ApplicationRunner{

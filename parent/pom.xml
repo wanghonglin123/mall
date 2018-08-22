@@ -7,6 +7,9 @@
     <groupId>com.whl.mall</groupId>
     <artifactId>parent</artifactId>
     <version>1.0.0</version>
+    <modules>
+        <module>../test</module>
+    </modules>
     <packaging>pom</packaging>
 
     <parent>

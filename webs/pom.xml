@@ -16,6 +16,8 @@
         <module>manage</module>
         <module>mq</module>
         <module>es</module>
+        <module>home</module>
+        <module>test</module>
     </modules>
 
 

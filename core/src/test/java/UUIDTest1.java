@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * Created by wang.honglin on 2018/7/30.
  */
-public class Test1 {
+public class UUIDTest1 {
 
     @org.junit.Test
     public void test() {

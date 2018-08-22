@@ -1,4 +1,4 @@
-/**
+package test; /**
  * 广州市两棵树网络科技有限公司版权所有
  * DT Group Technology & commerce Co., LtdAll rights reserved.
  * <p>
@@ -19,7 +19,7 @@
  * 洋桃商城：http://www.yunyangtao.com
  */
 /**
- * @Title: Test
+ * @Title: EnumTest
  * @Package: PACKAGE_NAME
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
@@ -33,16 +33,11 @@
  */
 
 /**
- * @ClassName: Test
+ * @ClassName: EnumTest
  * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/4/26
  */
 public class Test {
-    public static void main(String[] args) {
-        TestStudent testStudent = new TestStudent();
-        testStudent.setIdx(1);
-        testStudent.setName("zhangsan");
-        testStudent.setAvg(2);
-    }
+    
 }

@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>BitTest.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(128,128,128); font-style: italic; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,0,128); font-weight: bold; }
+.s3 { color: rgb(0,0,255); }
+.s4 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+BitTest.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">/** 
+ * Created by wang.honglin on 2018/8/1. 
+ */</span><span class="s1"> 
+</span><span class="s2">public class </span><span class="s1">BitTest { 
+    </span><span class="s2">public static void </span><span class="s1">main(String[] args) { 
+        </span><span class="s0">// 0000</span><span class="s1"> 
+        System.out.println(</span><span class="s3">15 </span><span class="s1">&amp; </span><span class="s4">&quot;8&quot;</span><span class="s1">.hashCode()); 
+        </span><span class="s0">// 1001 100001</span><span class="s1"> 
+        String s = Integer.toBinaryString(</span><span class="s3">1</span><span class="s1">); 
+        </span><span class="s2">int </span><span class="s1">i = </span><span class="s3">6</span><span class="s1">; 
+        </span><span class="s2">do </span><span class="s1">{ 
+            System.out.println(i % </span><span class="s3">2</span><span class="s1">); 
+        } </span><span class="s2">while </span><span class="s1">((i = i / </span><span class="s3">2</span><span class="s1">) &gt; </span><span class="s3">0</span><span class="s1">); 
+ 
+        System.out.println(</span><span class="s2">new int</span><span class="s1">[</span><span class="s3">3</span><span class="s1">].length); 
+    } 
+} 
+</span></pre>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>VectorTest.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,0,255); }
+.s4 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+VectorTest.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">import </span><span class="s1">java.util.Iterator; 
+</span><span class="s0">import </span><span class="s1">java.util.Vector; 
+</span><span class="s0">import </span><span class="s1">java.util.concurrent.TimeUnit; 
+</span><span class="s0">import </span><span class="s1">java.util.concurrent.locks.ReentrantLock; 
+ 
+</span><span class="s2">/** 
+ * Vector ConcurrentModificationException 异常模拟, 和解决 
+ * Created by wang.honglin on 2018/8/1. 
+ */</span><span class="s1"> 
+</span><span class="s0">public class </span><span class="s1">VectorTest { 
+    </span><span class="s2">/** 
+     * Vector ConcurrentModificationException 异常模拟 
+     */</span><span class="s1"> 
+    </span><span class="s0">static class </span><span class="s1">ExceptionTest { 
+        </span><span class="s0">public static void </span><span class="s1">main(String[] args) { 
+            Vector vector = </span><span class="s0">new </span><span class="s1">Vector(</span><span class="s3">10</span><span class="s1">); 
+ 
+            </span><span class="s0">new </span><span class="s1">Thread(() -&gt; { 
+                </span><span class="s2">// 在使用迭代器iterator()或者listIterator()的时候，只有当前迭代器可以add()和remove()。</span><span class="s1"> 
+                </span><span class="s2">// 如果其它线程并发操作该数组元素，那么iterator.next()会快速抛出ConcurrentModificationException</span><span class="s1"> 
+                Iterator iterator = vector.listIterator(); 
+                </span><span class="s0">try </span><span class="s1">{ 
+                    Thread.sleep(</span><span class="s3">1000</span><span class="s1">); 
+                } </span><span class="s0">catch </span><span class="s1">(InterruptedException e) { 
+                    e.printStackTrace(); 
+                } 
+                </span><span class="s0">while </span><span class="s1">(iterator.hasNext()) { 
+                    System.out.println(iterator.next()); 
+                } 
+            }).start(); 
+ 
+            </span><span class="s0">new </span><span class="s1">Thread(() -&gt; { 
+                vector.add(</span><span class="s3">3</span><span class="s1">); 
+            }).start(); 
+ 
+        } 
+    } 
+ 
+    </span><span class="s2">/** 
+     * 解决Vector ConcurrentModificationException 问题 
+     * 当需要使用迭代器的时候，添加锁，遍历完成后，再释放锁 
+     */</span><span class="s1"> 
+    </span><span class="s0">static class </span><span class="s1">MeasuresTest{ 
+        </span><span class="s0">public static void </span><span class="s1">main(String[] args) { 
+            Vector vector = </span><span class="s0">new </span><span class="s1">Vector(</span><span class="s3">10</span><span class="s1">); 
+            vector.add(</span><span class="s4">&quot;1&quot;</span><span class="s1">); 
+            vector.add(</span><span class="s4">&quot;2&quot;</span><span class="s1">); 
+            vector.add(</span><span class="s4">&quot;3&quot;</span><span class="s1">); 
+ 
+            ReentrantLock reentrantLock = </span><span class="s0">new </span><span class="s1">ReentrantLock(); 
+            </span><span class="s0">new </span><span class="s1">Thread(() -&gt; { 
+                </span><span class="s0">try </span><span class="s1">{ 
+                    </span><span class="s2">// 尝试获取锁，设置一个获取锁超时时间</span><span class="s1"> 
+                    </span><span class="s0">if </span><span class="s1">(reentrantLock.tryLock(</span><span class="s3">2000</span><span class="s1">, TimeUnit.SECONDS)) { 
+                        Iterator iterator = vector.listIterator(); 
+                        Thread.sleep(</span><span class="s3">1000</span><span class="s1">); 
+                        </span><span class="s0">while </span><span class="s1">(iterator.hasNext()) { 
+                            System.out.println(iterator.next()); 
+                        } 
+                    } 
+                } </span><span class="s0">catch </span><span class="s1">(InterruptedException e) { 
+                    e.printStackTrace(); 
+                } </span><span class="s0">finally </span><span class="s1">{ 
+                    reentrantLock.unlock(); 
+                } 
+            }).start(); 
+ 
+            </span><span class="s0">new </span><span class="s1">Thread(() -&gt; { 
+                </span><span class="s0">try </span><span class="s1">{ 
+                    </span><span class="s2">// 尝试获取锁，设置一个获取锁超时时间</span><span class="s1"> 
+                    </span><span class="s0">if </span><span class="s1">(reentrantLock.tryLock(</span><span class="s3">2000</span><span class="s1">, TimeUnit.SECONDS)) { 
+                        vector.add(</span><span class="s3">3</span><span class="s1">); 
+                    } 
+                } </span><span class="s0">catch </span><span class="s1">(InterruptedException e) { 
+                    e.printStackTrace(); 
+                } </span><span class="s0">finally </span><span class="s1">{ 
+                    reentrantLock.unlock(); 
+                } 
+            }).start(); 
+        } 
+    } 
+} 
+</span></pre>
+</body>
+</html>

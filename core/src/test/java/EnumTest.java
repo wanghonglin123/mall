@@ -1,5 +1,5 @@
 /**
- * @Title: Test
+ * @Title: EnumTest
  * @Package: PACKAGE_NAME
  * @Description:
  * @Author: WangHongLin
@@ -9,19 +9,25 @@
 
 import com.whl.mall.core.transcation.common.enums.RoleTranscationPropertiesEnum;
 import com.whl.mall.core.common.utils.MallThreadPollUtils;
+import org.junit.Test;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.concurrent.*;
 
 /**
- * @ClassName: Test
+ * @ClassName: EnumTest
  * @Description:
  * @Author: WangHongLin
  * @Date: 2018-06-03 上午 10:00
  */
-public class Test {
+public abstract class EnumTest {
+    public EnumTest(int i){
+        System.out.println(i);
+    }
 
+    public EnumTest() {
+    }
     @org.junit.Test
     public void test() throws Exception{
         Enum[] enums = RoleTranscationPropertiesEnum.values();
@@ -79,14 +85,37 @@ public class Test {
         }
         System.out.println(completableFuture.get());
 
-
+        Tets.class.newInstance();
     }
 
-    /*@org.junit.Test
+    @Test
+    public void test5() throws Exception{
+        Test2.class.newInstance();
+    }
+
+    /*@org.junit.EnumTest
     public void test() {
         List<Integer> pages = Arrays.asList(1, 2,3,4);
         pages.parallelStream().forEach(integer -> {
             System.out.println(integer);
         });
     }*/
+
+    @FunctionalInterface
+    public interface Tets{
+        void test();
+    }
+
+    public static class Test2 extends EnumTest{
+        public Test2(int i) {
+            super(i);
+        }
+
+        public Test2() {
+        }
+        @Test
+        public void test() {
+            new Test2(2);
+        }
+    }
 }

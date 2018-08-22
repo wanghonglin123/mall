@@ -31,6 +31,8 @@ package com.whl.mall.core.configura.druid;
  */
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.whl.mall.core.component.MallDomain;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +48,6 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @PropertySource("/${spring.profiles.active}/jdbc.properties")
 public class MallDruidConfigura {
-
     @Value("${spring.druid.datasource.driverClassName}")
     private String driverClassName;
 

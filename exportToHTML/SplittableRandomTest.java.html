@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>SplittableRandomTest.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+SplittableRandomTest.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">import </span><span class="s1">java.util.SplittableRandom; 
+ 
+</span><span class="s2">/** 
+ * Created by wang.honglin on 2018/8/8. 
+ * 
+ */</span><span class="s1"> 
+</span><span class="s0">public class </span><span class="s1">SplittableRandomTest { 
+    </span><span class="s0">public static void </span><span class="s1">main(String[] args) { 
+        SplittableRandom splittableRandom = </span><span class="s0">new </span><span class="s1">SplittableRandom(); 
+        SplittableRandom splittableRandom1 = splittableRandom.split(); 
+        SplittableRandom splittableRandom2 = splittableRandom.split(); 
+        System.out.println(splittableRandom.nextDouble()); 
+        System.out.println(splittableRandom1.nextDouble()); 
+        System.out.println(splittableRandom2.nextDouble()); 
+        System.out.println(splittableRandom.nextInt()); 
+        System.out.println(splittableRandom.nextLong()); 
+    } 
+} 
+</span></pre>
+</body>
+</html>

@@ -55,7 +55,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Date: 2018/3/23
  */
 @ControllerAdvice
-public class MallExceptionHandler extends MallBeans{
+public final class MallExceptionHandler extends MallBeans{
     /**
      * 异常页面路径
      */

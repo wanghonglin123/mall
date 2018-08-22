@@ -1,0 +1,94 @@
+<html>
+<head>
+<title>RegexTest.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(128,128,128); font-weight: bold; font-style: italic; }
+.s4 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+RegexTest.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">import </span><span class="s1">com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer; 
+</span><span class="s0">import </span><span class="s1">org.junit.*; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.regex.Matcher; 
+</span><span class="s0">import </span><span class="s1">java.util.regex.Pattern; 
+ 
+</span><span class="s2">/** 
+ * Created by wang.honglin on 2018/7/31. 
+ * 正则表达式使用详解 
+ * test() [] 使用 ^ 符号使用 
+ */</span><span class="s1"> 
+</span><span class="s0">public class </span><span class="s1">RegexTest { 
+    </span><span class="s2">/** 
+     * 正则表达式符号使用 
+     * [] test() 
+     * </span><span class="s3">@param </span><span class="s2">args 
+     */</span><span class="s1"> 
+    </span><span class="s0">public static void </span><span class="s1">main(String[] args) { 
+        </span><span class="s2">/** 
+         * [] 只能用于匹配一个字符，[0-9] [a-z] 匹配0-9,a-z的任意一个字符多可以匹配成功。 
+         * ^ 取非结果，如果[^0-9],那么0-9范围内的多不会匹配，其他只要是单个字符的多会匹配成功 
+         */</span><span class="s1"> 
+        String str = </span><span class="s4">&quot;abc1&quot;</span><span class="s1">; 
+        String regEx = </span><span class="s4">&quot;abc[0-9]&quot;</span><span class="s1">; 
+        Pattern pattern = Pattern.compile(regEx); 
+        Matcher matcher = pattern.matcher(str); 
+        System.out.println(matcher.matches()); 
+ 
+        </span><span class="s2">// \ 转义符作用，可以用于匹配\n(换行符)</span><span class="s1"> 
+        </span><span class="s2">/** 
+         * 元字符  说明 
+         [\b]   回退（删除）一个字符 
+         \f 换页符 
+         \n 换行符 
+         \r 回车符 
+         \t 制表符 
+         \v 垂直制表符 
+         */</span><span class="s1"> 
+        str = </span><span class="s4">&quot;1bv</span><span class="s0">\r</span><span class="s4">c&quot;</span><span class="s1">; 
+        System.out.println(str); 
+        regEx = </span><span class="s4">&quot;1bv</span><span class="s0">\\</span><span class="s4">rc&quot;</span><span class="s1">; 
+        pattern = Pattern.compile(regEx); 
+        matcher = pattern.matcher(str); 
+        System.out.println(matcher.matches()); 
+    } 
+ 
+    </span><span class="s2">/** 
+     * 
+     * [] 只能用于匹配一个字符，[0-9] [a-z] 匹配0-9,a-z的任意一个字符多可以匹配成功。 
+     * ^ 取非结果，如果[^0-9],那么0-9范围内的多不会匹配，其他只要是单个字符的多会匹配成功 
+     */</span><span class="s1"> 
+    @org.junit.Test 
+    </span><span class="s0">public void </span><span class="s1">test(){ 
+        </span><span class="s2">// abcbb abcbbb abc1 匹配结果=false</span><span class="s1"> 
+        String str = </span><span class="s4">&quot;abc1&quot;</span><span class="s1">; 
+        String regEx = </span><span class="s4">&quot;abc[0-9]&quot;</span><span class="s1">; 
+        Pattern pattern = Pattern.compile(regEx); 
+        Matcher matcher = pattern.matcher(str); 
+        System.out.println(matcher.matches()); 
+ 
+        </span><span class="s2">//</span><span class="s1"> 
+        str = </span><span class="s4">&quot;1bv</span><span class="s0">\n</span><span class="s4">c&quot;</span><span class="s1">; 
+        System.out.println(str); 
+        regEx = </span><span class="s4">&quot;1bv</span><span class="s0">\\</span><span class="s4">nc&quot;</span><span class="s1">; 
+        pattern = Pattern.compile(regEx); 
+        matcher = pattern.matcher(str); 
+        System.out.println(matcher.matches()); 
+    } 
+ 
+ 
+} 
+</span></pre>
+</body>
+</html>

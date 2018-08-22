@@ -19,7 +19,7 @@
  * 洋桃商城：http://www.yunyangtao.com
  */
 /**
- * @Title: Test
+ * @Title: EnumTest
  * @Package: PACKAGE_NAME
  * @Description:
  * @Company: 广州市两棵树网络科技有限公司
@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * @ClassName: Test
+ * @ClassName: EnumTest
  * @Description:
  * @Author: WangHonglin timo-wang@msyc.cc
  * @Date: 2018/5/31

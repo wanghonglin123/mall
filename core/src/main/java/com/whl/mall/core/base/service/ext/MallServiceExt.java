@@ -59,7 +59,7 @@ import java.util.List;
  */
 public abstract class MallServiceExt<T extends MallBasePoJo> implements MallBaseService<T> {
 
-    @Autowired
+    //@Autowired
     private MallBaseMapper<T> baseMapper;
 
     @Autowired
