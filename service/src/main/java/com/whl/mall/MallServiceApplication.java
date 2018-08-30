@@ -36,6 +36,10 @@ import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 
 /**
  * @ClassName: com.whl.mall.MallServiceApplication
@@ -44,6 +48,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Date: 2018/6/21
  */
 @SpringBootApplication
+@EnableEurekaServer
 @EnableAutoConfiguration(exclude = {MybatisAutoConfiguration.class})
 public class MallServiceApplication {
     public static void main(String[] args) {

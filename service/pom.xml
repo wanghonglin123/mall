@@ -4,10 +4,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>service</artifactId>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<name>service</name>
 	<description>Demo project for Spring Boot</description>
+	<modules>
+		<module>eureka-service</module>
+        <module>eureka-provider</module>
+		<module>eureka-consume</module>
+	</modules>
 
 	<parent>
 		<groupId>com.whl.mall</groupId>
@@ -21,8 +26,37 @@
 			<groupId>com.whl.mall</groupId>
 			<artifactId>core</artifactId>
 		</dependency>
-	</dependencies>
 
+		<!--引入spring cloud eureka jar, 提供服务注册，注册中心-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+			<exclusions>
+				<!--不能排除这个，启动的时候会报错，2.0.1版本-->
+				<!--<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-actuator-autoconfigure</artifactId>
+				</exclusion>-->
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.netflix.ribbon</groupId>
+			<artifactId>ribbon-eureka</artifactId>
+		</dependency>
+	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Finchley.SR1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
 	<build>
 		<!-- 如果不添加此节点mybatis的mapper.xml文件都会被漏掉。 -->
 		<resources>
