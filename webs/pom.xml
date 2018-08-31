@@ -15,8 +15,6 @@
     <modules>
         <module>manage</module>
         <module>mq</module>
-        <module>test</module>
-        <module>test2</module>
     </modules>
 
 

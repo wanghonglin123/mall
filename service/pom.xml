@@ -12,6 +12,7 @@
 		<module>eureka-service</module>
         <module>eureka-provider</module>
 		<module>eureka-consume</module>
+		<module>consume-test</module>
 	</modules>
 
 	<parent>
@@ -31,18 +32,11 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
-			<exclusions>
-				<!--不能排除这个，启动的时候会报错，2.0.1版本-->
-				<!--<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-actuator-autoconfigure</artifactId>
-				</exclusion>-->
-			</exclusions>
 		</dependency>
 
 		<dependency>
-			<groupId>com.netflix.ribbon</groupId>
-			<artifactId>ribbon-eureka</artifactId>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
